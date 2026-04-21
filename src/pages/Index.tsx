@@ -231,6 +231,18 @@ const Index = () => {
                   onClick={() => openWindow(section.id)}
                 />
               ))}
+              {desktopLinks.map((link) => (
+                <DesktopIcon
+                  key={link.id}
+                  id={link.id}
+                  label={link.title}
+                  icon={Star}
+                  iconUrl={link.icon_url}
+                  type="app"
+                  color={link.color}
+                  onClick={() => window.open(link.url, '_blank')}
+                />
+              ))}
             </div>
           </div>
         </div>
