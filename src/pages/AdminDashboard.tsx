@@ -124,6 +124,8 @@ const AdminDashboard = () => {
       toast.error("Seed failed: " + error.message);
       console.error(error);
     }
+  };
+
   const handleAddProject = async (e: React.FormEvent) => {
     e.preventDefault();
     const id = newProject.title.toLowerCase().replace(/\s+/g, '-');
