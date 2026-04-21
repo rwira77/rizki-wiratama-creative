@@ -176,12 +176,17 @@ export const Portfolio = () => {
           .order('year', { ascending: false });
 
         if (error) throw error;
+        
+        // Prioritaskan data dari Supabase jika ada (meskipun hanya 1 data baru)
         if (data && data.length > 0) {
           setWorks(data);
+        } else {
+          // Jika Supabase kosong (baru buat tabel), pakai data awal
+          setWorks(initialWorks);
         }
       } catch (error) {
-        console.error('Error fetching works:', error);
-        // Fallback to initialWorks if fetch fails
+        console.error('Supabase Fetch Error:', error);
+        setWorks(initialWorks);
       } finally {
         setIsLoading(false);
       }
