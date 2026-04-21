@@ -212,32 +212,27 @@ const Index = () => {
       </main>
 
       {/* --- MOBILE BOTTOM NAVBAR --- */}
-      <div className="md:hidden fixed bottom-6 left-6 right-6 z-[2000]">
-         <div className="bg-slate-900/90 backdrop-blur-2xl rounded-full p-2 border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.3)] flex items-center justify-between px-6 h-16">
-            <button 
-              onClick={() => { setWindows([]); }}
-              className={cn("p-3 rounded-full transition-all", currentMobileTab === 'home' ? "bg-white text-black" : "text-white/40")}
-            >
-               <Home className="size-5" />
-            </button>
-            <button 
-              onClick={() => openWindow('portfolio')}
-              className={cn("p-3 rounded-full transition-all", currentMobileTab === 'portfolio' ? "bg-white text-black" : "text-white/40")}
-            >
-               <Layers className="size-5" />
-            </button>
-            <button 
-              onClick={() => openWindow('services')}
-              className={cn("p-3 rounded-full transition-all", currentMobileTab === 'services' ? "bg-white text-black" : "text-white/40")}
-            >
-               <Aperture className="size-5" />
-            </button>
-            <button 
-              onClick={() => openWindow('contact')}
-              className={cn("p-3 rounded-full transition-all", currentMobileTab === 'contact' ? "bg-white text-black" : "text-white/40")}
-            >
-               <Phone className="size-5" />
-            </button>
+      <div className="md:hidden fixed bottom-6 left-4 right-4 z-[2000]">
+         <div className="bg-slate-900/90 backdrop-blur-2xl rounded-full p-2 border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.3)] flex items-center justify-between px-4 h-16">
+            {[
+              { id: 'home', icon: Home, label: 'Home', action: () => setWindows([]) },
+              { id: 'portfolio', icon: ImageIcon, label: 'Work', action: () => openWindow('portfolio') },
+              { id: 'services', icon: Aperture, label: 'Services', action: () => openWindow('services') },
+              { id: 'experience', icon: Briefcase, label: 'Resume', action: () => openWindow('experience') },
+              { id: 'contact', icon: Mail, label: 'Contact', action: () => openWindow('contact') }
+            ].map((item) => (
+              <button 
+                key={item.id}
+                onClick={item.action}
+                className={cn(
+                  "p-3 rounded-full transition-all flex flex-col items-center gap-1", 
+                  currentMobileTab === item.id ? "bg-white text-black scale-110 shadow-lg" : "text-white/40"
+                )}
+              >
+                 <item.icon className="size-4" />
+                 {currentMobileTab === item.id && <span className="text-[7px] font-black uppercase tracking-widest">{item.label}</span>}
+              </button>
+            ))}
          </div>
       </div>
 
