@@ -212,8 +212,11 @@ const Index = () => {
       </main>
 
       {/* --- MOBILE BOTTOM NAVBAR --- */}
-      <div className="md:hidden fixed bottom-6 left-4 right-4 z-[2000]">
-         <div className="bg-slate-900/90 backdrop-blur-2xl rounded-full p-2 border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.3)] flex items-center justify-between px-4 h-16">
+      <div className="md:hidden fixed bottom-8 left-6 right-6 z-[2000]">
+         <div className="relative overflow-hidden bg-white/10 backdrop-blur-3xl rounded-[32px] p-2 border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)] flex items-center justify-between px-4 h-20">
+            {/* Inner Glass Glow */}
+            <div className="absolute inset-0 bg-gradient-to-tr from-white/10 via-transparent to-transparent pointer-events-none" />
+            
             {[
               { id: 'home', icon: Home, label: 'Home', action: () => setWindows([]) },
               { id: 'portfolio', icon: ImageIcon, label: 'Work', action: () => openWindow('portfolio') },
@@ -225,12 +228,22 @@ const Index = () => {
                 key={item.id}
                 onClick={item.action}
                 className={cn(
-                  "p-3 rounded-full transition-all flex flex-col items-center gap-1", 
-                  currentMobileTab === item.id ? "bg-white text-black scale-110 shadow-lg" : "text-white/40"
+                  "relative z-10 p-3 rounded-2xl transition-all duration-500 flex flex-col items-center gap-1.5", 
+                  currentMobileTab === item.id 
+                    ? "bg-white text-black scale-110 shadow-[0_10px_20px_rgba(0,0,0,0.2)]" 
+                    : "text-white/60 hover:text-white"
                 )}
               >
-                 <item.icon className="size-4" />
-                 {currentMobileTab === item.id && <span className="text-[7px] font-black uppercase tracking-widest">{item.label}</span>}
+                 <item.icon className={cn("size-5", currentMobileTab === item.id ? "stroke-[2.5px]" : "stroke-[1.5px]")} />
+                 {currentMobileTab === item.id && (
+                   <motion.span 
+                     initial={{ opacity: 0, y: 5 }}
+                     animate={{ opacity: 1, y: 0 }}
+                     className="text-[8px] font-black uppercase tracking-[0.2em]"
+                   >
+                     {item.label}
+                   </motion.span>
+                 )}
               </button>
             ))}
          </div>
