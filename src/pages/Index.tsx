@@ -212,34 +212,37 @@ const Index = () => {
       </main>
 
       {/* --- MOBILE BOTTOM NAVBAR --- */}
-      <div className="md:hidden fixed bottom-8 left-6 right-6 z-[2000]">
-         <div className="relative overflow-hidden bg-white/10 backdrop-blur-3xl rounded-[32px] p-2 border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)] flex items-center justify-between px-4 h-20">
+      <div className="md:hidden fixed bottom-6 left-6 right-6 z-[2000]">
+         <div className="relative overflow-hidden bg-slate-900/40 backdrop-blur-3xl rounded-[32px] p-1.5 border border-white/10 shadow-2xl flex items-center justify-between px-3 h-16">
             {/* Inner Glass Glow */}
-            <div className="absolute inset-0 bg-gradient-to-tr from-white/10 via-transparent to-transparent pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-tr from-white/5 via-transparent to-transparent pointer-events-none" />
             
             {[
-              { id: 'home', icon: Home, label: 'Home', action: () => setWindows([]) },
-              { id: 'portfolio', icon: ImageIcon, label: 'Work', action: () => openWindow('portfolio') },
-              { id: 'services', icon: Aperture, label: 'Services', action: () => openWindow('services') },
-              { id: 'experience', icon: Briefcase, label: 'Resume', action: () => openWindow('experience') },
-              { id: 'contact', icon: Mail, label: 'Contact', action: () => openWindow('contact') }
+              { id: 'home', icon: Home, label: 'Home', color: 'text-blue-400', action: () => setWindows([]) },
+              { id: 'portfolio', icon: ImageIcon, label: 'Work', color: 'text-indigo-400', action: () => openWindow('portfolio') },
+              { id: 'services', icon: Aperture, label: 'Services', color: 'text-purple-400', action: () => openWindow('services') },
+              { id: 'experience', icon: Briefcase, label: 'Resume', color: 'text-emerald-400', action: () => openWindow('experience') },
+              { id: 'contact', icon: Mail, label: 'Contact', color: 'text-pink-400', action: () => openWindow('contact') }
             ].map((item) => (
               <button 
                 key={item.id}
                 onClick={item.action}
                 className={cn(
-                  "relative z-10 p-3 rounded-2xl transition-all duration-500 flex flex-col items-center gap-1.5", 
+                  "relative z-10 p-2.5 rounded-2xl transition-all duration-500 flex flex-col items-center gap-1", 
                   currentMobileTab === item.id 
-                    ? "bg-white text-black scale-110 shadow-[0_10px_20px_rgba(0,0,0,0.2)]" 
-                    : "text-white/60 hover:text-white"
+                    ? "bg-white scale-110 shadow-lg" 
+                    : "text-white/30"
                 )}
               >
-                 <item.icon className={cn("size-5", currentMobileTab === item.id ? "stroke-[2.5px]" : "stroke-[1.5px]")} />
+                 <item.icon className={cn(
+                   "size-5 transition-colors duration-500", 
+                   currentMobileTab === item.id ? item.color.replace('text-', 'text-') + " stroke-[2.5px]" : "text-white/40 stroke-[1.5px]"
+                 )} />
                  {currentMobileTab === item.id && (
                    <motion.span 
-                     initial={{ opacity: 0, y: 5 }}
-                     animate={{ opacity: 1, y: 0 }}
-                     className="text-[8px] font-black uppercase tracking-[0.2em]"
+                     initial={{ opacity: 0, scale: 0.8 }}
+                     animate={{ opacity: 1, scale: 1 }}
+                     className={cn("text-[7px] font-black uppercase tracking-widest", item.color)}
                    >
                      {item.label}
                    </motion.span>
