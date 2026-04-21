@@ -42,7 +42,8 @@ const AdminDashboard = () => {
     problem: "",
     result: "",
     year: new Date().getFullYear().toString(),
-    hasDetail: false
+    hasDetail: false,
+    gallery: ""
   });
 
   const [newLink, setNewLink] = useState({
@@ -317,7 +318,8 @@ const AdminDashboard = () => {
       problem: work.problem,
       result: work.result,
       year: work.year,
-      hasDetail: work.hasDetail
+      hasDetail: work.hasDetail,
+      gallery: Array.isArray(work.gallery) ? work.gallery.join(', ') : ""
     });
     setEditingId(work.id);
     setIsEditing(true);
@@ -335,9 +337,18 @@ const AdminDashboard = () => {
 
   const handleUpdateProject = async () => {
     try {
+      const galleryArray = newProject.gallery 
+        ? newProject.gallery.split(',').map(s => s.trim()).filter(Boolean)
+        : [];
+
+      const payload = {
+        ...newProject,
+        gallery: galleryArray
+      };
+
       const { error } = await supabase
         .from('works')
-        .update(newProject)
+        .update(payload)
         .eq('id', editingId);
 
       if (error) throw error;
@@ -361,7 +372,8 @@ const AdminDashboard = () => {
       problem: "",
       result: "",
       year: new Date().getFullYear().toString(),
-      hasDetail: false
+      hasDetail: false,
+      gallery: ""
     });
   };
 
@@ -369,9 +381,19 @@ const AdminDashboard = () => {
     const id = newProject.title.toLowerCase().replace(/\s+/g, '-');
     
     try {
+      const galleryArray = newProject.gallery 
+        ? newProject.gallery.split(',').map(s => s.trim()).filter(Boolean)
+        : [];
+
+      const payload = {
+        ...newProject,
+        id,
+        gallery: galleryArray
+      };
+
       const { error } = await supabase
         .from('works')
-        .insert([{ ...newProject, id }]);
+        .insert([payload]);
 
       if (error) throw error;
       
@@ -729,6 +751,16 @@ const AdminDashboard = () => {
                     onChange={(e) => setNewProject({...newProject, img: e.target.value})}
                     className="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 focus:ring-2 focus:ring-primary/20 transition-all font-bold"
                     placeholder="https://images.unsplash.com/..."
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-4">Gallery Image URLs (Comma Separated)</label>
+                  <textarea 
+                    value={newProject.gallery}
+                    onChange={(e) => setNewProject({...newProject, gallery: e.target.value})}
+                    className="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 focus:ring-2 focus:ring-primary/20 transition-all font-bold min-h-[80px]"
+                    placeholder="https://img1.jpg, https://img2.jpg, ..."
                   />
                 </div>
 

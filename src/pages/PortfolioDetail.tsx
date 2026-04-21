@@ -146,14 +146,34 @@ const PortfolioDetail = () => {
               </p>
            </div>
 
-           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-8">
-              <div className="aspect-[4/5] rounded-[2rem] bg-slate-200 overflow-hidden">
-                <img src={work.img} className="w-full h-full object-cover grayscale-[0.5]" alt="" />
-              </div>
-              <div className="aspect-[4/5] rounded-[2rem] bg-slate-200 overflow-hidden mt-12">
-                <img src={work.img} className="w-full h-full object-cover" alt="" />
-              </div>
-           </div>
+           {Array.isArray(work.gallery) && work.gallery.length > 0 ? (
+             <div className="space-y-4 md:space-y-8 pt-8">
+               {work.gallery.map((imgUrl: string, idx: number) => (
+                 <motion.div 
+                   key={idx}
+                   initial={{ opacity: 0, y: 30 }}
+                   whileInView={{ opacity: 1, y: 0 }}
+                   viewport={{ once: true }}
+                   className="w-full rounded-[2rem] overflow-hidden bg-slate-100 shadow-xl"
+                 >
+                   <img 
+                     src={imgUrl} 
+                     className="w-full h-auto object-cover" 
+                     alt={`${work.title} - view ${idx + 1}`} 
+                   />
+                 </motion.div>
+               ))}
+             </div>
+           ) : (
+             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-8">
+                <div className="aspect-[4/5] rounded-[2rem] bg-slate-200 overflow-hidden">
+                  <img src={work.img} className="w-full h-full object-cover grayscale-[0.5]" alt="" />
+                </div>
+                <div className="aspect-[4/5] rounded-[2rem] bg-slate-200 overflow-hidden mt-12">
+                  <img src={work.img} className="w-full h-full object-cover" alt="" />
+                </div>
+             </div>
+           )}
 
            <div className="space-y-8">
               <h3 className="font-special-serif text-3xl italic">"Visual empathy is the core of every design decision we made on this project."</h3>
