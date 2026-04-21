@@ -6,6 +6,7 @@ interface DesktopIconProps {
   id: string;
   label: string;
   icon?: LucideIcon;
+  iconUrl?: string;
   type?: "folder" | "file" | "app";
   color?: string; // Gradient class or hex
   subtext?: string;
@@ -16,6 +17,7 @@ interface DesktopIconProps {
 export const DesktopIcon = ({
   label,
   icon: Icon,
+  iconUrl,
   type = "folder",
   color = "from-blue-500 to-blue-600",
   subtext,
@@ -70,6 +72,10 @@ export const DesktopIcon = ({
                 </div>
               )}
             </div>
+          </div>
+        ) : iconUrl ? (
+          <div className="size-20 bg-white rounded-2xl shadow-icon group-hover:shadow-lg transition-all flex items-center justify-center p-3 overflow-hidden">
+             <img src={iconUrl} alt={label} className="w-full h-full object-contain" />
           </div>
         ) : Icon ? (
           <div className="p-4 bg-white rounded-2xl shadow-icon group-hover:shadow-lg transition-all">

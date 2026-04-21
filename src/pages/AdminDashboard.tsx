@@ -45,7 +45,8 @@ const AdminDashboard = () => {
   const [newLink, setNewLink] = useState({
     title: "",
     url: "",
-    icon_name: "Instagram",
+    icon_name: "Star",
+    icon_url: "",
     color: "text-blue-500",
     top: "20%",
     left: "20%"
@@ -136,7 +137,7 @@ const AdminDashboard = () => {
       toast.success("Shortcut added to desktop!");
       setDesktopLinks([...desktopLinks, data[0]]);
       setIsLinkModalOpen(false);
-      setNewLink({ title: "", url: "", icon_name: "Instagram", color: "text-blue-500", top: "", left: "" });
+      setNewLink({ title: "", url: "", icon_name: "Star", icon_url: "", color: "text-blue-500", top: "", left: "" });
     } catch (error: any) {
       toast.error("Failed to add: " + error.message);
     }
@@ -681,16 +682,28 @@ const AdminDashboard = () => {
                     placeholder="e.g. My Instagram"
                   />
                 </div>
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-4">External URL</label>
-                  <input 
-                    required
-                    type="text" 
-                    value={newLink.url}
-                    onChange={(e) => setNewLink({...newLink, url: e.target.value})}
-                    className="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 focus:ring-2 focus:ring-primary/20 transition-all font-bold"
-                    placeholder="https://instagram.com/..."
-                  />
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-4">External URL</label>
+                    <input 
+                      required
+                      type="text" 
+                      value={newLink.url}
+                      onChange={(e) => setNewLink({...newLink, url: e.target.value})}
+                      className="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 focus:ring-2 focus:ring-primary/20 transition-all font-bold"
+                      placeholder="https://social.com/..."
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-4">Icon Image URL (Optional)</label>
+                    <input 
+                      type="text" 
+                      value={newLink.icon_url}
+                      onChange={(e) => setNewLink({...newLink, icon_url: e.target.value})}
+                      className="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 focus:ring-2 focus:ring-primary/20 transition-all font-bold"
+                      placeholder="https://site.com/icon.png"
+                    />
+                  </div>
                 </div>
                 <div className="space-y-2">
                   <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-4">Accent Color</label>

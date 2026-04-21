@@ -166,6 +166,7 @@ const Index = () => {
                 id={link.id} 
                 label={link.title} 
                 icon={Star} 
+                iconUrl={link.icon_url}
                 type="app" 
                 color={link.color} 
                 onClick={() => window.open(link.url, '_blank')} 
