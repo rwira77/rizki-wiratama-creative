@@ -28,7 +28,7 @@ export const DesktopIcon = ({
       whileTap={{ scale: 0.95 }}
       onClick={onClick}
       className={cn(
-        "flex flex-col items-center justify-center p-4 rounded-xl cursor-pointer transition-all duration-300 w-28 sm:w-32 group",
+        "flex flex-col items-center justify-center p-4 rounded-xl cursor-pointer transition-all duration-300 w-24 sm:w-32 group",
         className
       )}
     >

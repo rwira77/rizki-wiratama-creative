@@ -75,7 +75,7 @@ export const Portfolio = () => {
                 </h2>
               </div>
               
-              <div className="grid grid-cols-3 md:grid-cols-5 gap-x-2 md:gap-x-12 gap-y-12 md:gap-y-24 justify-items-center">
+              <div className="grid grid-cols-3 md:grid-cols-5 gap-x-6 md:gap-x-12 gap-y-16 md:gap-y-24 justify-items-center">
                 {categories.map((cat) => {
                   const catProjects = works.filter(w => w.cat?.trim().toLowerCase() === cat.id.toLowerCase());
                   return (
