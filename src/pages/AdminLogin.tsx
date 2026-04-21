@@ -3,21 +3,34 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Lock, User, ArrowRight, ShieldCheck } from "lucide-react";
 import { toast } from "sonner";
+import { supabase } from "@/lib/supabase";
 
 const AdminLogin = () => {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Simple mock login
-    if (username === "admin" && password === "rizki2026") {
-      localStorage.setItem("isAdminAuthenticated", "true");
-      toast.success("Welcome back, Rizki");
-      navigate("/admin/dashboard");
-    } else {
-      toast.error("Invalid credentials. Please try again.");
+    setIsLoading(true);
+    
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (error) throw error;
+
+      if (data.user) {
+        toast.success("Identity verified. Welcome, Rizki.");
+        navigate("/admin/dashboard");
+      }
+    } catch (error: any) {
+      toast.error(error.message || "Authentication failed");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -42,11 +55,11 @@ const AdminLogin = () => {
             <div className="relative group">
               <User className="absolute left-6 top-1/2 -translate-y-1/2 size-4 text-slate-300 group-focus-within:text-primary transition-colors" />
               <input 
-                type="text" 
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                type="email" 
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="w-full bg-slate-50 border-none rounded-2xl py-4 pl-14 pr-6 focus:ring-2 focus:ring-primary/20 transition-all font-bold text-slate-900"
-                placeholder="Username"
+                placeholder="admin@rizki.com"
               />
             </div>
           </div>
@@ -67,9 +80,10 @@ const AdminLogin = () => {
 
           <button 
             type="submit"
-            className="w-full bg-slate-900 text-white rounded-2xl py-4 font-bold flex items-center justify-center gap-3 hover:bg-black transition-colors group mt-8 shadow-xl"
+            disabled={isLoading}
+            className="w-full bg-slate-900 text-white rounded-2xl py-4 font-bold flex items-center justify-center gap-3 hover:bg-black transition-colors group mt-8 shadow-xl disabled:opacity-50"
           >
-            Authenticate
+            {isLoading ? "Verifying..." : "Authenticate"}
             <ArrowRight className="size-4 group-hover:translate-x-1 transition-transform" />
           </button>
         </form>

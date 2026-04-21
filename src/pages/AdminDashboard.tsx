@@ -18,7 +18,6 @@ import {
 import { initialWorks, categories } from "@/components/Portfolio";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
-
 import { supabase } from "@/lib/supabase";
 
 const AdminDashboard = () => {
@@ -55,19 +54,23 @@ const AdminDashboard = () => {
     }
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("isAdminAuthenticated");
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
     toast.info("Session ended");
     navigate("/");
   };
 
   useEffect(() => {
-    const isAuth = localStorage.getItem("isAdminAuthenticated");
-    if (!isAuth) {
-      navigate("/admin/login");
-      return;
-    }
-    fetchWorks();
+    const checkSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        navigate("/admin/login");
+        return;
+      }
+      fetchWorks();
+    };
+    
+    checkSession();
   }, [navigate]);
 
   const toggleDetail = async (id: string, currentStatus: boolean) => {
