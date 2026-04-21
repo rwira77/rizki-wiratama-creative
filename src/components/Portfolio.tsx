@@ -102,7 +102,7 @@ export const Portfolio = () => {
               </div>
 
               {/* ULTRA PINTEREST MASONRY (Based on image ratio) */}
-              <div className="columns-1 md:columns-2 gap-4 space-y-4 pb-48">
+              <div className="columns-2 gap-3 space-y-3 md:gap-4 md:space-y-4 pb-48 px-2 md:px-0">
                 {sortedWorks.map((w, i) => (
                   <motion.div 
                     key={w.id || i} 
@@ -111,7 +111,7 @@ export const Portfolio = () => {
                     transition={{ delay: i * 0.1, duration: 1 }}
                     className="break-inside-avoid relative group cursor-pointer"
                   >
-                    <div className="block overflow-hidden rounded-[3.5rem] bg-slate-50 border border-slate-50 shadow-lg hover:shadow-2xl transition-all duration-700">
+                    <div className="block overflow-hidden rounded-3xl md:rounded-[3.5rem] bg-slate-50 border border-slate-50 shadow-lg hover:shadow-2xl transition-all duration-700">
                       <div className="relative w-full h-auto">
                         <img
                           src={w.img || "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop"}
@@ -120,25 +120,25 @@ export const Portfolio = () => {
                         />
                         
                         {/* Elegant Minimal Overlay */}
-                        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-12">
-                          <div className="translate-y-6 group-hover:translate-y-0 transition-transform duration-500">
-                            <p className="text-[10px] font-black uppercase tracking-[0.4em] text-primary mb-3">Portfolio</p>
-                            <h3 className="font-special-serif text-3xl text-white mb-6 leading-tight">{w.title}</h3>
+                        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-4 md:p-12">
+                          <div className="translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                            <p className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.4em] text-primary mb-1 md:mb-3">Portfolio</p>
+                            <h3 className="font-special-serif text-lg md:text-3xl text-white mb-3 md:mb-6 leading-tight">{w.title}</h3>
                             
                             <div className="flex justify-between items-center">
                                {w.hasDetail ? (
-                                 <Link to={`/portfolio/${w.id}`} className="flex items-center gap-3">
-                                    <div className="size-12 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white flex items-center justify-center hover:bg-white hover:text-black transition-all">
-                                       <Plus className="size-6" />
+                                 <Link to={`/portfolio/${w.id}`} className="flex items-center gap-2 md:gap-3">
+                                    <div className="size-8 md:size-12 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white flex items-center justify-center hover:bg-white hover:text-black transition-all">
+                                       <Plus className="size-4 md:size-6" />
                                     </div>
-                                    <span className="text-white text-[10px] font-black uppercase tracking-widest">Case Study</span>
+                                    <span className="text-white text-[8px] md:text-[10px] font-black uppercase tracking-widest leading-none">View Story</span>
                                  </Link>
                                ) : (
-                                 <a href="#contact" className="flex items-center gap-3">
-                                    <div className="size-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white flex items-center justify-center">
-                                       <ArrowUpRight className="size-6" />
+                                 <a href="#contact" className="flex items-center gap-2 md:gap-3">
+                                    <div className="size-8 md:size-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white flex items-center justify-center">
+                                       <ArrowUpRight className="size-4 md:size-6" />
                                     </div>
-                                    <span className="text-white/50 text-[10px] font-black uppercase tracking-widest">Inquire</span>
+                                    <span className="text-white/50 text-[8px] md:text-[10px] font-black uppercase tracking-widest leading-none">Inquire</span>
                                  </a>
                                )}
                             </div>
@@ -147,8 +147,8 @@ export const Portfolio = () => {
 
                         {/* Minimal floating icon (Not Hovered) */}
                         {w.hasDetail && (
-                          <div className="absolute top-10 right-10 z-20 size-12 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white flex items-center justify-center shadow-2xl group-hover:scale-0 transition-transform">
-                             <ArrowUpRight className="size-6 rotate-[-45deg] group-hover:rotate-0 transition-transform" />
+                          <div className="absolute top-4 right-4 md:top-10 md:right-10 z-20 size-8 md:size-12 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white flex items-center justify-center shadow-2xl group-hover:scale-0 transition-transform">
+                             <ArrowUpRight className="size-4 md:size-6 rotate-[-45deg] group-hover:rotate-0 transition-transform" />
                           </div>
                         )}
                       </div>
