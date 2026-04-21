@@ -1,73 +1,37 @@
-import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
-import { ArrowUpRight, ChevronLeft, Image as ImageIcon, Palette, Megaphone, Camera, Video, PenTool } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { 
+  Palette, 
+  Share2, 
+  Camera, 
+  Video, 
+  Layout, 
+  ChevronRight, 
+  ChevronLeft,
+  ArrowUpRight,
+  Image as ImageIcon
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
 import { supabase } from "@/lib/supabase";
 
-// Standardizing image imports
-import workBranding from "@/assets/work-branding.jpg";
-import workSocial from "@/assets/work-social.jpg";
-import workPhoto from "@/assets/work-photo.jpg";
-import workVideo from "@/assets/work-video.jpg";
-import workEvent from "@/assets/work-event.jpg";
-import workCampaign from "@/assets/work-campaign.jpg";
-
-export const categories = [
-  { id: "Branding", label: "Branding", icon: Palette, color: "from-blue-500 to-indigo-600", images: [workBranding, workEvent] },
-  { id: "Social Media", label: "Social Media", icon: Megaphone, color: "from-purple-500 to-fuchsia-600", images: [workSocial] },
-  { id: "Photography", label: "Photography", icon: Camera, color: "from-orange-500 to-rose-600", images: [workPhoto, workCampaign] },
-  { id: "Videography", label: "Videography", icon: Video, color: "from-emerald-500 to-teal-600", images: [workVideo] },
-  { id: "Graphic Design", label: "Graphic Design", icon: PenTool, color: "from-amber-500 to-yellow-600", images: [workBranding] },
-];
+// Sample data as fallback
+import workBranding from "@/assets/portfolio/branding-1.jpg";
+import workEvent from "@/assets/portfolio/branding-2.jpg";
+import workSocial from "@/assets/portfolio/social-1.jpg";
+import workCampaign from "@/assets/portfolio/social-2.jpg";
 
 export const initialWorks = [
   {
     id: "remlint-identity",
-    title: "Remlint Identity",
+    title: "Remlint Visual Identity",
     cat: "Branding",
     img: workBranding,
-    problem: "Generic, undifferentiated label",
-    result: "Premium brand recall +210%",
-    year: "2025",
-    span: "md:col-span-7",
-    aspect: "aspect-[4/3]",
-    hasDetail: true,
-  },
-  {
-    id: "maison-editorial",
-    title: "Maison Editorial",
-    cat: "Photography",
-    img: workPhoto,
-    problem: "Flat product imagery",
-    result: "CTR +68% across paid",
-    year: "2025",
-    span: "md:col-span-5",
-    aspect: "aspect-[4/5]",
-    hasDetail: false,
-  },
-  {
-    id: "atelier-social",
-    title: "Atelier Social System",
-    cat: "Social Media",
-    img: workSocial,
-    problem: "Inconsistent feed, low engagement",
-    result: "+340% followers in 9 months",
+    problem: "Outdated legacy perception",
+    result: "120% increase in brand equity",
     year: "2024",
-    span: "md:col-span-5",
-    aspect: "aspect-[4/5]",
-    hasDetail: true,
-  },
-  {
-    id: "runway-24",
-    title: "Runway 24 Campaign",
-    cat: "Videography",
-    img: workVideo,
-    problem: "No video presence",
-    result: "2.4M organic reach",
-    year: "2024",
-    span: "md:col-span-7",
-    aspect: "aspect-[4/3]",
+    span: "md:col-span-12",
+    aspect: "aspect-[21/9]",
     hasDetail: true,
   },
   {
@@ -82,22 +46,17 @@ export const initialWorks = [
     aspect: "aspect-[4/3]",
     hasDetail: false,
   },
-  {
-    id: "soft-form",
-    title: "Soft Form Campaign",
-    cat: "Photography",
-    img: workCampaign,
-    problem: "Weak seasonal positioning",
-    result: "+85% online sales QoQ",
-    year: "2023",
-    span: "md:col-span-5",
-    aspect: "aspect-[4/5]",
-    hasDetail: false,
-  },
+];
+
+export const categories = [
+  { id: "Branding", label: "Branding", icon: Palette, color: "from-blue-500 to-indigo-600", images: [workBranding, workEvent] },
+  { id: "Social Media", label: "Social Media", icon: Share2, color: "from-purple-500 to-pink-600", images: [workSocial, workCampaign] },
+  { id: "Photography", label: "Photography", icon: Camera, color: "from-orange-500 to-red-600", images: [workCampaign, workBranding] },
+  { id: "Videography", label: "Videography", icon: Video, color: "from-emerald-500 to-teal-600", images: [workEvent, workSocial] },
+  { id: "Graphic Design", label: "Graphic Design", icon: Layout, color: "from-slate-700 to-slate-900", images: [workBranding, workSocial] }
 ];
 
 const PortfolioFolder = ({ category, count, projects, onClick }: { category: any, count: number, projects: any[], onClick: () => void }) => {
-  // Use real project images for preview, fallback to category defaults if empty
   const previewImages = projects.length > 0 
     ? projects.slice(0, 2).map(p => p.img) 
     : category.images;
@@ -110,13 +69,11 @@ const PortfolioFolder = ({ category, count, projects, onClick }: { category: any
       className="group cursor-pointer flex flex-col items-center"
     >
       <div className="relative w-48 h-40 mb-4 transition-all duration-500">
-        {/* Back Flap */}
         <div className={cn(
           "absolute top-0 left-0 w-2/3 h-4 rounded-t-xl bg-gradient-to-br opacity-90",
           category.color
         )} />
         
-        {/* Sticking Out Images */}
         <div className="absolute inset-0 z-0">
           {previewImages.map((img: string, idx: number) => (
             <motion.div
@@ -139,10 +96,8 @@ const PortfolioFolder = ({ category, count, projects, onClick }: { category: any
           ))}
         </div>
 
-        {/* Regular Folder Papers */}
         <div className="absolute top-2 left-6 right-6 h-28 bg-white/80 rounded-lg shadow-sm -rotate-1 z-0 group-hover:-translate-y-4 transition-transform duration-500" />
 
-        {/* Front Flap */}
         <div className={cn(
           "absolute bottom-0 left-0 right-0 h-32 rounded-2xl bg-gradient-to-br shadow-2xl z-10 p-6 flex flex-col justify-between overflow-hidden transition-all duration-500 group-hover:translate-x-1 group-hover:rotate-1",
           category.color
@@ -169,9 +124,8 @@ const PortfolioFolder = ({ category, count, projects, onClick }: { category: any
 
 export const Portfolio = () => {
   const [selectedCat, setSelectedCat] = useState<string | null>(null);
-  const [works, setWorks] = useState(initialWorks);
+  const [works, setWorks] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-
   const [isLive, setIsLive] = useState(false);
 
   useEffect(() => {
@@ -208,111 +162,115 @@ export const Portfolio = () => {
     : works;
 
   return (
-    <section id="work" className="py-4">
-      <AnimatePresence mode="wait">
-        {!selectedCat ? (
-          <motion.div
-            key="categories"
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 1.05 }}
-            className="space-y-12"
-          >
-            <div className="grid md:grid-cols-12 gap-10">
-              <div className="md:col-span-8">
-                <p className="text-xs uppercase tracking-[0.3em] text-primary mb-6 flex items-center gap-3">
-                  <span className="h-px w-8 bg-primary" /> Gallery
-                </p>
-                <h2 className="font-display text-4xl md:text-5xl font-light leading-tight tracking-tight">
-                  Organized by <em className="text-primary italic">discipline</em>.
+    <section id="work" className="py-24">
+      <div className="container px-6 mx-auto">
+        <AnimatePresence mode="wait">
+          {!selectedCat ? (
+            <motion.div
+              key="categories"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.5 }}
+            >
+              <div className="grid md:grid-cols-12 gap-12 items-end mb-20">
+                <div className="md:col-span-8">
+                  <p className="text-xs uppercase tracking-[0.3em] text-primary mb-6 flex items-center gap-3">
+                    <span className="h-px w-8 bg-primary" /> Gallery
+                  </p>
+                  <h2 className="font-display text-4vh md:text-5xl font-light leading-tight tracking-tight">
+                    Organized by <em className="text-primary italic">discipline</em>.
+                  </h2>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-20">
+                {categories.map((cat) => (
+                  <PortfolioFolder 
+                    key={cat.id} 
+                    category={cat} 
+                    count={works.filter(w => w.cat?.trim().toLowerCase() === cat.id.toLowerCase()).length}
+                    projects={works.filter(w => w.cat?.trim().toLowerCase() === cat.id.toLowerCase())}
+                    onClick={() => setSelectedCat(cat.id)} 
+                  />
+                ))}
+              </div>
+            </motion.div>
+          ) : (
+            <motion.div
+              key="grid"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              className="space-y-12"
+            >
+              <div className="flex items-center justify-between">
+                <button 
+                  onClick={() => setSelectedCat(null)}
+                  className="flex items-center gap-2 text-sm font-medium text-black/50 hover:text-black transition-colors"
+                >
+                  <ChevronLeft className="size-4" /> Back to Folders
+                </button>
+                <h2 className="font-display text-2xl font-light">
+                  {selectedCat} <span className="opacity-20 ml-2">/</span>
+                  <span className="ml-4 text-xs font-black uppercase tracking-widest text-primary bg-primary/5 px-2 py-1 rounded-lg">
+                    {filteredWorks.length} Projects Detected
+                  </span>
                 </h2>
               </div>
-            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-24 gap-y-32 pt-16 pb-32 justify-items-center max-w-4xl mx-auto">
-              {categories.map((cat) => (
-                <PortfolioFolder 
-                  key={cat.id} 
-                  category={cat} 
-                  count={works.filter(w => w.cat?.trim().toLowerCase() === cat.id.toLowerCase()).length}
-                  projects={works.filter(w => w.cat?.trim().toLowerCase() === cat.id.toLowerCase())}
-                  onClick={() => setSelectedCat(cat.id)} 
-                />
-              ))}
-            </div>
-          </motion.div>
-        ) : (
-          <motion.div
-            key="grid"
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-            className="space-y-12"
-          >
-            <div className="flex items-center justify-between">
-              <button 
-                onClick={() => setSelectedCat(null)}
-                className="flex items-center gap-2 text-sm font-medium text-black/50 hover:text-black transition-colors"
-              >
-                <ChevronLeft className="size-4" /> Back to Files
-              </button>
-              <h2 className="font-display text-2xl font-light">
-                {selectedCat} <span className="opacity-20 ml-2">/</span>
-                <span className="ml-4 text-xs font-black uppercase tracking-widest text-primary bg-primary/5 px-2 py-1 rounded-lg">
-                  {filteredWorks.length} {filteredWorks.length === 1 ? 'Project' : 'Projects'} Detected
-                </span>
-              </h2>
-            </div>
+              <div className="grid md:grid-cols-12 gap-10 pb-20">
+                {filteredWorks.map((w, i) => {
+                  const CardWrapper = ({ children, className }: any) => {
+                    if (w.hasDetail) {
+                      return <Link to={`/portfolio/${w.id}`} className={className}>{children}</Link>;
+                    }
+                    return <a href="#contact" className={className}>{children}</a>;
+                  };
 
-            <div className="grid md:grid-cols-12 gap-6 pb-20">
-              {filteredWorks.map((w, i) => {
-                const CardWrapper = ({ children, className }: any) => {
-                  if (w.hasDetail) {
-                    return <Link to={`/portfolio/${w.id}`} className={className}>{children}</Link>;
-                  }
-                  return <a href="#contact" className={className}>{children}</a>;
-                };
-
-                return (
-                  <motion.div
-                    key={w.id || `work-${i}`}
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.7, delay: i * 0.1 }}
-                    className={w.span || "md:col-span-6"}
-                  >
-                    <CardWrapper className="group block">
-                      <div className={`relative overflow-hidden rounded-3xl bg-muted shadow-lg ${w.aspect || "aspect-[4/3]"}`}>
-                        <img
-                          src={w.img}
-                          alt={`${w.title} — ${w.cat} case study`}
-                          loading="lazy"
-                          className="absolute inset-0 w-full h-full object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-[1.06]"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-40 group-hover:opacity-70 transition-opacity duration-500" />
-
-                        <div className="absolute inset-0 p-6 md:p-8 flex flex-col justify-end text-white">
-                          <div className="flex items-end justify-between gap-4">
-                            <div>
-                              <p className="text-[10px] uppercase tracking-[0.2em] text-white/70 mb-2 font-bold">
-                                {w.cat} · {w.year}
-                              </p>
-                              <h3 className="font-display text-2xl md:text-3xl font-light">{w.title}</h3>
+                  return (
+                    <motion.div
+                      key={`works-grid-${w.id}-${i}`}
+                      initial={{ opacity: 0, y: 30 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.7, delay: i * 0.1 }}
+                      className={w.span || "md:col-span-6"}
+                    >
+                      <CardWrapper className="group block">
+                        <div className={cn(
+                          "relative overflow-hidden rounded-[2.5rem] bg-slate-100 shadow-xl border border-slate-50",
+                          w.aspect || "aspect-[4/3]"
+                        )}>
+                          {w.img ? (
+                            <img
+                              src={w.img}
+                              alt={w.title}
+                              className="absolute inset-0 w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-[1.08]"
+                            />
+                          ) : (
+                            <div className="absolute inset-0 flex items-center justify-center text-slate-300">
+                               <ImageIcon className="size-12" />
                             </div>
-                            <span className="size-10 rounded-full border border-white/30 flex items-center justify-center backdrop-blur-md transition-all duration-500 group-hover:bg-white group-hover:text-black group-hover:rotate-45">
-                              <ArrowUpRight className="size-4" />
-                            </span>
+                          )}
+                          
+                          <div className="absolute inset-0 flex flex-col justify-end p-8 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-80 group-hover:opacity-100 transition-all duration-500">
+                            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/50 mb-2">{w.cat}</p>
+                            <h3 className="font-special-serif text-3xl text-white mb-2">{w.title}</h3>
+                            <p className="text-white/60 text-sm line-clamp-2 max-w-md">{w.problem}</p>
+                            <div className="mt-6 flex items-center gap-2 text-primary font-bold text-xs uppercase tracking-widest opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-500 delay-100">
+                               View Case Study <ChevronRight className="size-3" />
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </CardWrapper>
-                  </motion.div>
-                );
-              })}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+                      </CardWrapper>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
     </section>
   );
 };
