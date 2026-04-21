@@ -111,7 +111,7 @@ export const Portfolio = () => {
                     transition={{ delay: i * 0.1, duration: 1 }}
                     className="break-inside-avoid relative group cursor-pointer"
                   >
-                    <div className="block overflow-hidden rounded-3xl md:rounded-[3.5rem] bg-slate-50 border border-slate-50 shadow-lg hover:shadow-2xl transition-all duration-700">
+                    <div className="block overflow-hidden rounded-2xl bg-slate-50 border border-slate-50 shadow-lg hover:shadow-2xl transition-all duration-700">
                       <div className="relative w-full h-auto">
                         <img
                           src={w.img || "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop"}
