@@ -151,7 +151,7 @@ const Index = () => {
         </div>
 
         {/* --- MOBILE HOME SCREEN --- */}
-        <div className="md:hidden flex flex-col px-4 pt-16 pb-40 space-y-10">
+        <div className="md:hidden flex flex-col px-4 pt-[52px] pb-40 space-y-10">
           {/* Mobile Profile Card */}
           <motion.div 
             initial={{ opacity: 0, y: 30 }}
