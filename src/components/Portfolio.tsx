@@ -67,7 +67,7 @@ export const Portfolio = () => {
                    Organized by <em className="text-primary italic">discipline</em>.
                 </h2>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-12 gap-y-24">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-16 gap-y-32 justify-items-center">
                 {categories.map((cat) => {
                   const projects = works.filter(w => w.cat?.trim().toLowerCase() === cat.id.toLowerCase());
                   const previewImages = projects.length > 0 ? projects.slice(0, 2).map(p => p.img) : (cat as any).images;
