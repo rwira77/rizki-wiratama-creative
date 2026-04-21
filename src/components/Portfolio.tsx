@@ -70,8 +70,8 @@ export const Portfolio = () => {
                 <p className="text-[10px] uppercase tracking-[0.4em] text-primary mb-4 flex items-center gap-3">
                   <span className="h-px w-6 bg-primary" /> Gallery
                 </p>
-                <h2 className="font-display text-3xl md:text-6xl font-light leading-tight tracking-tight text-slate-900">
-                   Organized by <em className="text-primary italic">discipline</em>.
+                <h2 className="font-display text-3xl md:text-6xl font-light leading-tight tracking-tight text-slate-900 uppercase">
+                   <em className="text-primary italic">Portfolio</em>.
                 </h2>
               </div>
               
