@@ -12,6 +12,7 @@ interface DesktopIconProps {
   subtext?: string;
   onClick: () => void;
   className?: string;
+  size?: "sm" | "md";
 }
 
 export const DesktopIcon = ({
@@ -23,18 +24,22 @@ export const DesktopIcon = ({
   subtext,
   onClick,
   className,
+  size = "md",
 }: DesktopIconProps) => {
+  const isSmall = size === "sm";
+
   return (
     <motion.div
       whileHover={{ scale: 1.05, y: -5 }}
       whileTap={{ scale: 0.95 }}
       onClick={onClick}
       className={cn(
-        "flex flex-col items-center justify-center p-4 rounded-xl cursor-pointer transition-all duration-300 w-[88px] sm:w-32 group",
+        "flex flex-col items-center justify-center p-4 rounded-xl cursor-pointer transition-all duration-300 group",
+        isSmall ? "w-[72px] sm:w-24" : "w-[88px] sm:w-32",
         className
       )}
     >
-      <div className="relative mb-3 h-20 w-20 flex items-center justify-center">
+      <div className={cn("relative mb-3 flex items-center justify-center", isSmall ? "h-14 w-14" : "h-20 w-20")}>
         {type === "folder" ? (
           <div className="relative w-full h-full">
             {/* Back Fold */}
@@ -74,15 +79,17 @@ export const DesktopIcon = ({
             </div>
           </div>
         ) : iconUrl ? (
-          <div className="size-20 bg-white rounded-2xl shadow-icon group-hover:shadow-lg transition-all flex items-center justify-center p-3 overflow-hidden">
+          <div className={cn("bg-white rounded-2xl shadow-icon group-hover:shadow-lg transition-all flex items-center justify-center p-3 overflow-hidden", isSmall ? "size-14" : "size-20")}>
              <img src={iconUrl} alt={label} className="w-full h-full object-contain" />
           </div>
         ) : Icon ? (
-          <div className="p-4 bg-white rounded-2xl shadow-icon group-hover:shadow-lg transition-all">
-            <Icon className={cn("size-10 sm:size-12", color)} strokeWidth={1.5} />
+          <div className={cn("bg-white rounded-2xl shadow-icon group-hover:shadow-lg transition-all", isSmall ? "p-2.5" : "p-4")}>
+            <Icon className={cn(isSmall ? "size-7 sm:size-8" : "size-10 sm:size-12", color)} strokeWidth={1.5} />
           </div>
         ) : (
-          <FileText className={cn("size-10 sm:size-12", color)} strokeWidth={1.5} />
+          <div className={cn("bg-white rounded-2xl shadow-icon group-hover:shadow-lg transition-all", isSmall ? "p-2.5" : "p-4")}>
+            <FileText className={cn(isSmall ? "size-7 sm:size-8" : "size-10 sm:size-12", color)} strokeWidth={1.5} />
+          </div>
         )}
       </div>
       

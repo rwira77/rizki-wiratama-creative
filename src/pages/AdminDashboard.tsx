@@ -14,8 +14,10 @@ import {
   PenTool,
   ExternalLink,
   Info,
-  Star
+  Star,
+  Folder
 } from "lucide-react";
+import { SECTIONS } from "@/pages/Index";
 import { initialWorks, categories } from "@/components/Portfolio";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";

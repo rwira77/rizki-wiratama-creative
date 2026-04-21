@@ -32,7 +32,7 @@ import { Contact } from "@/components/Contact";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/lib/supabase";
 
-const SECTIONS = [
+export const SECTIONS = [
   { id: "about", title: "About Me", icon: User, component: About, color: "from-orange-400 to-orange-500", subtext: "Bio" },
   { id: "portfolio", title: "My Work", icon: ImageIcon, component: Portfolio, color: "from-blue-500 to-indigo-600", subtext: "78%" },
   { id: "services", title: "Services", icon: Layout, component: Services, color: "from-purple-500 to-fuchsia-600", subtext: "Pro" },
@@ -185,6 +185,7 @@ const Index = () => {
                 label={link.title} 
                 icon={Star} 
                 iconUrl={link.icon_url}
+                size="sm"
                 type="app" 
                 color={link.color} 
                 onClick={() => window.open(link.url, '_blank')} 
