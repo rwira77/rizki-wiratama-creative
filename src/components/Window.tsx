@@ -98,8 +98,8 @@ export const Window = ({
           {/* Subtle Glass Glare */}
           <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-transparent pointer-events-none z-0" />
 
-          {/* Main Title Bar (Control Area) */}
-          <div className="h-16 bg-white/20 border-b border-white/20 flex items-center justify-between px-8 shrink-0 z-50">
+          {/* Main Title Bar (Control Area) - Hidden on Mobile */}
+          <div className="h-16 bg-white/20 border-b border-white/20 flex items-center justify-between px-8 shrink-0 z-50 hidden md:flex">
             <div className="flex items-center gap-4">
               <div className="flex gap-2">
                 <button 
