@@ -26,6 +26,16 @@ const AdminDashboard = () => {
   const [works, setWorks] = useState<any[]>([]);
   const [activeTab, setActiveTab] = useState("portfolio");
   const [isLoading, setIsLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [newProject, setNewProject] = useState({
+    title: "",
+    cat: "Branding",
+    img: "",
+    problem: "",
+    result: "",
+    year: new Date().getFullYear().toString(),
+    hasDetail: false
+  });
 
   const fetchWorks = async () => {
     setIsLoading(true);
@@ -114,6 +124,32 @@ const AdminDashboard = () => {
       toast.error("Seed failed: " + error.message);
       console.error(error);
     }
+  const handleAddProject = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const id = newProject.title.toLowerCase().replace(/\s+/g, '-');
+    
+    try {
+      const { error } = await supabase
+        .from('works')
+        .insert([{ ...newProject, id }]);
+
+      if (error) throw error;
+      
+      toast.success("Project added successfully!");
+      setIsModalOpen(false);
+      setNewProject({
+        title: "",
+        cat: "Branding",
+        img: "",
+        problem: "",
+        result: "",
+        year: new Date().getFullYear().toString(),
+        hasDetail: false
+      });
+      fetchWorks();
+    } catch (error: any) {
+      toast.error("Failed to add project: " + error.message);
+    }
   };
 
   return (
@@ -183,7 +219,10 @@ const AdminDashboard = () => {
                </button>
              )}
              {activeTab === "portfolio" && (
-               <button className="bg-primary text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 hover:bg-primary/90 transition-colors shadow-lg active:scale-95">
+               <button 
+                 onClick={() => setIsModalOpen(true)}
+                 className="bg-primary text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 hover:bg-primary/90 transition-colors shadow-lg active:scale-95"
+               >
                  <Plus className="size-4" /> New Project
                </button>
              )}
@@ -288,6 +327,143 @@ const AdminDashboard = () => {
           </div>
         )}
       </main>
+
+      {/* Add Project Modal */}
+      <AnimatePresence>
+        {isModalOpen && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsModalOpen(false)}
+              className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="relative w-full max-w-2xl bg-white rounded-[3rem] shadow-2xl overflow-hidden"
+            >
+              <div className="p-10 border-b border-slate-100 flex items-center justify-between">
+                <div>
+                  <h2 className="font-special-serif text-3xl">Launch New Project</h2>
+                  <p className="text-xs font-black uppercase tracking-widest text-slate-300 mt-1">Project Deployment Form</p>
+                </div>
+                <button 
+                  onClick={() => setIsModalOpen(false)}
+                  className="p-3 hover:bg-slate-50 rounded-2xl transition-colors"
+                >
+                  <X className="size-6 text-slate-400" />
+                </button>
+              </div>
+
+              <form onSubmit={handleAddProject} className="p-10 space-y-6">
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-4">Project Title</label>
+                    <input 
+                      required
+                      type="text" 
+                      value={newProject.title}
+                      onChange={(e) => setNewProject({...newProject, title: e.target.value})}
+                      className="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 focus:ring-2 focus:ring-primary/20 transition-all font-bold"
+                      placeholder="e.g. Maison Editorial"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-4">Category</label>
+                    <select 
+                      value={newProject.cat}
+                      onChange={(e) => setNewProject({...newProject, cat: e.target.value})}
+                      className="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 focus:ring-2 focus:ring-primary/20 transition-all font-bold appearance-none"
+                    >
+                      {categories.map(c => <option key={c.id} value={c.id}>{c.label}</option>)}
+                    </select>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-4">Banner Image URL</label>
+                  <input 
+                    required
+                    type="text" 
+                    value={newProject.img}
+                    onChange={(e) => setNewProject({...newProject, img: e.target.value})}
+                    className="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 focus:ring-2 focus:ring-primary/20 transition-all font-bold"
+                    placeholder="https://images.unsplash.com/..."
+                  />
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-4">The Problem (Challenge)</label>
+                    <textarea 
+                      required
+                      value={newProject.problem}
+                      onChange={(e) => setNewProject({...newProject, problem: e.target.value})}
+                      className="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 focus:ring-2 focus:ring-primary/20 transition-all font-bold min-h-[100px]"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-4">The Result (Metric)</label>
+                    <textarea 
+                      required
+                      value={newProject.result}
+                      onChange={(e) => setNewProject({...newProject, result: e.target.value})}
+                      className="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 focus:ring-2 focus:ring-primary/20 transition-all font-bold min-h-[100px]"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between p-6 bg-slate-50 rounded-[2rem]">
+                  <div className="flex items-center gap-4">
+                    <div className={cn(
+                      "size-10 rounded-xl flex items-center justify-center transition-colors",
+                      newProject.hasDetail ? "bg-emerald-100 text-emerald-600" : "bg-slate-200 text-slate-400"
+                    )}>
+                      <Check className="size-5" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-bold">Enable Case Study Detail</p>
+                      <p className="text-[10px] uppercase tracking-widest text-slate-400 font-black">Requires custom case study data</p>
+                    </div>
+                  </div>
+                  <button 
+                    type="button"
+                    onClick={() => setNewProject({...newProject, hasDetail: !newProject.hasDetail})}
+                    className={cn(
+                      "relative w-12 h-6 rounded-full transition-colors",
+                      newProject.hasDetail ? "bg-emerald-400" : "bg-slate-200"
+                    )}
+                  >
+                    <motion.div 
+                      animate={{ x: newProject.hasDetail ? 24 : 4 }}
+                      className="absolute top-1 size-4 bg-white rounded-full shadow-sm"
+                    />
+                  </button>
+                </div>
+
+                <div className="pt-4 flex gap-4">
+                  <button 
+                    type="button"
+                    onClick={() => setIsModalOpen(false)}
+                    className="flex-1 py-4 border border-slate-100 rounded-2xl font-bold text-slate-400 hover:bg-slate-50 transition-all"
+                  >
+                    Cancel
+                  </button>
+                  <button 
+                    type="submit"
+                    className="flex-[2] py-4 bg-slate-900 text-white rounded-2xl font-bold hover:bg-black transition-all shadow-xl active:scale-95"
+                  >
+                    Publish Project
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
