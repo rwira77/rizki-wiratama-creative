@@ -167,6 +167,8 @@ export const Portfolio = () => {
   const [works, setWorks] = useState(initialWorks);
   const [isLoading, setIsLoading] = useState(true);
 
+  const [isLive, setIsLive] = useState(false);
+
   useEffect(() => {
     const fetchWorks = async () => {
       try {
@@ -177,16 +179,17 @@ export const Portfolio = () => {
 
         if (error) throw error;
         
-        // Prioritaskan data dari Supabase jika ada (meskipun hanya 1 data baru)
         if (data && data.length > 0) {
           setWorks(data);
+          setIsLive(true);
         } else {
-          // Jika Supabase kosong (baru buat tabel), pakai data awal
           setWorks(initialWorks);
+          setIsLive(false);
         }
       } catch (error) {
         console.error('Supabase Fetch Error:', error);
         setWorks(initialWorks);
+        setIsLive(false);
       } finally {
         setIsLoading(false);
       }
@@ -214,6 +217,11 @@ export const Portfolio = () => {
               <div className="md:col-span-8">
                 <p className="text-xs uppercase tracking-[0.3em] text-primary mb-6 flex items-center gap-3">
                   <span className="h-px w-8 bg-primary" /> Gallery
+                  {isLive ? (
+                    <span className="ml-4 px-2 py-0.5 bg-emerald-100 text-emerald-600 text-[8px] font-black rounded-full animate-pulse">DB LIVE</span>
+                  ) : (
+                    <span className="ml-4 px-2 py-0.5 bg-slate-100 text-slate-400 text-[8px] font-black rounded-full">STATIC MODE</span>
+                  )}
                 </p>
                 <h2 className="font-display text-4xl md:text-5xl font-light leading-tight tracking-tight">
                   Organized by <em className="text-primary italic">discipline</em>.
