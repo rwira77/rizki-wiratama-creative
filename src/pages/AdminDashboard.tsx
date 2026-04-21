@@ -147,20 +147,28 @@ const AdminDashboard = () => {
 
   const updateSectionPosition = async () => {
     try {
+      const payload = { 
+        id: editingId as string, 
+        top: newLink.top, 
+        left: newLink.left 
+      };
+      
       const { error } = await supabase
         .from('section_settings')
-        .upsert({ 
-          id: editingId, 
-          top: newLink.top, 
-          left: newLink.left 
-        });
+        .upsert(payload);
 
       if (error) throw error;
+      
+      // Sync local state immediately
+      setSectionSettings(prev => {
+        const other = prev.filter(s => s.id !== editingId);
+        return [...other, payload];
+      });
+
       toast.success("Folder position updated!");
       setIsLinkModalOpen(false);
       setIsEditing(false);
       setEditingId(null);
-      fetchSectionSettings();
     } catch (error: any) {
       toast.error("Update failed: " + (error.message || "Check your table settings"));
     }
@@ -203,11 +211,15 @@ const AdminDashboard = () => {
 
       if (error) throw error;
       
+      // Sync local state immediately
+      setDesktopLinks(prev => prev.map(l => 
+        l.id === editingId ? { ...l, ...newLink } : l
+      ));
+
       toast.success("Shortcut updated!");
       setIsLinkModalOpen(false);
       setIsEditing(false);
       setEditingId(null);
-      fetchDesktopLinks();
     } catch (error: any) {
       toast.error("Update failed: " + error.message);
     }
