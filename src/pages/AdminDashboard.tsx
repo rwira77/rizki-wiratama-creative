@@ -231,6 +231,15 @@ const AdminDashboard = () => {
                 <LayoutDashboard className="size-4" /> Portfolio Management
              </button>
              <button 
+               onClick={() => setActiveTab("desktop")}
+               className={cn(
+                 "w-full flex items-center gap-4 px-6 py-4 rounded-2xl font-bold text-sm transition-all",
+                 activeTab === "desktop" ? "bg-slate-900 text-white shadow-xl scale-105" : "text-slate-400 hover:bg-slate-50"
+               )}
+             >
+                <PenTool className="size-4" /> Desktop Ecosystem
+             </button>
+             <button 
                onClick={() => setActiveTab("profile")}
                className={cn(
                  "w-full flex items-center gap-4 px-6 py-4 rounded-2xl font-bold text-sm transition-all",
@@ -260,7 +269,7 @@ const AdminDashboard = () => {
       <main className="ml-80 flex-1 p-12">
         <header className="flex items-center justify-between mb-12">
            <h1 className="font-special-serif text-5xl text-slate-900">
-             {activeTab === "portfolio" ? "Master Portfolio" : "Profile Settings"}
+             {activeTab === "portfolio" ? "Master Portfolio" : activeTab === "desktop" ? "Desktop Ecosystem" : "Profile Settings"}
            </h1>
            <div className="flex items-center gap-4">
              {activeTab === "portfolio" && works.length === 0 && (
@@ -280,6 +289,14 @@ const AdminDashboard = () => {
                  className="bg-primary text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 hover:bg-primary/90 transition-colors shadow-lg active:scale-95"
                >
                  <Plus className="size-4" /> New Project
+               </button>
+             )}
+             {activeTab === "desktop" && (
+               <button 
+                 onClick={() => setIsLinkModalOpen(true)}
+                 className="bg-slate-900 text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 hover:bg-black transition-colors shadow-lg active:scale-95"
+               >
+                 <Plus className="size-4" /> Add Shortcut
                </button>
              )}
            </div>
@@ -518,6 +535,78 @@ const AdminDashboard = () => {
                     className="flex-[2] py-4 bg-slate-900 text-white rounded-2xl font-bold hover:bg-black transition-all shadow-xl active:scale-95"
                   >
                     {isEditing ? "Update Project" : "Publish Project"}
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </div>
+        )}
+
+        {/* Add Shortcut Modal */}
+        {isLinkModalOpen && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              onClick={() => setIsLinkModalOpen(false)}
+              className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="relative w-full max-w-lg bg-white rounded-[3rem] shadow-2xl overflow-hidden"
+            >
+              <div className="p-10 border-b border-slate-100 flex items-center justify-between">
+                <div>
+                  <h2 className="font-special-serif text-3xl">Add Desktop Shortcut</h2>
+                  <p className="text-xs font-black uppercase tracking-widest text-slate-300 mt-1">Deploy External Link</p>
+                </div>
+                <button onClick={() => setIsLinkModalOpen(false)} className="p-3 hover:bg-slate-50 rounded-2xl transition-colors">
+                  <X className="size-6 text-slate-400" />
+                </button>
+              </div>
+
+              <form onSubmit={handleAddLink} className="p-10 space-y-6">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-4">Display Name</label>
+                  <input 
+                    required
+                    type="text" 
+                    value={newLink.title}
+                    onChange={(e) => setNewLink({...newLink, title: e.target.value})}
+                    className="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 focus:ring-2 focus:ring-primary/20 transition-all font-bold"
+                    placeholder="e.g. My Instagram"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-4">External URL</label>
+                  <input 
+                    required
+                    type="text" 
+                    value={newLink.url}
+                    onChange={(e) => setNewLink({...newLink, url: e.target.value})}
+                    className="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 focus:ring-2 focus:ring-primary/20 transition-all font-bold"
+                    placeholder="https://instagram.com/..."
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-4">Accent Color</label>
+                  <select 
+                    value={newLink.color}
+                    onChange={(e) => setNewLink({...newLink, color: e.target.value})}
+                    className="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 focus:ring-2 focus:ring-primary/20 transition-all font-bold appearance-none"
+                  >
+                    <option value="text-pink-500">Pink (Instagram)</option>
+                    <option value="text-black">Black (TikTok/Medium)</option>
+                    <option value="text-blue-500">Blue (LinkedIn)</option>
+                    <option value="text-orange-500">Orange (Behance)</option>
+                    <option value="text-purple-600">Purple (Figma)</option>
+                  </select>
+                </div>
+
+                <div className="pt-4 flex gap-4">
+                  <button type="submit" className="flex-1 py-4 bg-slate-900 text-white rounded-2xl font-bold hover:bg-black transition-all shadow-xl">
+                    Add to Desktop
                   </button>
                 </div>
               </form>

@@ -56,10 +56,22 @@ const Index = () => {
   const [windows, setWindows] = useState<{ id: string; contentId: string }[]>([]);
   const [windowZIndices, setWindowZIndices] = useState<Record<string, number>>({});
   const [maxZ, setMaxZ] = useState(100);
+  const [desktopLinks, setDesktopLinks] = useState<any[]>([]);
 
   useEffect(() => {
     document.title = "Rizki Wiratama — Portfolio 2026";
+    fetchDesktopLinks();
   }, []);
+
+  const fetchDesktopLinks = async () => {
+    try {
+      const { data, error } = await supabase.from('desktop_links').select('*');
+      if (error) throw error;
+      setDesktopLinks(data || []);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   const openWindow = (contentId: string) => {
     if (windows.length > 0) {
@@ -142,10 +154,21 @@ const Index = () => {
             </div>
           ))}
 
-          {/* Decorative Icons */}
-          {DECORATIVE_ICONS.map((dec) => (
-            <div key={dec.id} className="absolute" style={{ top: dec.top, left: dec.left }}>
-              <DesktopIcon id={dec.id} label={dec.label} icon={dec.icon} type={dec.type as any} color={dec.color} onClick={() => {}} />
+          {/* Dynamic Desktop Ecosystem Links */}
+          {desktopLinks.map((link) => (
+            <div 
+              key={link.id} 
+              className="absolute group" 
+              style={{ top: link.top, left: link.left }}
+            >
+              <DesktopIcon 
+                id={link.id} 
+                label={link.title} 
+                icon={Star} 
+                type="app" 
+                color={link.color} 
+                onClick={() => window.open(link.url, '_blank')} 
+              />
             </div>
           ))}
         </div>
