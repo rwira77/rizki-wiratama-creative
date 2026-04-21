@@ -8,7 +8,8 @@ import {
   Layout, 
   ChevronRight, 
   ChevronLeft,
-  ArrowUpRight
+  ArrowUpRight,
+  ExternalLink
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
@@ -53,25 +54,32 @@ export const Portfolio = () => {
     ? works.filter((w) => w.cat?.trim().toLowerCase() === selectedCat.toLowerCase())
     : works;
 
+  // Sorting Logic: Projects with hasDetail enabled go first
+  const sortedWorks = [...filteredWorks].sort((a, b) => {
+    if (a.hasDetail && !b.hasDetail) return -1;
+    if (!a.hasDetail && b.hasDetail) return 1;
+    return 0;
+  });
+
   return (
     <section id="work" className="py-24 bg-transparent min-h-screen">
       <div className="container px-6 mx-auto">
         <AnimatePresence mode="wait">
           {!selectedCat ? (
             <motion.div key="folders" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
-              <div className="mb-20 max-w-2xl px-4">
+              <div className="mb-20 max-w-2xl">
                 <p className="text-xs uppercase tracking-[0.3em] text-primary mb-6 flex items-center gap-3">
                   <span className="h-px w-8 bg-primary" /> Gallery
                 </p>
-                <h2 className="font-display text-4xl md:text-5xl font-light leading-tight tracking-tight text-slate-900">
+                <h2 className="font-display text-5xl md:text-6xl font-light leading-tight tracking-tight text-slate-900">
                    Organized by <em className="text-primary italic">discipline</em>.
                 </h2>
               </div>
               
               <div className="grid grid-cols-[repeat(auto-fit,minmax(180px,1fr))] gap-x-8 gap-y-24 justify-items-center">
                 {categories.map((cat) => {
-                  const projects = works.filter(w => w.cat?.trim().toLowerCase() === cat.id.toLowerCase());
-                  const previewImages = projects.length > 0 ? projects.slice(0, 2).map(p => p.img) : (cat as any).images;
+                  const catProjects = works.filter(w => w.cat?.trim().toLowerCase() === cat.id.toLowerCase());
+                  const previewImages = catProjects.length > 0 ? catProjects.slice(0, 2).map(p => p.img) : (cat as any).images;
                   
                   return (
                     <motion.div
@@ -81,7 +89,7 @@ export const Portfolio = () => {
                       onClick={() => setSelectedCat(cat.id)}
                       className="group cursor-pointer flex flex-col items-center w-40"
                     >
-                      <div className="relative w-full h-32 mb-4 transition-all duration-500">
+                      <div className="relative w-full h-32 mb-4">
                         <div className={cn("absolute top-0 left-0 w-2/3 h-4 rounded-t-xl bg-gradient-to-br opacity-90", cat.color)} />
                         <div className="absolute inset-0 z-0">
                           {previewImages.map((img: string, idx: number) => (
@@ -90,7 +98,7 @@ export const Portfolio = () => {
                               variants={{ hover: { y: -30 - (idx * 15), rotate: idx % 2 === 0 ? -8 : 8, x: idx % 2 === 0 ? -10 : 10, transition: { type: "spring", stiffness: 300, damping: 20 } } }}
                               className={cn("absolute left-4 right-4 h-28 rounded-lg border-2 border-white shadow-xl overflow-hidden z-[5]", idx === 0 ? "top-2 rotate-[-2deg]" : "top-4 rotate-[3deg]")}
                             >
-                              <img src={img} className="w-full h-full object-cover" alt="" />
+                              <img src={img || workBranding} className="w-full h-full object-cover" alt="" />
                             </motion.div>
                           ))}
                         </div>
@@ -99,7 +107,7 @@ export const Portfolio = () => {
                           <div className="relative z-20 flex justify-between items-start">
                             <cat.icon className="size-6 text-white/50 group-hover:text-white transition-colors" />
                             <span className="text-[9px] font-bold text-white/40 uppercase tracking-widest text-right leading-none">
-                              {projects.length}<br/>Items
+                              {catProjects.length}<br/>Items
                             </span>
                           </div>
                           <div className="relative z-20">
@@ -115,58 +123,70 @@ export const Portfolio = () => {
               </div>
             </motion.div>
           ) : (
-            <motion.div key="grid" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-              <div className="flex items-center justify-between mb-16 border-b border-slate-100 pb-12">
+            <motion.div key="grid" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-12">
+              <div className="flex items-center justify-between mb-16 border-b border-slate-100 pb-12 px-4">
                 <button onClick={() => setSelectedCat(null)} className="group flex items-center gap-3 text-sm font-bold text-slate-400 hover:text-black transition-all">
-                  <div className="size-10 rounded-full border border-slate-100 flex items-center justify-center group-hover:bg-slate-50">
+                  <div className="size-10 rounded-full border border-slate-100 flex items-center justify-center group-hover:bg-slate-50 transition-colors">
                     <ChevronLeft className="size-4" />
                   </div>
                   Back to Folders
                 </button>
                 <div className="text-right">
-                  <h2 className="font-display text-4xl font-light">{selectedCat}</h2>
-                  <p className="text-[10px] font-black uppercase tracking-widest text-primary mt-2">{filteredWorks.length} Projects Detected</p>
+                  <h2 className="font-display text-4xl font-light text-slate-900">{selectedCat}</h2>
+                  <p className="text-[10px] font-black uppercase tracking-widest text-primary mt-2">{sortedWorks.length} Projects Detected</p>
                 </div>
               </div>
 
-              <div className="grid md:grid-cols-2 gap-8 pb-32">
-                {filteredWorks.map((w, i) => (
-                  <div key={w.id || i} className="relative group block rounded-[3rem] overflow-hidden bg-slate-100 aspect-[4/3] shadow-2xl border border-slate-50">
-                    <div className="absolute inset-0 bg-slate-900">
-                      <img
-                        src={w.img || "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop"}
-                        alt=""
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[1.5s] ease-out opacity-70 group-hover:opacity-100"
-                      />
-                    </div>
-                    
-                    <div className="absolute top-8 right-8 z-30 size-10 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white text-[10px] font-black opacity-30 group-hover:opacity-100 transition-opacity">
-                      {String(i + 1).padStart(2, '0')}
-                    </div>
-
-                    <div className="absolute inset-0 flex flex-col justify-end p-10 bg-gradient-to-t from-black/95 via-black/40 to-transparent">
-                      <div className="space-y-4">
-                        <div>
-                          <p className="text-[10px] font-black uppercase tracking-[0.4em] text-primary mb-3 text-left">{w.cat || "Portfolio"}</p>
-                          <h3 className="font-special-serif text-3xl text-white leading-tight text-left">{w.title || "Untitled Project"}</h3>
-                        </div>
-                        <p className="text-white/60 text-sm line-clamp-2 max-w-sm font-medium text-left">{w.problem || "Visit project details to explore more."}</p>
+              {/* Masonry Layout Container */}
+              <div className="columns-1 md:columns-2 lg:columns-3 gap-8 space-y-8 px-4 pb-32">
+                {sortedWorks.map((w, i) => (
+                  <div key={w.id || i} className="break-inside-avoid">
+                    <div className="relative group block rounded-[2.5rem] overflow-hidden bg-slate-100 shadow-xl hover:shadow-2xl transition-all duration-500 border border-slate-100">
+                      {/* Image Layer */}
+                      <div className={cn(
+                        "relative overflow-hidden w-full",
+                        i % 3 === 0 ? "aspect-[3/4]" : i % 3 === 1 ? "aspect-[4/5]" : "aspect-[1/1]"
+                      )}>
+                        <img
+                          src={w.img || "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop"}
+                          alt={w.title}
+                          className="absolute inset-0 w-full h-full object-cover transition-transform duration-[2s] ease-out group-hover:scale-110"
+                        />
                         
-                        {w.hasDetail ? (
-                          <Link to={`/portfolio/${w.id}`} className="mt-6 inline-flex items-center gap-3 text-white text-xs font-bold uppercase tracking-widest opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-500">
-                             Explore Story 
-                             <div className="size-8 rounded-full bg-white text-black flex items-center justify-center">
-                                <ArrowUpRight className="size-4" />
-                             </div>
-                          </Link>
-                        ) : (
-                          <a href="#contact" className="mt-6 inline-flex items-center gap-3 text-white text-xs font-bold uppercase tracking-widest opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-500">
-                             Start Project
-                             <div className="size-8 rounded-full bg-primary text-white flex items-center justify-center">
-                                <ArrowUpRight className="size-4" />
-                             </div>
-                          </a>
+                        {/* Detail Tag (If enabled) */}
+                        {w.hasDetail && (
+                          <div className="absolute top-6 left-6 z-20 flex items-center gap-2 bg-white/20 backdrop-blur-md border border-white/30 text-white px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest">
+                            <ExternalLink className="size-3" /> Case Study
+                          </div>
                         )}
+                        
+                        {/* Index Number (Subtle) */}
+                        <div className="absolute top-6 right-6 z-20 size-8 rounded-full border border-white/20 text-white/50 flex items-center justify-center text-[10px] font-black backdrop-blur-sm">
+                          {String(i + 1).padStart(2, '0')}
+                        </div>
+
+                        {/* Content Overlay */}
+                        <div className="absolute inset-0 flex flex-col justify-end p-8 bg-gradient-to-t from-black/90 via-black/20 to-transparent">
+                          <p className="text-[9px] font-black uppercase tracking-[0.4em] text-primary mb-2">{w.cat}</p>
+                          <h3 className="font-special-serif text-3xl text-white mb-2 leading-tight">{w.title || "Untitled Project"}</h3>
+                          <p className="text-white/60 text-xs line-clamp-2 max-w-[80%] font-medium mb-4">{w.problem || "Explore the story behind this creative execution."}</p>
+                          
+                          {w.hasDetail ? (
+                            <Link to={`/portfolio/${w.id}`} className="inline-flex items-center gap-2 text-white text-[10px] font-black uppercase tracking-widest group/btn">
+                               View Story 
+                               <div className="size-8 rounded-full bg-white text-black flex items-center justify-center group-hover/btn:scale-110 transition-transform duration-300 shadow-lg">
+                                  <ArrowUpRight className="size-4" />
+                               </div>
+                            </Link>
+                          ) : (
+                            <a href="#contact" className="inline-flex items-center gap-2 text-white text-[10px] font-black uppercase tracking-widest group/btn">
+                               Inquire 
+                               <div className="size-8 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white flex items-center justify-center group-hover/btn:scale-110 transition-transform duration-300">
+                                  <ArrowUpRight className="size-4" />
+                               </div>
+                            </a>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>
