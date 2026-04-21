@@ -63,27 +63,37 @@ export const Window = ({
   return (
     <AnimatePresence>
       {isOpen && (
+        <>
+          {/* Backdrop (Click to close) */}
           <motion.div
-          initial={isMobile ? { y: "100%", opacity: 0 } : { scale: 0.95, opacity: 0, y: 20 }}
-          animate={{ 
-            scale: 1, 
-            opacity: 1, 
-            y: 0,
-            transition: { type: "spring", damping: 30, stiffness: 400 }
-          }}
-          exit={isMobile ? { y: "100%", opacity: 0 } : { scale: 0.95, opacity: 0, y: 20 }}
-          drag={!effectiveMaximized}
-          dragMomentum={false}
-          onPointerDown={onFocus}
-          style={{ zIndex }}
-          className={cn(
-             "fixed bg-white/40 backdrop-blur-3xl overflow-hidden border border-white/50 flex flex-col transition-all duration-500",
-             effectiveMaximized 
-              ? "inset-0 md:inset-4 md:top-12 z-[1000] rounded-none md:rounded-[2.5rem] shadow-none" 
-              : "w-[94vw] md:w-[960px] h-[82vh] rounded-[2.5rem] top-16 left-[3%] md:left-[12%] shadow-[0_40px_100px_-20px_rgba(0,0,0,0.15),inset_0_0_0_1px_rgba(255,255,255,0.4)]",
-             className
-          )}
-        >
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={onClose}
+            className="fixed inset-0 bg-black/10 backdrop-blur-[2px] z-[800]"
+          />
+
+          <motion.div
+            initial={isMobile ? { y: "100%", opacity: 0 } : { scale: 0.95, opacity: 0, y: 20 }}
+            animate={{ 
+              scale: 1, 
+              opacity: 1, 
+              y: 0,
+              transition: { type: "spring", damping: 30, stiffness: 400 }
+            }}
+            exit={isMobile ? { y: "100%", opacity: 0 } : { scale: 0.95, opacity: 0, y: 20 }}
+            drag={!effectiveMaximized}
+            dragMomentum={false}
+            onPointerDown={onFocus}
+            style={{ zIndex }}
+            className={cn(
+               "fixed bg-white/40 backdrop-blur-3xl overflow-hidden border border-white/50 flex flex-col transition-all duration-500",
+               effectiveMaximized 
+                ? "inset-0 md:inset-4 md:top-12 z-[1000] rounded-none md:rounded-[2.5rem] shadow-none" 
+                : "w-[96vw] md:w-[1100px] h-[88vh] rounded-[2.5rem] top-12 left-[2%] md:left-[10%] shadow-[0_40px_100px_-20px_rgba(0,0,0,0.15),inset_0_0_0_1px_rgba(255,255,255,0.4)]",
+               className
+            )}
+          >
           {/* Subtle Glass Glare */}
           <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-transparent pointer-events-none z-0" />
 

@@ -54,16 +54,17 @@ const Index = () => {
   }, []);
 
   const openWindow = (contentId: string) => {
-    // If a window with this content is already open, just focus it
-    const existingWindow = windows.find(w => w.contentId === contentId);
-    if (existingWindow) {
-      focusWindow(existingWindow.id);
+    // If ANY window is already open, reuse it and navigate to the new content
+    if (windows.length > 0) {
+      // Find the most recently opened/focused window
+      const targetWindowId = windows[windows.length - 1].id;
+      navigateWindow(targetWindowId, contentId);
       return;
     }
 
     // Otherwise open a new window
     const newId = `window-${Date.now()}`;
-    setWindows([...windows, { id: newId, contentId }]);
+    setWindows([{ id: newId, contentId }]);
     focusWindow(newId);
   };
 
