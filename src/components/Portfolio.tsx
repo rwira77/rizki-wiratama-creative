@@ -258,6 +258,9 @@ export const Portfolio = () => {
               </button>
               <h2 className="font-display text-2xl font-light">
                 {selectedCat} <span className="opacity-20 ml-2">/</span>
+                <span className="ml-4 text-xs font-black uppercase tracking-widest text-primary bg-primary/5 px-2 py-1 rounded-lg">
+                  {filteredWorks.length} {filteredWorks.length === 1 ? 'Project' : 'Projects'} Detected
+                </span>
               </h2>
             </div>
 
