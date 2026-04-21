@@ -96,7 +96,12 @@ export const initialWorks = [
   },
 ];
 
-const PortfolioFolder = ({ category, count, onClick }: { category: typeof categories[0], count: number, onClick: () => void }) => {
+const PortfolioFolder = ({ category, count, projects, onClick }: { category: any, count: number, projects: any[], onClick: () => void }) => {
+  // Use real project images for preview, fallback to category defaults if empty
+  const previewImages = projects.length > 0 
+    ? projects.slice(0, 2).map(p => p.img) 
+    : category.images;
+
   return (
     <motion.div
       whileHover="hover"
@@ -113,7 +118,7 @@ const PortfolioFolder = ({ category, count, onClick }: { category: typeof catego
         
         {/* Sticking Out Images */}
         <div className="absolute inset-0 z-0">
-          {category.images.map((img, idx) => (
+          {previewImages.map((img: string, idx: number) => (
             <motion.div
               key={idx}
               variants={{
@@ -199,7 +204,7 @@ export const Portfolio = () => {
   }, []);
   
   const filteredWorks = selectedCat 
-    ? works.filter((w) => w.cat === selectedCat)
+    ? works.filter((w) => w.cat?.trim().toLowerCase() === selectedCat.toLowerCase())
     : works;
 
   return (
@@ -242,7 +247,8 @@ export const Portfolio = () => {
                 <PortfolioFolder 
                   key={cat.id} 
                   category={cat} 
-                  count={works.filter(w => w.cat === cat.id).length}
+                  count={works.filter(w => w.cat?.trim().toLowerCase() === cat.id.toLowerCase()).length}
+                  projects={works.filter(w => w.cat?.trim().toLowerCase() === cat.id.toLowerCase())}
                   onClick={() => setSelectedCat(cat.id)} 
                 />
               ))}
