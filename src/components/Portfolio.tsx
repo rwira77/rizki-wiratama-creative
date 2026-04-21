@@ -94,7 +94,7 @@ export const Portfolio = () => {
             </motion.div>
           ) : (
             <motion.div key="grid" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
-              <div className="flex items-center gap-12 mb-8 px-4">
+              <div className="flex items-center gap-12 mb-8 px-0">
                 <button onClick={() => setSelectedCat(null)} className="flex items-center gap-2 text-xs font-bold text-slate-300 hover:text-black transition-colors uppercase tracking-[0.2em]">
                    <ChevronLeft className="size-4" /> Back
                 </button>
@@ -102,7 +102,7 @@ export const Portfolio = () => {
               </div>
 
               {/* ULTRA PINTEREST MASONRY (Based on image ratio) */}
-              <div className="columns-2 gap-3 space-y-3 md:gap-4 md:space-y-4 pb-48 px-2 md:px-0">
+              <div className="columns-2 gap-3 space-y-3 md:gap-4 md:space-y-4 pb-48 px-0">
                 {sortedWorks.map((w, i) => (
                   <motion.div 
                     key={w.id || i} 
