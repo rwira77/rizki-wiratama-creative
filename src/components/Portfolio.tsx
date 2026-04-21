@@ -12,8 +12,36 @@ import {
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 
+// Reliable Unsplash placeholders for initial setup
 const workBranding = "https://images.unsplash.com/photo-1541462608141-ad4d60da3e8a?q=80&w=2670&auto=format&fit=crop";
 const workEvent = "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?q=80&w=2612&auto=format&fit=crop";
+
+export const initialWorks = [
+  {
+    id: "remlint-identity",
+    title: "Remlint Visual Identity",
+    cat: "Branding",
+    img: workBranding,
+    problem: "Outdated legacy perception",
+    result: "120% increase in brand equity",
+    year: "2024",
+    span: "md:col-span-12",
+    aspect: "aspect-[21/9]",
+    hasDetail: true,
+  },
+  {
+    id: "soiree-activation",
+    title: "Soirée Activation",
+    cat: "Branding",
+    img: workEvent,
+    problem: "Unmemorable launch event",
+    result: "Sold-out collection in 48h",
+    year: "2024",
+    span: "md:col-span-7",
+    aspect: "aspect-[4/3]",
+    hasDetail: false,
+  },
+];
 
 export const categories = [
   { id: "Branding", label: "Branding", icon: Palette, color: "from-blue-500 to-indigo-600", images: [workBranding, workEvent] },
