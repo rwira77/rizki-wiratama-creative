@@ -198,6 +198,7 @@ export const Window = ({
             </main>
           </div>
         </motion.div>
+      </>
       )}
     </AnimatePresence>
   );
