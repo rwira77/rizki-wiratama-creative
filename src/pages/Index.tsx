@@ -148,24 +148,28 @@ const Index = () => {
           ))}
 
           {/* Dynamic Desktop Ecosystem Links */}
-          {desktopLinks.map((link) => (
-            <div 
-              key={link.id} 
-              className="absolute group" 
-              style={{ top: link.top, left: link.left }}
-            >
-              <DesktopIcon 
-                id={link.id} 
-                label={`${link.title} (ID:${link.id})`} 
-                icon={Star} 
-                iconUrl={link.icon_url}
-                size="sm"
-                type="app" 
-                color={link.color} 
-                onClick={() => window.open(link.url, '_blank')} 
-              />
-            </div>
-          ))}
+          {desktopLinks.map((link) => {
+            const top = link.top?.toString().includes('%') ? link.top : `${link.top || 15}%`;
+            const left = link.left?.toString().includes('%') ? link.left : `${link.left || 15}%`;
+            return (
+              <div 
+                key={link.id} 
+                className="absolute group z-10" 
+                style={{ top, left }}
+              >
+                <DesktopIcon 
+                  id={link.id} 
+                  label={link.title} 
+                  icon={Star} 
+                  iconUrl={link.icon_url}
+                  size="sm"
+                  type="app" 
+                  color={link.color} 
+                  onClick={() => window.open(link.url, '_blank')} 
+                />
+              </div>
+            );
+          })}
         </div>
 
         {/* --- MOBILE HOME SCREEN --- */}
@@ -228,7 +232,7 @@ const Index = () => {
                 <DesktopIcon
                   key={link.id}
                   id={link.id}
-                  label={`${link.title} (ID:${link.id})`}
+                  label={link.title}
                   icon={Star}
                   iconUrl={link.icon_url}
                   type="app"

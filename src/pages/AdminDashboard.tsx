@@ -628,7 +628,6 @@ const AdminDashboard = () => {
                          <p className="text-xs text-slate-400 truncate font-mono mb-4">{link.url}</p>
                          <div className="flex items-center gap-2">
                             <span className="px-2 py-1 bg-slate-100 rounded text-[9px] font-bold text-slate-500 uppercase">Pos: {link.top}, {link.left}</span>
-                            <span className="px-2 py-1 bg-slate-50 rounded text-[9px] font-mono text-slate-300 uppercase">ID: {link.id}</span>
                          </div>
                       </div>
                    </motion.div>
