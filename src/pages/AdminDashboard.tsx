@@ -23,11 +23,14 @@ import { supabase } from "@/lib/supabase";
 const AdminDashboard = () => {
   const navigate = useNavigate();
   const [works, setWorks] = useState<any[]>([]);
+  const [desktopLinks, setDesktopLinks] = useState<any[]>([]);
   const [activeTab, setActiveTab] = useState("portfolio");
   const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLinkModalOpen, setIsLinkModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  
   const [newProject, setNewProject] = useState({
     title: "",
     cat: "Branding",
@@ -36,6 +39,15 @@ const AdminDashboard = () => {
     result: "",
     year: new Date().getFullYear().toString(),
     hasDetail: false
+  });
+
+  const [newLink, setNewLink] = useState({
+    title: "",
+    url: "",
+    icon_name: "Instagram",
+    color: "text-blue-500",
+    top: "20%",
+    left: "20%"
   });
 
   const fetchWorks = async () => {
@@ -50,9 +62,21 @@ const AdminDashboard = () => {
       setWorks(data || []);
     } catch (error: any) {
       console.error('Supabase Error:', error);
-      toast.error(`Supabase Error: ${error.message || "Unknown error"}`);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const fetchDesktopLinks = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('desktop_links')
+        .select('*');
+
+      if (error) throw error;
+      setDesktopLinks(data || []);
+    } catch (error: any) {
+      console.error('Supabase Error:', error);
     }
   };
 
@@ -70,10 +94,52 @@ const AdminDashboard = () => {
         return;
       }
       fetchWorks();
+      fetchDesktopLinks();
     };
     
     checkSession();
   }, [navigate]);
+
+  const deleteLink = async (id: string) => {
+    if (confirm("Delete this desktop shortcut?")) {
+      try {
+        const { error } = await supabase.from('desktop_links').delete().eq('id', id);
+        if (error) throw error;
+        setDesktopLinks(desktopLinks.filter(l => l.id !== id));
+        toast.error("Shortcut deleted");
+      } catch (error) {
+        toast.error("Delete failed");
+      }
+    }
+  };
+
+  const handleAddLink = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const randomTop = `${Math.floor(Math.random() * 60) + 15}%`;
+    const randomLeft = `${Math.floor(Math.random() * 70) + 10}%`;
+    
+    try {
+      const linkData = { 
+        ...newLink, 
+        top: newLink.top || randomTop, 
+        left: newLink.left || randomLeft 
+      };
+
+      const { data, error } = await supabase
+        .from('desktop_links')
+        .insert([linkData])
+        .select();
+
+      if (error) throw error;
+      
+      toast.success("Shortcut added to desktop!");
+      setDesktopLinks([...desktopLinks, data[0]]);
+      setIsLinkModalOpen(false);
+      setNewLink({ title: "", url: "", icon_name: "Instagram", color: "text-blue-500", top: "", left: "" });
+    } catch (error: any) {
+      toast.error("Failed to add: " + error.message);
+    }
+  };
 
   const toggleDetail = async (id: string, currentStatus: boolean) => {
     try {
