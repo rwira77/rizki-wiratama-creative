@@ -27,6 +27,7 @@ const AdminDashboard = () => {
   const navigate = useNavigate();
   const [works, setWorks] = useState<any[]>([]);
   const [desktopLinks, setDesktopLinks] = useState<any[]>([]);
+  const [sectionSettings, setSectionSettings] = useState<any[]>([]);
   const [activeTab, setActiveTab] = useState("portfolio");
   const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -73,12 +74,19 @@ const AdminDashboard = () => {
 
   const fetchDesktopLinks = async () => {
     try {
-      const { data, error } = await supabase
-        .from('desktop_links')
-        .select('*');
-
+      const { data, error } = await supabase.from('desktop_links').select('*');
       if (error) throw error;
       setDesktopLinks(data || []);
+    } catch (error: any) {
+      console.error('Supabase Error:', error);
+    }
+  };
+
+  const fetchSectionSettings = async () => {
+    try {
+      const { data, error } = await supabase.from('section_settings').select('*');
+      if (error) throw error;
+      setSectionSettings(data || []);
     } catch (error: any) {
       console.error('Supabase Error:', error);
     }
@@ -99,6 +107,7 @@ const AdminDashboard = () => {
       }
       fetchWorks();
       fetchDesktopLinks();
+      fetchSectionSettings();
     };
     
     checkSession();
