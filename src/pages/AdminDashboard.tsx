@@ -115,6 +115,49 @@ const AdminDashboard = () => {
     }
   };
 
+  const handleOpenEditLink = (link: any) => {
+    setNewLink({
+      title: link.title,
+      url: link.url,
+      icon_name: link.icon_name || "Star",
+      icon_url: link.icon_url || "",
+      color: link.color || "text-blue-500",
+      top: link.top,
+      left: link.left
+    });
+    setEditingId(link.id);
+    setIsEditing(true);
+    setIsLinkModalOpen(true);
+  };
+
+  const handleLinkSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (isEditing && editingId) {
+      await handleUpdateLink();
+    } else {
+      await handleAddLink(e);
+    }
+  };
+
+  const handleUpdateLink = async () => {
+    try {
+      const { error } = await supabase
+        .from('desktop_links')
+        .update(newLink)
+        .eq('id', editingId);
+
+      if (error) throw error;
+      
+      toast.success("Shortcut updated!");
+      setIsLinkModalOpen(false);
+      setIsEditing(false);
+      setEditingId(null);
+      fetchDesktopLinks();
+    } catch (error: any) {
+      toast.error("Update failed: " + error.message);
+    }
+  };
+
   const handleAddLink = async (e: React.FormEvent) => {
     e.preventDefault();
     const randomTop = `${Math.floor(Math.random() * 60) + 15}%`;
@@ -463,12 +506,20 @@ const AdminDashboard = () => {
                      <div className={cn("p-4 rounded-2xl bg-slate-50 text-2xl", link.color)}>
                         <Star className="size-6" />
                      </div>
-                     <button 
-                       onClick={() => deleteLink(link.id)}
-                       className="p-2 text-slate-300 hover:text-red-500 transition-colors"
-                     >
-                       <Trash2 className="size-4" />
-                     </button>
+                     <div className="flex items-center gap-2">
+                        <button 
+                          onClick={() => handleOpenEditLink(link)}
+                          className="p-2 text-slate-300 hover:text-slate-900 transition-colors"
+                        >
+                          <PenTool className="size-4" />
+                        </button>
+                        <button 
+                          onClick={() => deleteLink(link.id)}
+                          className="p-2 text-slate-300 hover:text-red-500 transition-colors"
+                        >
+                          <Trash2 className="size-4" />
+                        </button>
+                     </div>
                   </div>
                   <div>
                      <h3 className="font-bold text-slate-900 mb-1">{link.title}</h3>
@@ -662,15 +713,24 @@ const AdminDashboard = () => {
             >
               <div className="p-10 border-b border-slate-100 flex items-center justify-between">
                 <div>
-                  <h2 className="font-special-serif text-3xl">Add Desktop Shortcut</h2>
-                  <p className="text-xs font-black uppercase tracking-widest text-slate-300 mt-1">Deploy External Link</p>
+                  <h2 className="font-special-serif text-3xl">{isEditing ? "Modify Shortcut" : "Add Desktop Shortcut"}</h2>
+                  <p className="text-xs font-black uppercase tracking-widest text-slate-300 mt-1">
+                    {isEditing ? `Editing ID: ${editingId}` : "Deploy External Link"}
+                  </p>
                 </div>
-                <button onClick={() => setIsLinkModalOpen(false)} className="p-3 hover:bg-slate-50 rounded-2xl transition-colors">
+                <button 
+                  onClick={() => {
+                    setIsLinkModalOpen(false);
+                    setIsEditing(false);
+                    setEditingId(null);
+                  }} 
+                  className="p-3 hover:bg-slate-50 rounded-2xl transition-colors"
+                >
                   <X className="size-6 text-slate-400" />
                 </button>
               </div>
 
-              <form onSubmit={handleAddLink} className="p-10 space-y-6">
+              <form onSubmit={handleLinkSubmit} className="p-10 space-y-6">
                 <div className="space-y-2">
                   <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-4">Display Name</label>
                   <input 
@@ -722,7 +782,7 @@ const AdminDashboard = () => {
 
                 <div className="pt-4 flex gap-4">
                   <button type="submit" className="flex-1 py-4 bg-slate-900 text-white rounded-2xl font-bold hover:bg-black transition-all shadow-xl">
-                    Add to Desktop
+                    {isEditing ? "Save Changes" : "Add to Desktop"}
                   </button>
                 </div>
               </form>
