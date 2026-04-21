@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { OSMenuBar } from "@/components/OSMenuBar";
 import { DesktopIcon } from "@/components/DesktopIcon";
 import { Window } from "@/components/Window";
+import portrait from "@/assets/rizki-portrait.png";
 import { 
   User, 
   Briefcase, 
@@ -12,7 +13,13 @@ import {
   Users,
   Image as ImageIcon,
   Aperture,
-  Wifi
+  Wifi,
+  Home,
+  Layers,
+  Phone,
+  Settings,
+  MapPin,
+  BadgeCheck
 } from "lucide-react";
 
 // Content Components
@@ -22,6 +29,7 @@ import { Portfolio } from "@/components/Portfolio";
 import { Experience } from "@/components/Experience";
 import { Clients } from "@/components/Clients";
 import { Contact } from "@/components/Contact";
+import { cn } from "@/lib/utils";
 
 const SECTIONS = [
   { id: "about", title: "About Me", icon: User, component: About, color: "from-orange-400 to-orange-500", subtext: "Bio" },
@@ -54,15 +62,11 @@ const Index = () => {
   }, []);
 
   const openWindow = (contentId: string) => {
-    // If ANY window is already open, reuse it and navigate to the new content
     if (windows.length > 0) {
-      // Find the most recently opened/focused window
       const targetWindowId = windows[windows.length - 1].id;
       navigateWindow(targetWindowId, contentId);
       return;
     }
-
-    // Otherwise open a new window
     const newId = `window-${Date.now()}`;
     setWindows([{ id: newId, contentId }]);
     focusWindow(newId);
@@ -85,109 +89,159 @@ const Index = () => {
     focusWindow(windowId);
   };
 
-  // Positions for folders (manual for a "scattered" look)
   const folderPositions = [
-    { top: "10%", left: "5%" },    // about
-    { top: "25%", left: "65%" },   // portfolio
-    { top: "60%", left: "10%" },   // services
-    { top: "75%", left: "45%" },   // experience
-    { top: "15%", left: "80%" },   // clients
-    { top: "70%", left: "75%" },   // contact
+    { top: "10%", left: "5%" },    
+    { top: "25%", left: "65%" },   
+    { top: "60%", left: "10%" },   
+    { top: "75%", left: "45%" },   
+    { top: "15%", left: "80%" },   
+    { top: "70%", left: "75%" },   
   ];
+
+  const currentMobileTab = windows.length > 0 ? windows[0].contentId : "home";
 
   return (
     <div className="h-screen w-screen overflow-hidden bg-[#F5F2EB] noise relative font-sans text-foreground">
       <OSMenuBar />
 
-      {/* Central Background Title */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none select-none z-0">
+      {/* Central Background Title (Desktop Only) */}
+      <div className="hidden md:flex absolute inset-0 flex flex-col items-center justify-center pointer-events-none select-none z-0">
         <motion.div
            initial={{ opacity: 0, scale: 0.9 }}
            animate={{ opacity: 1, scale: 1 }}
            transition={{ duration: 1.5 }}
            className="text-center"
         >
-          <em className="font-special-serif text-[6vw] md:text-[4vw] text-blue-500/40 leading-none italic block -mb-4">Rizki Wiratama</em>
-          <h1 className="font-special-serif text-[15vw] md:text-[12vw] leading-none text-[#332211]">portfolio</h1>
-          <p className="text-[4vw] md:text-2xl font-special-serif text-[#332211]/60 mt-4">(2025)</p>
+          <em className="font-special-serif text-[4vw] text-blue-500/40 leading-none italic block -mb-4">Rizki Wiratama</em>
+          <h1 className="font-special-serif text-[12vw] leading-none text-[#332211]">portfolio</h1>
+          <p className="text-2xl font-special-serif text-[#332211]/60 mt-4">(2025)</p>
         </motion.div>
       </div>
 
       {/* Desktop Content Layer */}
-      <main className="relative h-full w-full pt-8">
-        {/* Real Content Folders */}
-        {SECTIONS.map((section, idx) => (
-          <div 
-            key={section.id} 
-            className="absolute transition-all hidden md:block" 
-            style={{ 
-              top: folderPositions[idx]?.top || "20%", 
-              left: folderPositions[idx]?.left || "20%" 
-            }}
-          >
-            <DesktopIcon
-              id={section.id}
-              label={section.title}
-              icon={section.icon}
-              color={section.color}
-              subtext={section.subtext}
-              onClick={() => openWindow(section.id)}
-            />
-          </div>
-        ))}
-
-        {/* Decorative Icons */}
-        {DECORATIVE_ICONS.map((dec) => (
-          <div 
-            key={dec.id} 
-            className="absolute hidden md:block" 
-            style={{ top: dec.top, left: dec.left }}
-          >
-            <DesktopIcon
-              id={dec.id}
-              label={dec.label}
-              icon={dec.icon}
-              type={dec.type as any}
-              color={dec.color}
-              onClick={() => {}}
-            />
-          </div>
-        ))}
-
-        {/* Decorative Files */}
-        {DECORATIVE_FILES.map((file) => (
-          <div 
-            key={file.id} 
-            className="absolute hidden md:block opacity-60" 
-            style={{ top: file.top, left: file.left }}
-          >
-            <DesktopIcon
-              id={file.id}
-              label={file.label}
-              type="file"
-              color="text-amber-600/40"
-              onClick={() => {}}
-            />
-          </div>
-        ))}
-
-        {/* Mobile View: Simple Grid (as per user's earlier requirement) */}
-        <div className="md:hidden pt-20 p-4 grid grid-cols-3 gap-4">
-          {SECTIONS.map((section) => (
-            <DesktopIcon
-              key={section.id}
-              id={section.id}
-              label={section.title}
-              icon={section.icon}
-              color={section.color}
-              subtext={section.subtext}
-              onClick={() => openWindow(section.id)}
-            />
+      <main className="relative h-full w-full pt-8 custom-scrollbar overflow-auto md:overflow-hidden pb-32 md:pb-0">
+        {/* Real Content Folders (Desktop Only) */}
+        <div className="hidden md:block">
+          {SECTIONS.map((section, idx) => (
+            <div 
+              key={section.id} 
+              className="absolute transition-all" 
+              style={{ 
+                top: folderPositions[idx]?.top || "20%", 
+                left: folderPositions[idx]?.left || "20%" 
+              }}
+            >
+              <DesktopIcon
+                id={section.id}
+                label={section.title}
+                icon={section.icon}
+                color={section.color}
+                subtext={section.subtext}
+                onClick={() => openWindow(section.id)}
+              />
+            </div>
           ))}
+
+          {/* Decorative Icons */}
+          {DECORATIVE_ICONS.map((dec) => (
+            <div key={dec.id} className="absolute" style={{ top: dec.top, left: dec.left }}>
+              <DesktopIcon id={dec.id} label={dec.label} icon={dec.icon} type={dec.type as any} color={dec.color} onClick={() => {}} />
+            </div>
+          ))}
+        </div>
+
+        {/* --- MOBILE HOME SCREEN --- */}
+        <div className="md:hidden flex flex-col px-6 pt-24 pb-40 space-y-10">
+          {/* Mobile Profile Card */}
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="relative group w-full"
+          >
+            <div className="absolute -inset-2 bg-gradient-to-r from-primary/20 via-blue-400/20 to-purple-400/20 rounded-[3rem] blur-2xl opacity-50" />
+            <div className="relative bg-white/60 backdrop-blur-2xl rounded-[2.5rem] border border-white p-6 shadow-2xl flex flex-col items-center text-center">
+               <div className="relative size-24 mb-4">
+                  <div className="absolute inset-0 bg-primary/20 rounded-full animate-ping" />
+                  <div className="relative size-24 rounded-full border-4 border-white shadow-xl overflow-hidden">
+                    <img src={portrait} alt="Rizki Wiratama" className="w-full h-full object-cover" />
+                  </div>
+                  <div className="absolute -bottom-1 -right-1 size-8 rounded-full bg-blue-500 border-4 border-white flex items-center justify-center text-white shadow-lg">
+                    <BadgeCheck className="size-4" />
+                  </div>
+               </div>
+               <h2 className="font-special-serif text-3xl text-slate-900 mb-1">Rizki Wiratama</h2>
+               <div className="flex items-center gap-2 px-3 py-1 bg-green-50 rounded-full mb-6">
+                  <div className="size-1.5 rounded-full bg-green-500 animate-pulse" />
+                  <span className="text-[9px] font-black uppercase tracking-widest text-green-600">Available For Lead</span>
+               </div>
+               <div className="w-full grid grid-cols-2 gap-4">
+                  <div className="bg-white/40 p-4 rounded-3xl border border-white/50 text-left">
+                    <MapPin className="size-4 text-red-500 mb-2" />
+                    <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest leading-none">Location</p>
+                    <p className="text-xs font-black text-slate-900 mt-1">Jakarta, ID</p>
+                  </div>
+                  <div className="bg-white/40 p-4 rounded-3xl border border-white/50 text-left">
+                    <Star className="size-4 text-yellow-500 mb-2" />
+                    <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest leading-none">Status</p>
+                    <p className="text-xs font-black text-slate-900 mt-1">Top Rated</p>
+                  </div>
+               </div>
+            </div>
+          </motion.div>
+
+          {/* Mobile Folders Grid */}
+          <div className="space-y-4">
+            <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-400 px-2 flex items-center gap-4">
+               Favorites <div className="flex-1 h-px bg-slate-200" />
+            </h3>
+            <div className="grid grid-cols-3 gap-6">
+              {SECTIONS.map((section) => (
+                <DesktopIcon
+                  key={section.id}
+                  id={section.id}
+                  label={section.title}
+                  icon={section.icon}
+                  color={section.color}
+                  subtext={section.subtext}
+                  onClick={() => openWindow(section.id)}
+                />
+              ))}
+            </div>
+          </div>
         </div>
       </main>
 
-      {/* Windows */}
+      {/* --- MOBILE BOTTOM NAVBAR --- */}
+      <div className="md:hidden fixed bottom-6 left-6 right-6 z-[2000]">
+         <div className="bg-slate-900/90 backdrop-blur-2xl rounded-full p-2 border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.3)] flex items-center justify-between px-6 h-16">
+            <button 
+              onClick={() => { setWindows([]); }}
+              className={cn("p-3 rounded-full transition-all", currentMobileTab === 'home' ? "bg-white text-black" : "text-white/40")}
+            >
+               <Home className="size-5" />
+            </button>
+            <button 
+              onClick={() => openWindow('portfolio')}
+              className={cn("p-3 rounded-full transition-all", currentMobileTab === 'portfolio' ? "bg-white text-black" : "text-white/40")}
+            >
+               <Layers className="size-5" />
+            </button>
+            <button 
+              onClick={() => openWindow('services')}
+              className={cn("p-3 rounded-full transition-all", currentMobileTab === 'services' ? "bg-white text-black" : "text-white/40")}
+            >
+               <Aperture className="size-5" />
+            </button>
+            <button 
+              onClick={() => openWindow('contact')}
+              className={cn("p-3 rounded-full transition-all", currentMobileTab === 'contact' ? "bg-white text-black" : "text-white/40")}
+            >
+               <Phone className="size-5" />
+            </button>
+         </div>
+      </div>
+
+      {/* Windows Overlay */}
       {windows.map((win) => {
         const section = SECTIONS.find(s => s.id === win.contentId) || SECTIONS[0];
         return (
@@ -208,14 +262,12 @@ const Index = () => {
         );
       })}
 
-      {/* Custom Global Cursor (Optional, but matches reference) */}
+      {/* Global Style Enhancements */}
       <style dangerouslySetInnerHTML={{ __html: `
-        body { 
-          cursor: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='white' stroke='black' stroke-width='2' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M3 3L11 20L14 14L20 11L3 3Z'/%3E%3C/svg%3E"), auto; 
-        }
-        button, a, .cursor-pointer {
-          cursor: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='white' stroke='black' stroke-width='2' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M3 3L11 20L14 14L20 11L3 3Z'/%3E%3C/svg%3E"), pointer !important;
-        }
+        body { cursor: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='white' stroke='black' stroke-width='2' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M3 3L11 20L14 14L20 11L3 3Z'/%3E%3C/svg%3E"), auto; }
+        button, a, .cursor-pointer { cursor: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='white' stroke='black' stroke-width='2' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M3 3L11 20L14 14L20 11L3 3Z'/%3E%3C/svg%3E"), pointer !important; }
+        .noise { position: relative; }
+        .noise::before { content: ""; position: fixed; inset: 0; background-image: url("https://grainy-gradients.vercel.app/noise.svg"); opacity: 0.05; pointer-events: none; z-index: 1000; }
       `}} />
     </div>
   );
