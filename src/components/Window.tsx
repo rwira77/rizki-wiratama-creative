@@ -70,7 +70,8 @@ export const Window = ({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-black/10 backdrop-blur-[2px] z-[800]"
+            style={{ zIndex: zIndex - 1 }}
+            className="fixed inset-0 bg-black/5 backdrop-blur-[2px]"
           />
 
           <motion.div
