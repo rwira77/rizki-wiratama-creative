@@ -15,11 +15,12 @@ import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
 import { supabase } from "@/lib/supabase";
 
-// Sample data as fallback
-import workBranding from "@/assets/portfolio/branding-1.jpg";
-import workEvent from "@/assets/portfolio/branding-2.jpg";
-import workSocial from "@/assets/portfolio/social-1.jpg";
-import workCampaign from "@/assets/portfolio/social-2.jpg";
+// Reliable Unsplash placeholders for initial setup
+const workBranding = "https://images.unsplash.com/photo-1541462608141-ad4d60da3e8a?q=80&w=2670&auto=format&fit=crop";
+const workEvent = "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?q=80&w=2612&auto=format&fit=crop";
+const workSocial = "https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=2574&auto=format&fit=crop";
+const workCampaign = "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=2560&auto=format&fit=crop";
+const workDesign = "https://images.unsplash.com/photo-1558655146-d09347e92766?q=80&w=2564&auto=format&fit=crop";
 
 export const initialWorks = [
   {
