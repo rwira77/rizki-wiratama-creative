@@ -224,16 +224,16 @@ export const Portfolio = () => {
                   <span className="h-px w-8 bg-primary" /> Gallery
                   {isLive ? (
                     <div className="flex items-center gap-2">
-                      <span className="ml-4 px-2 py-0.5 bg-emerald-100 text-emerald-600 text-[8px] font-black rounded-full animate-pulse">DB LIVE</span>
+                      <span className="ml-4 px-2 py-0.5 bg-emerald-100 text-emerald-600 text-[8px] font-black rounded-full animate-pulse">DB LIVE ({works.length} Projects)</span>
                       <button 
-                        onClick={() => alert(JSON.stringify(works.map(w => ({ title: w.title, cat: w.cat })), null, 2))}
+                        onClick={() => alert(JSON.stringify(works, null, 2))}
                         className="px-2 py-0.5 bg-slate-200 text-slate-600 text-[8px] font-black rounded-full hover:bg-slate-300 transition-colors"
                       >
-                        INSPECT DATA
+                        INSPECT FULL DATA
                       </button>
                     </div>
                   ) : (
-                    <span className="ml-4 px-2 py-0.5 bg-slate-100 text-slate-400 text-[8px] font-black rounded-full">STATIC MODE</span>
+                    <span className="ml-4 px-2 py-0.5 bg-slate-100 text-slate-400 text-[8px] font-black rounded-full">STATIC MODE (Sample Data)</span>
                   )}
                 </p>
                 <h2 className="font-display text-4xl md:text-5xl font-light leading-tight tracking-tight">
@@ -285,7 +285,7 @@ export const Portfolio = () => {
 
                 return (
                   <motion.div
-                    key={w.id}
+                    key={w.id || `work-${i}`}
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.7, delay: i * 0.1 }}
