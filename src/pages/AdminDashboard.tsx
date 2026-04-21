@@ -47,9 +47,9 @@ const AdminDashboard = () => {
 
       if (error) throw error;
       setWorks(data || []);
-    } catch (error) {
-      console.error('Error:', error);
-      toast.error("Failed to fetch works from Supabase");
+    } catch (error: any) {
+      console.error('Supabase Error:', error);
+      toast.error(`Supabase Error: ${error.message || "Unknown error"}`);
     } finally {
       setIsLoading(false);
     }
