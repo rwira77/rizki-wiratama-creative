@@ -26,17 +26,6 @@ import { SECTIONS } from "@/config/sections";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/lib/supabase";
 
-const DECORATIVE_ICONS = [
-  { id: "notion", label: "Notion", icon: Star, type: "app", color: "text-black", top: "15%", left: "12%" },
-  { id: "figma", label: "Figma", icon: Aperture, type: "app", color: "text-purple-600", top: "45%", left: "85%" },
-  { id: "safari", label: "Safari", icon: Wifi, type: "app", color: "text-blue-500", top: "75%", left: "15%" },
-];
-
-const DECORATIVE_FILES = [
-  { id: "img1", label: "editorial_v1.jpg", top: "65%", left: "68%" },
-  { id: "img2", label: "school_case.png", top: "20%", left: "40%" },
-  { id: "img3", label: "brand_guide.pdf", top: "48%", left: "30%" },
-];
 
 const Index = () => {
   const [windows, setWindows] = useState<{ id: string; contentId: string }[]>([]);
