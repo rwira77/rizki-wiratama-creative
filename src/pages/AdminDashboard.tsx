@@ -115,6 +115,43 @@ const AdminDashboard = () => {
     }
   };
 
+  const handleOpenEditSection = (id: string) => {
+    const existing = sectionSettings.find(s => s.id === id);
+    setNewLink({
+      title: id.toUpperCase(),
+      url: "#",
+      icon_name: "Folder",
+      icon_url: "",
+      color: "text-blue-500",
+      top: existing?.top || "10%",
+      left: existing?.left || "10%"
+    });
+    setEditingId(id);
+    setIsEditing(true);
+    setIsLinkModalOpen(true);
+  };
+
+  const updateSectionPosition = async () => {
+    try {
+      const { error } = await supabase
+        .from('section_settings')
+        .upsert({ 
+          id: editingId, 
+          top: newLink.top, 
+          left: newLink.left 
+        });
+
+      if (error) throw error;
+      toast.success("Folder position updated!");
+      setIsLinkModalOpen(false);
+      setIsEditing(false);
+      setEditingId(null);
+      fetchSectionSettings();
+    } catch (error: any) {
+      toast.error("Update failed");
+    }
+  };
+
   const handleOpenEditLink = (link: any) => {
     setNewLink({
       title: link.title,
@@ -133,7 +170,12 @@ const AdminDashboard = () => {
   const handleLinkSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (isEditing && editingId) {
-      await handleUpdateLink();
+      const isSection = SECTIONS.some(s => s.id === editingId);
+      if (isSection) {
+        await updateSectionPosition();
+      } else {
+        await handleUpdateLink();
+      }
     } else {
       await handleAddLink(e);
     }
@@ -494,48 +536,85 @@ const AdminDashboard = () => {
              </AnimatePresence>
           </div>
         ) : activeTab === "desktop" ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-             {desktopLinks.map((link) => (
-               <motion.div
-                 key={link.id}
-                 initial={{ opacity: 0, scale: 0.9 }}
-                 animate={{ opacity: 1, scale: 1 }}
-                 className="bg-white border border-slate-100 rounded-3xl p-6 flex flex-col justify-between hover:shadow-xl transition-all group"
-               >
-                  <div className="flex items-start justify-between mb-6">
-                     <div className={cn("p-4 rounded-2xl bg-slate-50 text-2xl", link.color)}>
-                        <Star className="size-6" />
-                     </div>
-                     <div className="flex items-center gap-2">
-                        <button 
-                          onClick={() => handleOpenEditLink(link)}
-                          className="p-2 text-slate-300 hover:text-slate-900 transition-colors"
-                        >
+          <div className="space-y-12">
+            <section>
+              <h2 className="text-xs font-black uppercase tracking-[0.3em] text-slate-400 mb-6 flex items-center gap-4">
+                Core App Folders <div className="flex-1 h-px bg-slate-100" />
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {SECTIONS.map((section) => {
+                  const setting = sectionSettings.find(s => s.id === section.id);
+                  return (
+                    <div key={section.id} className="bg-slate-50 border border-slate-100 rounded-3xl p-6 flex items-center justify-between">
+                       <div className="flex items-center gap-4">
+                          <div className={cn("p-3 rounded-xl bg-slate-900 shadow-sm")}>
+                             <Folder className="size-5 text-white" />
+                          </div>
+                          <div>
+                             <p className="font-bold text-slate-900 text-sm">{section.title}</p>
+                             <p className="text-[10px] text-slate-400 font-mono italic">Pos: {setting?.top || "Default"}, {setting?.left || "Default"}</p>
+                          </div>
+                       </div>
+                       <button 
+                         onClick={() => handleOpenEditSection(section.id)}
+                         className="p-3 bg-white text-slate-400 hover:text-slate-900 rounded-xl shadow-sm transition-all"
+                       >
                           <PenTool className="size-4" />
-                        </button>
-                        <button 
-                          onClick={() => deleteLink(link.id)}
-                          className="p-2 text-slate-300 hover:text-red-500 transition-colors"
-                        >
-                          <Trash2 className="size-4" />
-                        </button>
-                     </div>
-                  </div>
-                  <div>
-                     <h3 className="font-bold text-slate-900 mb-1">{link.title}</h3>
-                     <p className="text-xs text-slate-400 truncate font-mono mb-4">{link.url}</p>
-                     <div className="flex items-center gap-2">
-                        <span className="px-2 py-1 bg-slate-100 rounded text-[9px] font-bold text-slate-500 uppercase">Pos: {link.top}, {link.left}</span>
-                     </div>
-                  </div>
-               </motion.div>
-             ))}
-             {desktopLinks.length === 0 && (
-               <div className="col-span-full py-20 text-center space-y-4 bg-slate-50 rounded-[3rem] border border-dashed border-slate-200">
-                  <PenTool className="size-12 text-slate-200 mx-auto" />
-                  <p className="text-slate-400 font-medium">Your desktop is empty. Add icons like IG or Behance!</p>
-               </div>
-             )}
+                       </button>
+                    </div>
+                  );
+                })}
+              </div>
+            </section>
+
+            <section>
+              <h2 className="text-xs font-black uppercase tracking-[0.3em] text-slate-400 mb-6 flex items-center gap-4">
+                Ecosystem Shortcuts <div className="flex-1 h-px bg-slate-100" />
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                 {desktopLinks.map((link) => (
+                   <motion.div
+                     key={link.id}
+                     initial={{ opacity: 0, scale: 0.9 }}
+                     animate={{ opacity: 1, scale: 1 }}
+                     className="bg-white border border-slate-100 rounded-3xl p-6 flex flex-col justify-between hover:shadow-xl transition-all group"
+                   >
+                      <div className="flex items-start justify-between mb-6">
+                         <div className={cn("p-4 rounded-2xl bg-slate-50 text-2xl", link.color)}>
+                            <Star className="size-6" />
+                         </div>
+                         <div className="flex items-center gap-2">
+                            <button 
+                              onClick={() => handleOpenEditLink(link)}
+                              className="p-2 text-slate-300 hover:text-slate-900 transition-colors"
+                            >
+                              <PenTool className="size-4" />
+                            </button>
+                            <button 
+                              onClick={() => deleteLink(link.id)}
+                              className="p-2 text-slate-300 hover:text-red-500 transition-colors"
+                            >
+                              <Trash2 className="size-4" />
+                            </button>
+                         </div>
+                      </div>
+                      <div>
+                         <h3 className="font-bold text-slate-900 mb-1">{link.title}</h3>
+                         <p className="text-xs text-slate-400 truncate font-mono mb-4">{link.url}</p>
+                         <div className="flex items-center gap-2">
+                            <span className="px-2 py-1 bg-slate-100 rounded text-[9px] font-bold text-slate-500 uppercase">Pos: {link.top}, {link.left}</span>
+                         </div>
+                      </div>
+                   </motion.div>
+                 ))}
+                 {desktopLinks.length === 0 && (
+                   <div className="col-span-full py-20 text-center space-y-4 bg-slate-50 rounded-[3rem] border border-dashed border-slate-200">
+                      <PenTool className="size-12 text-slate-200 mx-auto" />
+                      <p className="text-slate-400 font-medium">Your desktop is empty. Add icons like IG or Behance!</p>
+                   </div>
+                 )}
+              </div>
+            </section>
           </div>
         ) : (
           <div className="max-w-2xl bg-white border border-slate-100 rounded-[3rem] p-12 space-y-12">

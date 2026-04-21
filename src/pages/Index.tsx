@@ -58,10 +58,12 @@ const Index = () => {
   const [windowZIndices, setWindowZIndices] = useState<Record<string, number>>({});
   const [maxZ, setMaxZ] = useState(100);
   const [desktopLinks, setDesktopLinks] = useState<any[]>([]);
+  const [sectionPositions, setSectionPositions] = useState<Record<string, {top: string, left: string}>>({});
 
   useEffect(() => {
     document.title = "Rizki Wiratama — Portfolio 2026";
     fetchDesktopLinks();
+    fetchSectionPositions();
   }, []);
 
   const fetchDesktopLinks = async () => {
@@ -69,6 +71,20 @@ const Index = () => {
       const { data, error } = await supabase.from('desktop_links').select('*');
       if (error) throw error;
       setDesktopLinks(data || []);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const fetchSectionPositions = async () => {
+    try {
+      const { data, error } = await supabase.from('section_settings').select('*');
+      if (error) throw error;
+      const positions = data.reduce((acc: any, curr: any) => {
+        acc[curr.id] = { top: curr.top, left: curr.left };
+        return acc;
+      }, {});
+      setSectionPositions(positions);
     } catch (err) {
       console.error(err);
     }
@@ -102,14 +118,16 @@ const Index = () => {
     focusWindow(windowId);
   };
 
-  const folderPositions = [
-    { top: "10%", left: "5%" },    
-    { top: "25%", left: "65%" },   
-    { top: "60%", left: "10%" },   
-    { top: "75%", left: "45%" },   
-    { top: "15%", left: "80%" },   
-    { top: "70%", left: "75%" },   
-  ];
+  const defaultPositions: Record<string, {top: string, left: string}> = {
+    about: { top: "10%", left: "5%" },    
+    portfolio: { top: "25%", left: "65%" },   
+    services: { top: "60%", left: "10%" },   
+    experience: { top: "75%", left: "45%" },   
+    clients: { top: "15%", left: "80%" },   
+    contact: { top: "70%", left: "75%" },   
+  };
+
+  const getPos = (id: string) => sectionPositions[id] || defaultPositions[id] || { top: "20%", left: "20%" };
 
   const currentMobileTab = windows.length > 0 ? windows[0].contentId : "home";
 
@@ -135,13 +153,13 @@ const Index = () => {
       <main className="relative h-full w-full pt-8 custom-scrollbar overflow-auto md:overflow-hidden pb-32 md:pb-0">
         {/* Real Content Folders (Desktop Only) */}
         <div className="hidden md:block">
-          {SECTIONS.map((section, idx) => (
+          {SECTIONS.map((section) => (
             <div 
               key={section.id} 
               className="absolute transition-all" 
               style={{ 
-                top: folderPositions[idx]?.top || "20%", 
-                left: folderPositions[idx]?.left || "20%" 
+                top: getPos(section.id).top, 
+                left: getPos(section.id).left 
               }}
             >
               <DesktopIcon
