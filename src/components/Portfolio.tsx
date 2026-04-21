@@ -222,19 +222,6 @@ export const Portfolio = () => {
               <div className="md:col-span-8">
                 <p className="text-xs uppercase tracking-[0.3em] text-primary mb-6 flex items-center gap-3">
                   <span className="h-px w-8 bg-primary" /> Gallery
-                  {isLive ? (
-                    <div className="flex items-center gap-2">
-                      <span className="ml-4 px-2 py-0.5 bg-emerald-100 text-emerald-600 text-[8px] font-black rounded-full animate-pulse">DB LIVE ({works.length} Projects)</span>
-                      <button 
-                        onClick={() => alert(JSON.stringify(works, null, 2))}
-                        className="px-2 py-0.5 bg-slate-200 text-slate-600 text-[8px] font-black rounded-full hover:bg-slate-300 transition-colors"
-                      >
-                        INSPECT FULL DATA
-                      </button>
-                    </div>
-                  ) : (
-                    <span className="ml-4 px-2 py-0.5 bg-slate-100 text-slate-400 text-[8px] font-black rounded-full">STATIC MODE (Sample Data)</span>
-                  )}
                 </p>
                 <h2 className="font-display text-4xl md:text-5xl font-light leading-tight tracking-tight">
                   Organized by <em className="text-primary italic">discipline</em>.
