@@ -92,7 +92,7 @@ const PortfolioFolder = ({ category, count, projects, onClick }: { category: any
                 idx === 0 ? "top-2 rotate-[-2deg]" : "top-4 rotate-[3deg]"
               )}
             >
-              <img src={img} className="w-full h-full object-cover grayscale-[0.3] group-hover:grayscale-0 transition-all duration-500" alt="" />
+              <img src={img || workBranding} className="w-full h-full object-cover grayscale-[0.3] group-hover:grayscale-0 transition-all duration-500" alt="" />
             </motion.div>
           ))}
         </div>
@@ -247,24 +247,24 @@ export const Portfolio = () => {
                           "relative overflow-hidden rounded-[2.5rem] bg-slate-100 shadow-xl border border-slate-50",
                           w.aspect || "aspect-[4/3]"
                         )}>
-                          {w.img ? (
+                          {/* Image Layer with Error Handling */}
+                          <div className="absolute inset-0 bg-slate-200 flex items-center justify-center">
                             <img
-                              src={w.img}
-                              alt={w.title}
-                              className="absolute inset-0 w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-[1.08]"
+                              src={w.img || "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop"}
+                              alt={w.title || "Project"}
+                              className="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-[1.08]"
+                              onError={(e: any) => {
+                                e.target.src = "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop";
+                              }}
                             />
-                          ) : (
-                            <div className="absolute inset-0 flex items-center justify-center text-slate-300">
-                               <ImageIcon className="size-12" />
-                            </div>
-                          )}
+                          </div>
                           
-                          <div className="absolute inset-0 flex flex-col justify-end p-8 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-80 group-hover:opacity-100 transition-all duration-500">
-                            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/50 mb-2">{w.cat}</p>
-                            <h3 className="font-special-serif text-3xl text-white mb-2">{w.title}</h3>
-                            <p className="text-white/60 text-sm line-clamp-2 max-w-md">{w.problem}</p>
+                          <div className="absolute inset-0 flex flex-col justify-end p-8 bg-gradient-to-t from-black/90 via-black/40 to-transparent">
+                            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/50 mb-2">{w.cat || "Branding"}</p>
+                            <h3 className="font-special-serif text-3xl text-white mb-2">{w.title || "Untitled Project"}</h3>
+                            <p className="text-white/60 text-sm line-clamp-2 max-w-md">{w.problem || "No details provided for this showcase yet."}</p>
                             <div className="mt-6 flex items-center gap-2 text-primary font-bold text-xs uppercase tracking-widest opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-500 delay-100">
-                               View Case Study <ChevronRight className="size-3" />
+                               View Story <ChevronRight className="size-3" />
                             </div>
                           </div>
                         </div>
