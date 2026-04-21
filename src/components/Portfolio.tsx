@@ -14,6 +14,7 @@ import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
 import { supabase } from "@/lib/supabase";
 import { DesktopIcon } from "@/components/DesktopIcon";
+import { getOptimizedUrl } from "@/lib/cloudinary";
 
 const workBranding = "https://images.unsplash.com/photo-1541462608141-ad4d60da3e8a?q=80&w=2670&auto=format&fit=crop";
 const workEvent = "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?q=80&w=2612&auto=format&fit=crop";
@@ -114,7 +115,7 @@ export const Portfolio = () => {
                     <div className="block overflow-hidden rounded-2xl bg-slate-50 border border-slate-50 shadow-lg hover:shadow-2xl transition-all duration-700">
                       <div className="relative w-full h-auto">
                         <img
-                          src={w.img || "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop"}
+                          src={getOptimizedUrl(w.img || "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop", 'thumb')}
                           alt={w.title}
                           className="w-full h-auto object-contain transition-transform duration-[2s] group-hover:scale-105"
                         />

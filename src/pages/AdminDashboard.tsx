@@ -752,6 +752,9 @@ const AdminDashboard = () => {
                     className="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 focus:ring-2 focus:ring-primary/20 transition-all font-bold"
                     placeholder="https://images.unsplash.com/..."
                   />
+                  <p className="text-[9px] font-bold text-blue-400 mt-1 ml-4 uppercase tracking-widest">
+                    Tip: Cloudinary URLs are automatically optimized for performance.
+                  </p>
                 </div>
 
                 <div className="space-y-2">

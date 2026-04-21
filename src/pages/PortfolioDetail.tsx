@@ -4,6 +4,7 @@ import { ChevronLeft, ArrowUpRight, Calendar, Tag, Target, BarChart3 } from "luc
 import { cn } from "@/lib/utils";
 import { supabase } from "@/lib/supabase";
 import { useState, useEffect } from "react";
+import { getOptimizedUrl } from "@/lib/cloudinary";
 
 const PortfolioDetail = () => {
   const { id } = useParams();
@@ -89,7 +90,7 @@ const PortfolioDetail = () => {
            transition={{ duration: 1, ease: [0.65, 0, 0.35, 1] }}
            className="relative aspect-[21/9] rounded-[3rem] overflow-hidden shadow-2xl border border-white"
         >
-           <img src={work.img} className="w-full h-full object-cover" alt="" />
+           <img src={getOptimizedUrl(work.img, 'hero')} className="w-full h-full object-cover" alt="" />
            <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
         </motion.div>
       </header>
@@ -157,7 +158,7 @@ const PortfolioDetail = () => {
                    className="w-full rounded-[2rem] overflow-hidden bg-slate-100 shadow-xl"
                  >
                    <img 
-                     src={imgUrl} 
+                     src={getOptimizedUrl(imgUrl, 'gallery')} 
                      className="w-full h-auto object-cover" 
                      alt={`${work.title} - view ${idx + 1}`} 
                    />
