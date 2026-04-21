@@ -54,7 +54,7 @@ export const Portfolio = () => {
     : works;
 
   return (
-    <section id="work" className="py-24 bg-white min-h-screen">
+    <section id="work" className="py-24 bg-transparent min-h-screen">
       <div className="container px-6 mx-auto">
         <AnimatePresence mode="wait">
           {!selectedCat ? (
@@ -94,7 +94,6 @@ export const Portfolio = () => {
                             </motion.div>
                           ))}
                         </div>
-                        <div className="absolute top-2 left-6 right-6 h-24 bg-white/80 rounded-lg shadow-sm -rotate-1 z-0 group-hover:-translate-y-4 transition-transform duration-500" />
                         <div className={cn("absolute bottom-0 left-0 right-0 h-28 rounded-2xl bg-gradient-to-br shadow-2xl z-10 p-5 flex flex-col justify-between overflow-hidden transition-all duration-500", cat.color)}>
                           <div className="absolute inset-0 bg-white/10 backdrop-blur-[4px] group-hover:opacity-0 transition-opacity" />
                           <div className="relative z-20 flex justify-between items-start">
