@@ -62,7 +62,7 @@ export const Portfolio = () => {
 
   return (
     <section id="work" className="py-24 bg-transparent min-h-screen">
-      <div className="max-w-[1600px] px-8 mx-auto">
+      <div className="max-w-[1100px] px-8 mx-auto">
         <AnimatePresence mode="wait">
           {!selectedCat ? (
             <motion.div key="folders" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
