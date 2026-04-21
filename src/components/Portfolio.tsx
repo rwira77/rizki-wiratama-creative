@@ -62,7 +62,7 @@ export const Portfolio = () => {
 
   return (
     <section id="work" className="py-24 bg-transparent min-h-screen">
-      <div className="max-w-[1100px] px-8 mx-auto">
+      <div className="max-w-[1400px] px-8 mx-auto">
         <AnimatePresence mode="wait">
           {!selectedCat ? (
             <motion.div key="folders" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
@@ -136,7 +136,7 @@ export const Portfolio = () => {
               </div>
 
               {/* TRUE PINTEREST MASONRY (Based on image ratio) */}
-              <div className="columns-1 md:columns-2 gap-8 space-y-8 px-4 pb-48">
+              <div className="columns-1 md:columns-2 gap-4 space-y-4 px-4 pb-48">
                 {sortedWorks.map((w, i) => (
                   <motion.div 
                     key={w.id || i} 
