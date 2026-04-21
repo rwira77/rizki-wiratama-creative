@@ -289,10 +289,10 @@ export const Portfolio = () => {
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.7, delay: i * 0.1 }}
-                    className={w.span ?? "md:col-span-6"}
+                    className={w.span || "md:col-span-6"}
                   >
                     <CardWrapper className="group block">
-                      <div className={`relative overflow-hidden rounded-3xl bg-muted shadow-lg ${w.aspect}`}>
+                      <div className={`relative overflow-hidden rounded-3xl bg-muted shadow-lg ${w.aspect || "aspect-[4/3]"}`}>
                         <img
                           src={w.img}
                           alt={`${w.title} — ${w.cat} case study`}
