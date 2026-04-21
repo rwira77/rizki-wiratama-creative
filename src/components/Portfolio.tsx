@@ -220,13 +220,11 @@ export const Portfolio = () => {
                     return <a href="#contact" className={className}>{children}</a>;
                   };
 
-                  return (
-                    <motion.div
-                      key={`works-grid-${w.id || i}-${i}`}
-                      initial={{ opacity: 0, y: 30 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.8, delay: i * 0.1 }}
+                  return (                    <motion.div
+                      key={`works-grid-v2-${w.id || i}-${i}`}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.6, delay: i * 0.1 }}
                       className="md:col-span-6 col-span-12"
                     >
                       <CardWrapper className="group block relative">
@@ -240,9 +238,6 @@ export const Portfolio = () => {
                               src={w.img || "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop"}
                               alt={w.title || "Project"}
                               className="absolute inset-0 w-full h-full object-cover transition-transform duration-[2s] ease-out group-hover:scale-110"
-                              onError={(e: any) => {
-                                e.target.src = "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop";
-                              }}
                             />
                           </div>
                           
@@ -253,15 +248,15 @@ export const Portfolio = () => {
                                 <p className="text-[10px] font-black uppercase tracking-[0.4em] text-primary mb-3">
                                   {w.cat || "Portfolio"}
                                 </p>
-                                <h3 className="font-special-serif text-4xl text-white leading-tight">
-                                  {w.title || "Untitled Project"}
+                                <h3 className="font-special-serif text-3xl text-white leading-tight">
+                                  {w.title || "Untitled Showcase"}
                                 </h3>
                               </div>
                               <p className="text-white/60 text-sm line-clamp-2 max-w-sm font-medium">
                                 {w.problem || "View this dedicated project showcase for more details."}
                               </p>
                               <div className="pt-4 flex items-center gap-3 text-white text-xs font-bold uppercase tracking-widest translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-500">
-                                 View Case Study 
+                                 View Details 
                                  <div className="size-8 rounded-full bg-white text-black flex items-center justify-center">
                                     <ArrowUpRight className="size-4" />
                                  </div>
@@ -270,12 +265,13 @@ export const Portfolio = () => {
                           </div>
 
                           {/* Index Badge (Subtle) */}
-                          <div className="absolute top-8 right-8 size-10 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white text-xs font-black">
+                          <div className="absolute top-8 right-8 size-10 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white text-[10px] font-black opacity-30 group-hover:opacity-100 transition-opacity">
                             {String(i + 1).padStart(2, '0')}
                           </div>
                         </div>
                       </CardWrapper>
                     </motion.div>
+
                   );
                 })}
               </div>
