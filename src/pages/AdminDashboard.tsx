@@ -765,19 +765,43 @@ const AdminDashboard = () => {
                     />
                   </div>
                 </div>
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-4">Accent Color</label>
-                  <select 
-                    value={newLink.color}
-                    onChange={(e) => setNewLink({...newLink, color: e.target.value})}
-                    className="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 focus:ring-2 focus:ring-primary/20 transition-all font-bold appearance-none"
-                  >
-                    <option value="text-pink-500">Pink (Instagram)</option>
-                    <option value="text-black">Black (TikTok/Medium)</option>
-                    <option value="text-blue-500">Blue (LinkedIn)</option>
-                    <option value="text-orange-500">Orange (Behance)</option>
-                    <option value="text-purple-600">Purple (Figma)</option>
-                  </select>
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-4">Accent Color</label>
+                    <select 
+                      value={newLink.color}
+                      onChange={(e) => setNewLink({...newLink, color: e.target.value})}
+                      className="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 focus:ring-2 focus:ring-primary/20 transition-all font-bold appearance-none"
+                    >
+                      <option value="text-pink-500">Pink (Instagram)</option>
+                      <option value="text-black">Black (TikTok/Medium)</option>
+                      <option value="text-blue-500">Blue (LinkedIn)</option>
+                      <option value="text-orange-500">Orange (Behance)</option>
+                      <option value="text-purple-600">Purple (Figma)</option>
+                    </select>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-4">Top (%)</label>
+                      <input 
+                        type="text" 
+                        value={newLink.top}
+                        onChange={(e) => setNewLink({...newLink, top: e.target.value})}
+                        className="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 focus:ring-2 focus:ring-primary/20 transition-all font-bold"
+                        placeholder="e.g. 25%"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-4">Left (%)</label>
+                      <input 
+                        type="text" 
+                        value={newLink.left}
+                        onChange={(e) => setNewLink({...newLink, left: e.target.value})}
+                        className="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 focus:ring-2 focus:ring-primary/20 transition-all font-bold"
+                        placeholder="e.g. 10%"
+                      />
+                    </div>
+                  </div>
                 </div>
 
                 <div className="pt-4 flex gap-4">
