@@ -13,7 +13,8 @@ import {
   Save,
   PenTool,
   ExternalLink,
-  Info
+  Info,
+  Star
 } from "lucide-react";
 import { initialWorks, categories } from "@/components/Portfolio";
 import { toast } from "sonner";
