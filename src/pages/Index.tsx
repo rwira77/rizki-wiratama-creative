@@ -156,7 +156,7 @@ const Index = () => {
             >
               <DesktopIcon 
                 id={link.id} 
-                label={link.title} 
+                label={`${link.title} (ID:${link.id})`} 
                 icon={Star} 
                 iconUrl={link.icon_url}
                 size="sm"
@@ -228,7 +228,7 @@ const Index = () => {
                 <DesktopIcon
                   key={link.id}
                   id={link.id}
-                  label={link.title}
+                  label={`${link.title} (ID:${link.id})`}
                   icon={Star}
                   iconUrl={link.icon_url}
                   type="app"
