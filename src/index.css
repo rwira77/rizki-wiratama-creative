@@ -6,44 +6,41 @@
 
 @layer base {
   :root {
-    /* Premium dark editorial palette */
-    --background: 30 8% 6%;
-    --foreground: 36 25% 94%;
+    /* Virtual Desktop Beige Palette */
+    --background: 40 30% 92%;
+    --foreground: 30 15% 15%;
 
-    --card: 30 8% 8%;
-    --card-foreground: 36 25% 94%;
+    --card: 40 30% 96%;
+    --card-foreground: 30 15% 15%;
 
-    --popover: 30 8% 8%;
-    --popover-foreground: 36 25% 94%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 30 15% 15%;
 
-    /* Warm gold accent */
-    --primary: 38 60% 62%;
-    --primary-foreground: 30 10% 8%;
+    --primary: 200 80% 45%; /* OS Blue for folder/icons */
+    --primary-foreground: 210 40% 98%;
 
-    --secondary: 30 6% 12%;
-    --secondary-foreground: 36 20% 90%;
+    --secondary: 40 10% 90%;
+    --secondary-foreground: 30 15% 15%;
 
-    --muted: 30 6% 14%;
-    --muted-foreground: 36 8% 62%;
+    --muted: 40 10% 85%;
+    --muted-foreground: 30 5% 45%;
 
-    --accent: 38 60% 62%;
-    --accent-foreground: 30 10% 8%;
+    --accent: 200 80% 45%;
+    --accent-foreground: 210 40% 98%;
 
-    --destructive: 0 70% 55%;
-    --destructive-foreground: 36 25% 94%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
 
-    --border: 30 6% 16%;
-    --input: 30 6% 16%;
-    --ring: 38 60% 62%;
+    --border: 30 10% 80%;
+    --input: 30 10% 80%;
+    --ring: 200 80% 45%;
 
-    --radius: 0.25rem;
+    --radius: 0.5rem;
 
-    /* Editorial gradients & shadows */
-    --gradient-radial: radial-gradient(ellipse at top, hsl(38 60% 62% / 0.15), transparent 60%);
-    --gradient-text: linear-gradient(135deg, hsl(36 25% 94%) 0%, hsl(38 40% 75%) 100%);
-    --gradient-accent: linear-gradient(135deg, hsl(38 60% 62%), hsl(28 55% 55%));
-    --shadow-glow: 0 0 80px -20px hsl(38 60% 62% / 0.5);
-    --shadow-elegant: 0 30px 80px -20px hsl(0 0% 0% / 0.6);
+    /* OS Specific Shadows & Gradients */
+    --shadow-window: 0 20px 40px -10px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.05);
+    --shadow-icon: 2px 4px 10px rgba(0, 0, 0, 0.1);
+    --gradient-desktop: linear-gradient(180deg, #f5f2eb 0%, #e8e3d5 100%);
 
     --transition-smooth: cubic-bezier(0.65, 0, 0.35, 1);
 
@@ -79,6 +76,11 @@
 
 @layer utilities {
   .font-display {
+    @apply font-sans;
+    font-feature-settings: "ss01";
+  }
+
+  .font-special-serif {
     font-family: 'Fraunces', serif;
     font-feature-settings: "ss01";
   }

@@ -1,79 +1,155 @@
 import { motion } from "framer-motion";
+import { Briefcase, Calendar, Star, Zap, Cpu, MousePointer2, Layers, Figma, PenTool, Layout } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const track = [
   {
     year: "2022 — 2024",
     role: "Marketing Manager",
     company: "Indie Fashion Label",
-    bullets: [
-      "Scaled Instagram from 12K → 180K (+1,400%)",
-      "Drove +85% online sales YoY through content & campaigns",
-      "Directed 14 seasonal campaigns and 4 brand events",
-    ],
+    description: "Driving commercial success through high-impact visual strategy and lifecycle marketing.",
+    stats: ["+1,400% IG Growth", "+85% Sales YoY", "14 Campaigns"],
+    isLatest: true
   },
   {
     year: "2020 — 2022",
     role: "Brand & Content Lead",
     company: "Creative Studio (Jakarta)",
-    bullets: [
-      "Built brand systems for 20+ founders & SMEs",
-      "Generated 12M+ organic impressions across client accounts",
-      "Established content production playbook still in use",
-    ],
+    description: "Orchestrating brand ecosystems for tech founders and high-growth SMEs.",
+    stats: ["12M organic imp.", "20+ brand systems"],
+    isLatest: false
   },
   {
     year: "2019 — 2020",
-    role: "Freelance Designer & Photographer",
+    role: "Freelance Designer",
     company: "Independent",
-    bullets: [
-      "Branding, photography, and social design across F&B and fashion",
-      "Developed signature editorial visual style",
-    ],
+    description: "High-end editorial design and photography for premium lifestyle brands.",
+    stats: ["Signature Visual Style", "F&B Specialist"],
+    isLatest: false
   },
+];
+
+const arsenal = [
+  { name: "Figma", icon: Figma, level: "Master", color: "text-purple-500", bg: "bg-purple-50" },
+  { name: "Adobe Suite", icon: PenTool, level: "Expert", color: "text-red-500", bg: "bg-red-50" },
+  { name: "Strategy", icon: Layers, level: "Senior", color: "text-blue-500", bg: "bg-blue-50" },
+  { name: "UI Design", icon: Layout, level: "Master", color: "text-orange-500", bg: "bg-orange-50" },
 ];
 
 export const Experience = () => {
   return (
-    <section id="experience" className="border-t border-border bg-secondary/30">
-      <div className="container py-32 md:py-44">
-        <div className="grid md:grid-cols-12 gap-10 mb-20">
-          <div className="md:col-span-7">
-            <p className="text-xs uppercase tracking-[0.3em] text-primary mb-6 flex items-center gap-3">
-              <span className="h-px w-8 bg-primary" /> Track Record
-            </p>
-            <h2 className="font-display text-4xl md:text-6xl font-light leading-[1.05] tracking-tight text-balance">
-              Receipts, not <em className="text-primary not-italic">promises</em>.
-            </h2>
-          </div>
+    <section id="experience" className="py-8 space-y-24">
+      {/* Header Section */}
+      <div className="space-y-6">
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          className="flex items-center gap-4"
+        >
+          <div className="h-px w-12 bg-primary/40" />
+          <span className="text-[10px] uppercase tracking-[0.4em] text-primary font-black">Professional Path</span>
+        </motion.div>
+        
+        <motion.h2 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="font-special-serif text-5xl md:text-7xl leading-tight tracking-tight text-slate-900"
+        >
+          Receipts, not <span className="text-primary italic">promises.</span>
+        </motion.h2>
+      </div>
+
+      {/* Timeline Section */}
+      <div className="relative space-y-12 pl-4 md:pl-0">
+        {/* Vertical Line */}
+        <div className="absolute left-[20px] md:left-[147px] top-4 bottom-4 w-px bg-gradient-to-b from-primary/40 via-slate-200 to-slate-100 hidden md:block" />
+
+        {track.map((t, i) => (
+          <motion.div
+            key={t.role}
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: i * 0.1 }}
+            className="grid grid-cols-1 md:grid-cols-12 gap-8 relative items-start group"
+          >
+            {/* Year Column */}
+            <div className="md:col-span-2 md:text-right pt-2 pr-12 hidden md:block">
+               <span className="font-special-serif text-lg text-slate-400 group-hover:text-primary transition-colors duration-500">{t.year}</span>
+            </div>
+
+            {/* Indicator Dot */}
+            <div className="absolute left-[13px] md:left-[140px] top-3 z-10 hidden md:block">
+               <div className={cn(
+                 "size-[15px] rounded-full border-2 border-white shadow-md transition-all duration-500 group-hover:scale-150", 
+                 t.isLatest ? "bg-primary animate-pulse" : "bg-slate-300 group-hover:bg-primary/60"
+               )} />
+            </div>
+
+            {/* Content Column */}
+            <div className="md:col-span-10 space-y-6 bg-white/40 backdrop-blur-xl p-8 md:p-10 rounded-[2.5rem] border border-white/60 shadow-sm group-hover:shadow-2xl group-hover:bg-white transition-all duration-700">
+               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                 <div>
+                   {t.isLatest && (
+                     <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-primary/10 rounded-full mb-3">
+                       <Zap className="size-3 text-primary fill-primary" />
+                       <span className="text-[9px] font-black uppercase tracking-widest text-primary">Current Chapter</span>
+                     </div>
+                   )}
+                   <h3 className="font-special-serif text-3xl md:text-4xl text-slate-900 group-hover:text-primary transition-colors">{t.role}</h3>
+                   <div className="flex items-center gap-3 mt-1 text-slate-500 font-bold uppercase tracking-widest text-[11px]">
+                     <span className="text-primary/60">{t.company}</span>
+                     <div className="size-1 rounded-full bg-slate-300" />
+                     <span className="md:hidden text-slate-400 font-normal">{t.year}</span>
+                   </div>
+                 </div>
+                 
+                 <div className="flex flex-wrap gap-2">
+                    {t.stats.map((stat) => (
+                      <span key={stat} className="px-4 py-1.5 bg-slate-900/5 backdrop-blur-md border border-slate-900/5 rounded-xl text-[10px] font-black text-slate-600 uppercase tracking-tight group-hover:translate-y-[-2px] transition-transform">
+                        {stat}
+                      </span>
+                    ))}
+                 </div>
+               </div>
+
+               <p className="text-slate-500 leading-relaxed max-w-2xl text-lg font-light">
+                 {t.description}
+               </p>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Creative Arsenal - Bento Grid */}
+      <div className="space-y-12 pt-12">
+        <div className="flex items-center justify-between">
+           <h3 className="font-special-serif text-3xl md:text-5xl text-slate-900">Creative Arsenal</h3>
+           <div className="h-px flex-1 mx-12 bg-slate-100 hidden md:block" />
         </div>
 
-        <div className="space-y-px bg-border rounded-sm overflow-hidden">
-          {track.map((t, i) => (
-            <motion.div
-              key={t.role}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.6, delay: i * 0.1 }}
-              className="grid md:grid-cols-12 gap-6 bg-background p-8 md:p-12 group hover:bg-secondary/40 transition-colors duration-500"
-            >
-              <div className="md:col-span-3">
-                <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">{t.year}</p>
-              </div>
-              <div className="md:col-span-4">
-                <h3 className="font-display text-2xl md:text-3xl">{t.role}</h3>
-                <p className="text-muted-foreground mt-1">{t.company}</p>
-              </div>
-              <ul className="md:col-span-5 space-y-3">
-                {t.bullets.map((b) => (
-                  <li key={b} className="flex gap-3 text-foreground/85">
-                    <span className="text-primary mt-2 size-1 rounded-full bg-primary shrink-0" />
-                    <span>{b}</span>
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
-          ))}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+           {arsenal.map((a, i) => (
+             <motion.div
+               key={a.name}
+               initial={{ opacity: 0, scale: 0.9 }}
+               whileInView={{ opacity: 1, scale: 1 }}
+               viewport={{ once: true }}
+               transition={{ delay: i * 0.1 }}
+               whileHover={{ y: -5 }}
+               className="p-8 rounded-[2rem] bg-white border border-slate-100 shadow-sm hover:shadow-xl transition-all group text-center space-y-6"
+             >
+                <div className={cn("size-16 mx-auto rounded-2xl flex items-center justify-center transition-transform group-hover:rotate-12", a.bg)}>
+                  <a.icon className={cn("size-8", a.color)} />
+                </div>
+                <div>
+                  <h4 className="font-bold text-slate-900 uppercase tracking-widest text-xs mb-1">{a.name}</h4>
+                  <p className="text-[10px] font-black text-slate-300 uppercase tracking-[0.2em]">{a.level}</p>
+                </div>
+             </motion.div>
+           ))}
         </div>
       </div>
     </section>

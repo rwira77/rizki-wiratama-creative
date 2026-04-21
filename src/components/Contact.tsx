@@ -1,86 +1,199 @@
 import { motion } from "framer-motion";
-import { Mail, MessageCircle, Instagram, Linkedin, ArrowUpRight } from "lucide-react";
+import { Mail, MessageCircle, Instagram, Linkedin, ArrowUpRight, Globe, Clock, Sparkles } from "lucide-react";
+import { useState, useEffect } from "react";
+import { cn } from "@/lib/utils";
 
 const channels = [
-  { icon: MessageCircle, label: "WhatsApp", value: "+62 812 3456 7890", href: "https://wa.me/6281234567890" },
-  { icon: Mail, label: "Email", value: "hello@rizkiwiratama.com", href: "mailto:hello@rizkiwiratama.com" },
-  { icon: Instagram, label: "Instagram", value: "@rizkiwiratama", href: "https://instagram.com" },
-  { icon: Linkedin, label: "LinkedIn", value: "Rizki Wiratama", href: "https://linkedin.com" },
+  { 
+    icon: MessageCircle, 
+    label: "WhatsApp", 
+    value: "+62 812 3456 7890", 
+    href: "https://wa.me/6281234567890",
+    color: "from-emerald-500/20 to-green-500/5",
+    accent: "text-emerald-600",
+    span: "col-span-12 md:col-span-8"
+  },
+  { 
+    icon: Mail, 
+    label: "Direct Email", 
+    value: "hello@rizkiwiratama.com", 
+    href: "mailto:hello@rizkiwiratama.com",
+    color: "from-blue-500/20 to-indigo-500/5",
+    accent: "text-blue-600",
+    span: "col-span-12 md:col-span-4"
+  },
+  { 
+    icon: Instagram, 
+    label: "Social / IG", 
+    value: "@rizkiwiratama", 
+    href: "https://instagram.com",
+    color: "from-pink-500/20 to-orange-500/5",
+    accent: "text-pink-600",
+    span: "col-span-12 md:col-span-6"
+  },
+  { 
+    icon: Linkedin, 
+    label: "Professional / IN", 
+    value: "Rizki Wiratama", 
+    href: "https://linkedin.com",
+    color: "from-sky-500/20 to-blue-500/5",
+    accent: "text-sky-600",
+    span: "col-span-12 md:col-span-6"
+  },
 ];
 
 export const Contact = () => {
+  const [time, setTime] = useState("");
+
+  useEffect(() => {
+    const updateTime = () => {
+      const now = new Date();
+      setTime(now.toLocaleTimeString("en-US", { 
+        timeZone: "Asia/Jakarta", 
+        hour: '2-digit', 
+        minute: '2-digit',
+        hour12: true 
+      }));
+    };
+    updateTime();
+    const interval = setInterval(updateTime, 60000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
-    <section id="contact" className="relative border-t border-border noise overflow-hidden">
-      <div className="absolute inset-0 -z-10" style={{ background: "var(--gradient-radial)" }} />
-      <div className="container py-32 md:py-48">
-        <motion.p
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
+    <section id="contact" className="py-8 space-y-16">
+       {/* Header Section */}
+       <div className="space-y-8">
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="text-xs uppercase tracking-[0.3em] text-primary mb-8 flex items-center gap-3"
+          className="flex items-center gap-4"
         >
-          <span className="h-px w-8 bg-primary" /> Contact
-        </motion.p>
-
-        <motion.h2
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 1 }}
-          className="font-display text-5xl md:text-8xl font-light leading-[0.95] tracking-tight text-balance max-w-5xl"
+          <div className="h-px w-12 bg-primary/40" />
+          <span className="text-[10px] uppercase tracking-[0.4em] text-primary font-black">Open for Collaboration</span>
+        </motion.div>
+        
+        <motion.div
+           initial={{ opacity: 0, y: 30 }}
+           whileInView={{ opacity: 1, y: 0 }}
+           transition={{ duration: 0.8 }}
+           className="space-y-4"
         >
-          Let's build something <em className="text-primary not-italic">great</em> together.
-        </motion.h2>
-
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="mt-8 text-lg text-muted-foreground max-w-xl"
-        >
-          Currently accepting select branding, content, and campaign projects for 2026.
-        </motion.p>
-
-        <motion.a
-          initial={{ opacity: 0, scale: 0.9 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.3 }}
-          href="mailto:hello@rizkiwiratama.com"
-          className="group inline-flex items-center gap-4 mt-12 px-8 py-5 rounded-full bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition-all duration-500 hover:gap-6"
-        >
-          Start a project
-          <ArrowUpRight className="size-5 transition-transform group-hover:rotate-45" />
-        </motion.a>
-
-        <div className="mt-24 grid sm:grid-cols-2 lg:grid-cols-4 gap-px bg-border rounded-sm overflow-hidden">
-          {channels.map((c, i) => (
-            <motion.a
-              key={c.label}
-              href={c.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: i * 0.1 }}
-              className="bg-background p-8 group hover:bg-secondary/50 transition-colors duration-500"
-            >
-              <c.icon className="size-5 text-primary mb-6" strokeWidth={1.4} />
-              <p className="text-xs uppercase tracking-wider text-muted-foreground mb-2">{c.label}</p>
-              <p className="font-display text-lg group-hover:text-primary transition-colors">{c.value}</p>
-            </motion.a>
-          ))}
-        </div>
+          <h2 className="font-special-serif text-5xl md:text-8xl leading-[0.9] tracking-tight text-slate-900">
+            Let's build something <br />
+            <span className="text-primary italic underline decoration-primary/30 underline-offset-8">extraordinary</span> together.
+          </h2>
+          <p className="text-slate-400 text-lg md:text-xl font-light max-w-2xl leading-relaxed">
+            Currently accepting select branding, content, and creative campaign projects for the 2026 season.
+          </p>
+        </motion.div>
       </div>
 
-      <footer className="border-t border-border">
-        <div className="container py-8 flex flex-col md:flex-row gap-4 items-center justify-between text-sm text-muted-foreground">
-          <p>© 2026 Rizki Wiratama. Crafted in Jakarta.</p>
-          <p className="font-display italic">Available worldwide · Based in Indonesia</p>
-        </div>
+      {/* Global Context Indicator */}
+      <div className="flex flex-wrap items-center gap-8 py-6 border-y border-slate-100">
+         <div className="flex items-center gap-3">
+           <div className="p-2 bg-slate-50 rounded-lg">
+             <Globe className="size-4 text-slate-400" />
+           </div>
+           <div>
+             <p className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400">Location</p>
+             <p className="text-sm font-bold text-slate-900">Jakarta, Indonesia</p>
+           </div>
+         </div>
+
+         <div className="flex items-center gap-3">
+           <div className="p-2 bg-slate-50 rounded-lg">
+             <Clock className="size-4 text-slate-400 animate-pulse" />
+           </div>
+           <div>
+             <p className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400">Local Time (WIB)</p>
+             <p className="text-sm font-bold text-slate-900">{time || "Loading..."}</p>
+           </div>
+         </div>
+
+         <div className="flex items-center gap-2 ml-auto hidden md:flex">
+            <div className="size-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-600">Available to start now</span>
+         </div>
+      </div>
+
+      {/* Bento Grid Channels */}
+      <div className="grid grid-cols-12 gap-6 pb-20">
+        {channels.map((c, i) => (
+          <motion.a
+            key={c.label}
+            href={c.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, delay: i * 0.1 }}
+            whileHover={{ y: -8, transition: { duration: 0.3 } }}
+            className={cn(
+              "group relative overflow-hidden rounded-[2.5rem] p-8 md:p-10 border border-white/60 bg-white/40 backdrop-blur-xl shadow-sm transition-all duration-500 hover:shadow-2xl hover:bg-white",
+              c.span
+            )}
+          >
+            {/* Background Color Accent */}
+            <div className={cn("absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-100 transition-opacity duration-700 -z-10", c.color)} />
+            
+            <div className="relative flex flex-col justify-between h-full space-y-12">
+               <div className="flex justify-between items-start">
+                  <div className="p-4 bg-white shadow-sm rounded-2xl group-hover:scale-110 transition-transform duration-500">
+                    <c.icon className={cn("size-6", c.accent)} strokeWidth={1.5} />
+                  </div>
+                  <div className="size-10 rounded-full bg-slate-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                    <ArrowUpRight className="size-4 text-slate-400" />
+                  </div>
+               </div>
+
+               <div>
+                 <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 mb-2">{c.label}</p>
+                 <h3 className="font-special-serif text-2xl md:text-3xl text-slate-900 group-hover:text-primary transition-colors truncate">
+                   {c.value}
+                 </h3>
+               </div>
+            </div>
+          </motion.a>
+        ))}
+      </div>
+
+      {/* Footer Sign-off */}
+      <footer className="pt-20 pb-12 border-t border-slate-100 space-y-12 text-slate-900">
+         <div className="flex flex-col md:flex-row items-center justify-between gap-12">
+            <div className="space-y-4 text-center md:text-left">
+               <h4 className="font-special-serif text-5xl text-slate-300 select-none opacity-50">Rizki Wiratama</h4>
+               <p className="text-[11px] font-bold uppercase tracking-[0.5em] text-slate-400">Creative Technologist · 2026</p>
+            </div>
+            
+            <div className="grid grid-cols-2 gap-x-12 gap-y-4">
+               <div>
+                  <p className="text-[10px] font-black text-slate-300 uppercase tracking-widest mb-4">Navigation</p>
+                  <ul className="space-y-2 text-[13px] font-bold text-slate-600">
+                     <li className="hover:text-primary cursor-pointer transition-colors">Case Studies</li>
+                     <li className="hover:text-primary cursor-pointer transition-colors">Methodology</li>
+                     <li className="hover:text-primary cursor-pointer transition-colors">Digital Archive</li>
+                  </ul>
+               </div>
+               <div>
+                  <p className="text-[10px] font-black text-slate-300 uppercase tracking-widest mb-4">Availability</p>
+                   <ul className="space-y-2 text-[13px] font-bold text-slate-600">
+                     <li>Q2 2026: Open</li>
+                     <li>Q3 2026: Booking</li>
+                  </ul>
+               </div>
+            </div>
+         </div>
+
+         <div className="flex flex-col md:flex-row items-center justify-between pt-12 text-[10px] font-bold uppercase tracking-[0.4em] text-slate-300 gap-4 text-center">
+            <p>© 2026 Design by Rizki Wiratama</p>
+            <p>Made with creative empathy in Jakarta</p>
+            <div className="flex items-center gap-6">
+               <span className="hover:text-primary cursor-pointer transition-colors">Privacy</span>
+               <span className="hover:text-primary cursor-pointer transition-colors">Legal</span>
+            </div>
+         </div>
       </footer>
     </section>
   );

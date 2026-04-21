@@ -1,6 +1,11 @@
-import { motion } from "framer-motion";
-import { useState } from "react";
-import { ArrowUpRight } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect } from "react";
+import { ArrowUpRight, ChevronLeft, Image as ImageIcon, Palette, Megaphone, Camera, Video, PenTool } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Link } from "react-router-dom";
+import { supabase } from "@/lib/supabase";
+
+// Standardizing image imports
 import workBranding from "@/assets/work-branding.jpg";
 import workSocial from "@/assets/work-social.jpg";
 import workPhoto from "@/assets/work-photo.jpg";
@@ -8,10 +13,17 @@ import workVideo from "@/assets/work-video.jpg";
 import workEvent from "@/assets/work-event.jpg";
 import workCampaign from "@/assets/work-campaign.jpg";
 
-const categories = ["All", "Branding", "Social Media", "Photography", "Videography"];
+export const categories = [
+  { id: "Branding", label: "Branding", icon: Palette, color: "from-blue-500 to-indigo-600", images: [workBranding, workEvent] },
+  { id: "Social Media", label: "Social Media", icon: Megaphone, color: "from-purple-500 to-fuchsia-600", images: [workSocial] },
+  { id: "Photography", label: "Photography", icon: Camera, color: "from-orange-500 to-rose-600", images: [workPhoto, workCampaign] },
+  { id: "Videography", label: "Videography", icon: Video, color: "from-emerald-500 to-teal-600", images: [workVideo] },
+  { id: "Graphic Design", label: "Graphic Design", icon: PenTool, color: "from-amber-500 to-yellow-600", images: [workBranding] },
+];
 
-const works = [
+export const initialWorks = [
   {
+    id: "remlint-identity",
     title: "Remlint Identity",
     cat: "Branding",
     img: workBranding,
@@ -20,8 +32,10 @@ const works = [
     year: "2025",
     span: "md:col-span-7",
     aspect: "aspect-[4/3]",
+    hasDetail: true,
   },
   {
+    id: "maison-editorial",
     title: "Maison Editorial",
     cat: "Photography",
     img: workPhoto,
@@ -30,8 +44,10 @@ const works = [
     year: "2025",
     span: "md:col-span-5",
     aspect: "aspect-[4/5]",
+    hasDetail: false,
   },
   {
+    id: "atelier-social",
     title: "Atelier Social System",
     cat: "Social Media",
     img: workSocial,
@@ -40,8 +56,10 @@ const works = [
     year: "2024",
     span: "md:col-span-5",
     aspect: "aspect-[4/5]",
+    hasDetail: true,
   },
   {
+    id: "runway-24",
     title: "Runway 24 Campaign",
     cat: "Videography",
     img: workVideo,
@@ -50,8 +68,10 @@ const works = [
     year: "2024",
     span: "md:col-span-7",
     aspect: "aspect-[4/3]",
+    hasDetail: true,
   },
   {
+    id: "soiree-activation",
     title: "Soirée Activation",
     cat: "Branding",
     img: workEvent,
@@ -60,8 +80,10 @@ const works = [
     year: "2024",
     span: "md:col-span-7",
     aspect: "aspect-[4/3]",
+    hasDetail: false,
   },
   {
+    id: "soft-form",
     title: "Soft Form Campaign",
     cat: "Photography",
     img: workCampaign,
@@ -70,91 +92,210 @@ const works = [
     year: "2023",
     span: "md:col-span-5",
     aspect: "aspect-[4/5]",
+    hasDetail: false,
   },
 ];
 
-export const Portfolio = () => {
-  const [filter, setFilter] = useState("All");
-  const filtered = filter === "All" ? works : works.filter((w) => w.cat === filter);
-
+const PortfolioFolder = ({ category, count, onClick }: { category: typeof categories[0], count: number, onClick: () => void }) => {
   return (
-    <section id="work" className="container py-32 md:py-44">
-      <div className="grid md:grid-cols-12 gap-10 mb-16">
-        <div className="md:col-span-7">
-          <p className="text-xs uppercase tracking-[0.3em] text-primary mb-6 flex items-center gap-3">
-            <span className="h-px w-8 bg-primary" /> Selected Work
-          </p>
-          <h2 className="font-display text-4xl md:text-6xl font-light leading-[1.05] tracking-tight text-balance">
-            Case studies in <em className="text-primary not-italic">measurable</em> creative work.
-          </h2>
+    <motion.div
+      whileHover="hover"
+      whileTap={{ scale: 0.98 }}
+      onClick={onClick}
+      className="group cursor-pointer flex flex-col items-center"
+    >
+      <div className="relative w-48 h-40 mb-4 transition-all duration-500">
+        {/* Back Flap */}
+        <div className={cn(
+          "absolute top-0 left-0 w-2/3 h-4 rounded-t-xl bg-gradient-to-br opacity-90",
+          category.color
+        )} />
+        
+        {/* Sticking Out Images */}
+        <div className="absolute inset-0 z-0">
+          {category.images.map((img, idx) => (
+            <motion.div
+              key={idx}
+              variants={{
+                hover: { 
+                  y: -40 - (idx * 20), 
+                  rotate: idx % 2 === 0 ? -8 : 8,
+                  x: idx % 2 === 0 ? -10 : 10,
+                  transition: { type: "spring", stiffness: 300, damping: 20 }
+                }
+              }}
+              className={cn(
+                "absolute left-4 right-4 h-32 rounded-lg border-2 border-white shadow-xl overflow-hidden z-[5]",
+                idx === 0 ? "top-2 rotate-[-2deg]" : "top-4 rotate-[3deg]"
+              )}
+            >
+              <img src={img} className="w-full h-full object-cover grayscale-[0.3] group-hover:grayscale-0 transition-all duration-500" alt="" />
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Regular Folder Papers */}
+        <div className="absolute top-2 left-6 right-6 h-28 bg-white/80 rounded-lg shadow-sm -rotate-1 z-0 group-hover:-translate-y-4 transition-transform duration-500" />
+
+        {/* Front Flap */}
+        <div className={cn(
+          "absolute bottom-0 left-0 right-0 h-32 rounded-2xl bg-gradient-to-br shadow-2xl z-10 p-6 flex flex-col justify-between overflow-hidden transition-all duration-500 group-hover:translate-x-1 group-hover:rotate-1",
+          category.color
+        )}>
+          <div className="absolute inset-0 bg-white/10 backdrop-blur-[4px] group-hover:opacity-0 transition-opacity" />
+          
+          <div className="relative z-20 flex justify-between items-start">
+            <category.icon className="size-8 text-white/50 group-hover:text-white transition-colors" />
+            <span className="text-[10px] font-bold text-white/40 uppercase tracking-widest">
+              {count} Items
+            </span>
+          </div>
+          
+          <div className="relative z-20">
+            <div className="h-1 w-8 bg-white/40 rounded-full mb-2" />
+            <div className="h-1 w-12 bg-white/20 rounded-full" />
+          </div>
         </div>
       </div>
+      <h3 className="font-display text-xl text-black/80 font-medium group-hover:text-primary transition-colors">{category.label}</h3>
+    </motion.div>
+  );
+};
 
-      <div className="flex flex-wrap gap-2 mb-12">
-        {categories.map((c) => (
-          <button
-            key={c}
-            onClick={() => setFilter(c)}
-            className={`text-sm px-5 py-2.5 rounded-full border transition-all duration-300 ${
-              filter === c
-                ? "bg-foreground text-background border-foreground"
-                : "border-border text-muted-foreground hover:text-foreground hover:border-foreground/40"
-            }`}
+export const Portfolio = () => {
+  const [selectedCat, setSelectedCat] = useState<string | null>(null);
+  const [works, setWorks] = useState(initialWorks);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchWorks = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('works')
+          .select('*')
+          .order('year', { ascending: false });
+
+        if (error) throw error;
+        if (data && data.length > 0) {
+          setWorks(data);
+        }
+      } catch (error) {
+        console.error('Error fetching works:', error);
+        // Fallback to initialWorks if fetch fails
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchWorks();
+  }, []);
+  
+  const filteredWorks = selectedCat 
+    ? works.filter((w) => w.cat === selectedCat)
+    : works;
+
+  return (
+    <section id="work" className="py-4">
+      <AnimatePresence mode="wait">
+        {!selectedCat ? (
+          <motion.div
+            key="categories"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 1.05 }}
+            className="space-y-12"
           >
-            {c}
-          </button>
-        ))}
-      </div>
-
-      <div className="grid md:grid-cols-12 gap-6">
-        {filtered.map((w, i) => (
-          <motion.a
-            key={w.title}
-            href="#contact"
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.7, delay: (i % 2) * 0.1 }}
-            className={`group block ${w.span ?? "md:col-span-6"}`}
-          >
-            <div className={`relative overflow-hidden rounded-sm bg-muted ${w.aspect}`}>
-              <img
-                src={w.img}
-                alt={`${w.title} — ${w.cat} case study`}
-                loading="lazy"
-                width={1024}
-                height={1280}
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-[1.06]"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent opacity-60 group-hover:opacity-90 transition-opacity duration-500" />
-
-              <div className="absolute inset-0 p-6 md:p-8 flex flex-col justify-end">
-                <div className="flex items-end justify-between gap-4">
-                  <div>
-                    <p className="text-xs uppercase tracking-[0.2em] text-primary mb-2">
-                      {w.cat} · {w.year}
-                    </p>
-                    <h3 className="font-display text-2xl md:text-4xl font-light">{w.title}</h3>
-                  </div>
-                  <span className="size-12 rounded-full border border-foreground/30 flex items-center justify-center transition-all duration-500 group-hover:bg-primary group-hover:border-primary group-hover:text-primary-foreground group-hover:rotate-45">
-                    <ArrowUpRight className="size-5" />
-                  </span>
-                </div>
-                <div className="mt-6 grid grid-cols-2 gap-4 max-w-lg overflow-hidden">
-                  <div className="opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500">
-                    <p className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1">Problem</p>
-                    <p className="text-sm">{w.problem}</p>
-                  </div>
-                  <div className="opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 delay-75">
-                    <p className="text-[10px] uppercase tracking-wider text-primary mb-1">Result</p>
-                    <p className="text-sm">{w.result}</p>
-                  </div>
-                </div>
+            <div className="grid md:grid-cols-12 gap-10">
+              <div className="md:col-span-8">
+                <p className="text-xs uppercase tracking-[0.3em] text-primary mb-6 flex items-center gap-3">
+                  <span className="h-px w-8 bg-primary" /> Gallery
+                </p>
+                <h2 className="font-display text-4xl md:text-5xl font-light leading-tight tracking-tight">
+                  Organized by <em className="text-primary italic">discipline</em>.
+                </h2>
               </div>
             </div>
-          </motion.a>
-        ))}
-      </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-24 gap-y-32 pt-16 pb-32 justify-items-center max-w-4xl mx-auto">
+              {categories.map((cat) => (
+                <PortfolioFolder 
+                  key={cat.id} 
+                  category={cat} 
+                  count={works.filter(w => w.cat === cat.id).length}
+                  onClick={() => setSelectedCat(cat.id)} 
+                />
+              ))}
+            </div>
+          </motion.div>
+        ) : (
+          <motion.div
+            key="grid"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            className="space-y-12"
+          >
+            <div className="flex items-center justify-between">
+              <button 
+                onClick={() => setSelectedCat(null)}
+                className="flex items-center gap-2 text-sm font-medium text-black/50 hover:text-black transition-colors"
+              >
+                <ChevronLeft className="size-4" /> Back to Files
+              </button>
+              <h2 className="font-display text-2xl font-light">
+                {selectedCat} <span className="opacity-20 ml-2">/</span>
+              </h2>
+            </div>
+
+            <div className="grid md:grid-cols-12 gap-6 pb-20">
+              {filteredWorks.map((w, i) => {
+                const CardWrapper = ({ children, className }: any) => {
+                  if (w.hasDetail) {
+                    return <Link to={`/portfolio/${w.id}`} className={className}>{children}</Link>;
+                  }
+                  return <a href="#contact" className={className}>{children}</a>;
+                };
+
+                return (
+                  <motion.div
+                    key={w.id}
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.7, delay: i * 0.1 }}
+                    className={w.span ?? "md:col-span-6"}
+                  >
+                    <CardWrapper className="group block">
+                      <div className={`relative overflow-hidden rounded-3xl bg-muted shadow-lg ${w.aspect}`}>
+                        <img
+                          src={w.img}
+                          alt={`${w.title} — ${w.cat} case study`}
+                          loading="lazy"
+                          className="absolute inset-0 w-full h-full object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-[1.06]"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-40 group-hover:opacity-70 transition-opacity duration-500" />
+
+                        <div className="absolute inset-0 p-6 md:p-8 flex flex-col justify-end text-white">
+                          <div className="flex items-end justify-between gap-4">
+                            <div>
+                              <p className="text-[10px] uppercase tracking-[0.2em] text-white/70 mb-2 font-bold">
+                                {w.cat} · {w.year}
+                              </p>
+                              <h3 className="font-display text-2xl md:text-3xl font-light">{w.title}</h3>
+                            </div>
+                            <span className="size-10 rounded-full border border-white/30 flex items-center justify-center backdrop-blur-md transition-all duration-500 group-hover:bg-white group-hover:text-black group-hover:rotate-45">
+                              <ArrowUpRight className="size-4" />
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </CardWrapper>
+                  </motion.div>
+                );
+              })}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 };
