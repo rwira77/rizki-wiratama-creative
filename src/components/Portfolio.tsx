@@ -59,15 +59,16 @@ export const Portfolio = () => {
         <AnimatePresence mode="wait">
           {!selectedCat ? (
             <motion.div key="folders" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
-              <div className="mb-20 max-w-2xl">
+              <div className="mb-20 max-w-2xl px-4">
                 <p className="text-xs uppercase tracking-[0.3em] text-primary mb-6 flex items-center gap-3">
                   <span className="h-px w-8 bg-primary" /> Gallery
                 </p>
-                <h2 className="font-display text-5xl md:text-6xl font-light leading-tight tracking-tight">
+                <h2 className="font-display text-4xl md:text-5xl font-light leading-tight tracking-tight text-slate-900">
                    Organized by <em className="text-primary italic">discipline</em>.
                 </h2>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-16 gap-y-32 justify-items-center">
+              
+              <div className="grid grid-cols-[repeat(auto-fit,minmax(180px,1fr))] gap-x-8 gap-y-24 justify-items-center">
                 {categories.map((cat) => {
                   const projects = works.filter(w => w.cat?.trim().toLowerCase() === cat.id.toLowerCase());
                   const previewImages = projects.length > 0 ? projects.slice(0, 2).map(p => p.img) : (cat as any).images;
@@ -78,37 +79,37 @@ export const Portfolio = () => {
                       whileHover="hover"
                       whileTap={{ scale: 0.98 }}
                       onClick={() => setSelectedCat(cat.id)}
-                      className="group cursor-pointer flex flex-col items-center"
+                      className="group cursor-pointer flex flex-col items-center w-40"
                     >
-                      <div className="relative w-48 h-40 mb-4 transition-all duration-500">
+                      <div className="relative w-full h-32 mb-4 transition-all duration-500">
                         <div className={cn("absolute top-0 left-0 w-2/3 h-4 rounded-t-xl bg-gradient-to-br opacity-90", cat.color)} />
                         <div className="absolute inset-0 z-0">
                           {previewImages.map((img: string, idx: number) => (
                             <motion.div
                               key={idx}
-                              variants={{ hover: { y: -40 - (idx * 20), rotate: idx % 2 === 0 ? -8 : 8, x: idx % 2 === 0 ? -10 : 10, transition: { type: "spring", stiffness: 300, damping: 20 } } }}
-                              className={cn("absolute left-4 right-4 h-32 rounded-lg border-2 border-white shadow-xl overflow-hidden z-[5]", idx === 0 ? "top-2 rotate-[-2deg]" : "top-4 rotate-[3deg]")}
+                              variants={{ hover: { y: -30 - (idx * 15), rotate: idx % 2 === 0 ? -8 : 8, x: idx % 2 === 0 ? -10 : 10, transition: { type: "spring", stiffness: 300, damping: 20 } } }}
+                              className={cn("absolute left-4 right-4 h-28 rounded-lg border-2 border-white shadow-xl overflow-hidden z-[5]", idx === 0 ? "top-2 rotate-[-2deg]" : "top-4 rotate-[3deg]")}
                             >
-                              <img src={img || workBranding} className="w-full h-full object-cover transition-all duration-500" alt="" />
+                              <img src={img} className="w-full h-full object-cover" alt="" />
                             </motion.div>
                           ))}
                         </div>
-                        <div className="absolute top-2 left-6 right-6 h-28 bg-white/80 rounded-lg shadow-sm -rotate-1 z-0 group-hover:-translate-y-4 transition-transform duration-500" />
-                        <div className={cn("absolute bottom-0 left-0 right-0 h-32 rounded-2xl bg-gradient-to-br shadow-2xl z-10 p-6 flex flex-col justify-between overflow-hidden transition-all duration-500", cat.color)}>
+                        <div className="absolute top-2 left-6 right-6 h-24 bg-white/80 rounded-lg shadow-sm -rotate-1 z-0 group-hover:-translate-y-4 transition-transform duration-500" />
+                        <div className={cn("absolute bottom-0 left-0 right-0 h-28 rounded-2xl bg-gradient-to-br shadow-2xl z-10 p-5 flex flex-col justify-between overflow-hidden transition-all duration-500", cat.color)}>
                           <div className="absolute inset-0 bg-white/10 backdrop-blur-[4px] group-hover:opacity-0 transition-opacity" />
                           <div className="relative z-20 flex justify-between items-start">
-                            <cat.icon className="size-8 text-white/50 group-hover:text-white transition-colors" />
-                            <span className="text-[10px] font-bold text-white/40 uppercase tracking-widest text-right leading-none">
+                            <cat.icon className="size-6 text-white/50 group-hover:text-white transition-colors" />
+                            <span className="text-[9px] font-bold text-white/40 uppercase tracking-widest text-right leading-none">
                               {projects.length}<br/>Items
                             </span>
                           </div>
                           <div className="relative z-20">
-                            <div className="h-1 w-8 bg-white/40 rounded-full mb-2" />
-                            <div className="h-1 w-12 bg-white/20 rounded-full" />
+                            <div className="h-0.5 w-6 bg-white/40 rounded-full mb-1" />
+                            <div className="h-0.5 w-10 bg-white/20 rounded-full" />
                           </div>
                         </div>
                       </div>
-                      <h3 className="font-display text-xl text-black/80 font-medium group-hover:text-primary transition-colors">{cat.label}</h3>
+                      <h3 className="font-display text-base text-black/80 font-medium group-hover:text-primary transition-colors text-center">{cat.label}</h3>
                     </motion.div>
                   );
                 })}
@@ -129,7 +130,7 @@ export const Portfolio = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+              <div className="grid md:grid-cols-2 gap-8 pb-32">
                 {filteredWorks.map((w, i) => (
                   <div key={w.id || i} className="relative group block rounded-[3rem] overflow-hidden bg-slate-100 aspect-[4/3] shadow-2xl border border-slate-50">
                     <div className="absolute inset-0 bg-slate-900">
@@ -147,10 +148,10 @@ export const Portfolio = () => {
                     <div className="absolute inset-0 flex flex-col justify-end p-10 bg-gradient-to-t from-black/95 via-black/40 to-transparent">
                       <div className="space-y-4">
                         <div>
-                          <p className="text-[10px] font-black uppercase tracking-[0.4em] text-primary mb-3">{w.cat || "Portfolio"}</p>
-                          <h3 className="font-special-serif text-4xl text-white leading-tight">{w.title || "Untitled Project"}</h3>
+                          <p className="text-[10px] font-black uppercase tracking-[0.4em] text-primary mb-3 text-left">{w.cat || "Portfolio"}</p>
+                          <h3 className="font-special-serif text-3xl text-white leading-tight text-left">{w.title || "Untitled Project"}</h3>
                         </div>
-                        <p className="text-white/60 text-sm line-clamp-2 max-w-sm font-medium">{w.problem || "Visit project details to explore more about this showcase."}</p>
+                        <p className="text-white/60 text-sm line-clamp-2 max-w-sm font-medium text-left">{w.problem || "Visit project details to explore more."}</p>
                         
                         {w.hasDetail ? (
                           <Link to={`/portfolio/${w.id}`} className="mt-6 inline-flex items-center gap-3 text-white text-xs font-bold uppercase tracking-widest opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-500">
