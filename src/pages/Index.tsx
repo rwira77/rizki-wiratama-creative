@@ -30,6 +30,7 @@ import { Experience } from "@/components/Experience";
 import { Clients } from "@/components/Clients";
 import { Contact } from "@/components/Contact";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/lib/supabase";
 
 const SECTIONS = [
   { id: "about", title: "About Me", icon: User, component: About, color: "from-orange-400 to-orange-500", subtext: "Bio" },
