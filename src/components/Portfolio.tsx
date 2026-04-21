@@ -66,7 +66,7 @@ export const Portfolio = () => {
         <AnimatePresence mode="wait">
           {!selectedCat ? (
             <motion.div key="folders" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
-              <div className="mb-12 md:mb-20 max-w-2xl px-2">
+              <div className="mb-12 md:mb-20 max-w-2xl px-0">
                 <p className="text-[10px] uppercase tracking-[0.4em] text-primary mb-4 flex items-center gap-3">
                   <span className="h-px w-6 bg-primary" /> Gallery
                 </p>
