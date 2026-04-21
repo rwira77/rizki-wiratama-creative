@@ -132,7 +132,6 @@ export const Portfolio = () => {
                 </button>
                 <div className="text-right">
                   <h2 className="font-display text-4xl font-light text-slate-900">{selectedCat}</h2>
-                  <p className="text-[10px] font-black uppercase tracking-[0.3em] text-primary mt-2">{sortedWorks.length} Projects</p>
                 </div>
               </div>
 
@@ -181,11 +180,10 @@ export const Portfolio = () => {
                           </div>
                         </div>
 
-                        {/* Detail Tag (Subtle Floating) */}
+                        {/* Minimal Arrow Tag for Detail Page */}
                         {w.hasDetail && (
-                          <div className="absolute top-8 right-8 z-20 flex items-center gap-2 bg-primary/20 backdrop-blur-md border border-white/30 text-white px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest group-hover:scale-0 transition-transform">
-                             <div className="size-2 rounded-full bg-white animate-pulse" />
-                             Case Study
+                          <div className="absolute top-8 right-8 z-20 size-10 rounded-full bg-primary/20 backdrop-blur-md border border-white/30 text-white flex items-center justify-center shadow-lg group-hover:scale-0 transition-transform">
+                             <ArrowUpRight className="size-5" />
                           </div>
                         )}
                       </div>
