@@ -26,6 +26,8 @@ const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("portfolio");
   const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [newProject, setNewProject] = useState({
     title: "",
     cat: "Branding",
@@ -129,8 +131,63 @@ const AdminDashboard = () => {
     }
   };
 
-  const handleAddProject = async (e: React.FormEvent) => {
+  const handleOpenEdit = (work: any) => {
+    setNewProject({
+      title: work.title,
+      cat: work.cat,
+      img: work.img,
+      problem: work.problem,
+      result: work.result,
+      year: work.year,
+      hasDetail: work.hasDetail
+    });
+    setEditingId(work.id);
+    setIsEditing(true);
+    setIsModalOpen(true);
+  };
+
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isEditing && editingId) {
+       await handleUpdateProject();
+    } else {
+       await handleAddProject();
+    }
+  };
+
+  const handleUpdateProject = async () => {
+    try {
+      const { error } = await supabase
+        .from('works')
+        .update(newProject)
+        .eq('id', editingId);
+
+      if (error) throw error;
+      
+      toast.success("Project updated successfully!");
+      closeModal();
+      fetchWorks();
+    } catch (error: any) {
+      toast.error("Update failed: " + error.message);
+    }
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setIsEditing(false);
+    setEditingId(null);
+    setNewProject({
+      title: "",
+      cat: "Branding",
+      img: "",
+      problem: "",
+      result: "",
+      year: new Date().getFullYear().toString(),
+      hasDetail: false
+    });
+  };
+
+  const handleAddProject = async () => {
     const id = newProject.title.toLowerCase().replace(/\s+/g, '-');
     
     try {
@@ -141,16 +198,7 @@ const AdminDashboard = () => {
       if (error) throw error;
       
       toast.success("Project added successfully!");
-      setIsModalOpen(false);
-      setNewProject({
-        title: "",
-        cat: "Branding",
-        img: "",
-        problem: "",
-        result: "",
-        year: new Date().getFullYear().toString(),
-        hasDetail: false
-      });
+      closeModal();
       fetchWorks();
     } catch (error: any) {
       toast.error("Failed to add project: " + error.message);
@@ -225,7 +273,10 @@ const AdminDashboard = () => {
              )}
              {activeTab === "portfolio" && (
                <button 
-                 onClick={() => setIsModalOpen(true)}
+                 onClick={() => {
+                   setIsEditing(false);
+                   setIsModalOpen(true);
+                 }}
                  className="bg-primary text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 hover:bg-primary/90 transition-colors shadow-lg active:scale-95"
                >
                  <Plus className="size-4" /> New Project
@@ -297,7 +348,10 @@ const AdminDashboard = () => {
                     </div>
 
                     <div className="flex items-center gap-3">
-                       <button className="p-3 bg-slate-50 text-slate-400 hover:bg-slate-900 hover:text-white rounded-xl transition-all">
+                       <button 
+                         onClick={() => handleOpenEdit(work)}
+                         className="p-3 bg-slate-50 text-slate-400 hover:bg-slate-900 hover:text-white rounded-xl transition-all"
+                       >
                           <PenTool className="size-4" />
                        </button>
                        <button 
@@ -341,7 +395,7 @@ const AdminDashboard = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              onClick={() => setIsModalOpen(false)}
+              onClick={closeModal}
               className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
             />
             <motion.div
@@ -352,18 +406,20 @@ const AdminDashboard = () => {
             >
               <div className="p-10 border-b border-slate-100 flex items-center justify-between">
                 <div>
-                  <h2 className="font-special-serif text-3xl">Launch New Project</h2>
-                  <p className="text-xs font-black uppercase tracking-widest text-slate-300 mt-1">Project Deployment Form</p>
+                  <h2 className="font-special-serif text-3xl">{isEditing ? "Modify Project" : "Launch New Project"}</h2>
+                  <p className="text-xs font-black uppercase tracking-widest text-slate-300 mt-1">
+                    {isEditing ? `Editing ID: ${editingId}` : "Project Deployment Form"}
+                  </p>
                 </div>
                 <button 
-                  onClick={() => setIsModalOpen(false)}
+                  onClick={closeModal}
                   className="p-3 hover:bg-slate-50 rounded-2xl transition-colors"
                 >
                   <X className="size-6 text-slate-400" />
                 </button>
               </div>
 
-              <form onSubmit={handleAddProject} className="p-10 space-y-6">
+              <form onSubmit={handleFormSubmit} className="p-10 space-y-6">
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-4">Project Title</label>
@@ -452,7 +508,7 @@ const AdminDashboard = () => {
                 <div className="pt-4 flex gap-4">
                   <button 
                     type="button"
-                    onClick={() => setIsModalOpen(false)}
+                    onClick={closeModal}
                     className="flex-1 py-4 border border-slate-100 rounded-2xl font-bold text-slate-400 hover:bg-slate-50 transition-all"
                   >
                     Cancel
@@ -461,7 +517,7 @@ const AdminDashboard = () => {
                     type="submit"
                     className="flex-[2] py-4 bg-slate-900 text-white rounded-2xl font-bold hover:bg-black transition-all shadow-xl active:scale-95"
                   >
-                    Publish Project
+                    {isEditing ? "Update Project" : "Publish Project"}
                   </button>
                 </div>
               </form>
