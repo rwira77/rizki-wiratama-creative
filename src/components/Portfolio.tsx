@@ -259,12 +259,22 @@ export const Portfolio = () => {
                             />
                           </div>
                           
-                          <div className="absolute inset-0 flex flex-col justify-end p-8 bg-gradient-to-t from-black/90 via-black/40 to-transparent">
-                            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/50 mb-2">{w.cat || "Branding"}</p>
-                            <h3 className="font-special-serif text-3xl text-white mb-2">{w.title || "Untitled Project"}</h3>
-                            <p className="text-white/60 text-sm line-clamp-2 max-w-md">{w.problem || "No details provided for this showcase yet."}</p>
-                            <div className="mt-6 flex items-center gap-2 text-primary font-bold text-xs uppercase tracking-widest opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-500 delay-100">
-                               View Story <ChevronRight className="size-3" />
+                          {/* Content Overlay - Always 100% visible for debugging */}
+                          <div className={cn(
+                            "absolute inset-0 flex flex-col justify-end p-8 bg-gradient-to-t from-black/95 via-black/50 to-transparent transition-all duration-500",
+                            (!w.title || !w.img) && "border-4 border-red-500/20"
+                          )}>
+                            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/50 mb-2">
+                              {w.cat || "BRANDING"}
+                            </p>
+                            <h3 className="font-special-serif text-3xl text-white mb-2">
+                              {w.title || "DATA MISSING"}
+                            </h3>
+                            <p className="text-white/60 text-sm line-clamp-2 max-w-md">
+                              {w.problem || "Checking data synchronization..."}
+                            </p>
+                            <div className="mt-6 flex items-center gap-2 text-primary font-bold text-xs uppercase tracking-widest">
+                               View Project <ChevronRight className="size-3" />
                             </div>
                           </div>
                         </div>
