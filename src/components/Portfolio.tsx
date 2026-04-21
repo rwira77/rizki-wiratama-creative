@@ -6,7 +6,6 @@ import {
   Camera, 
   Video, 
   Layout, 
-  ChevronRight, 
   ChevronLeft,
   ArrowUpRight,
   Plus
@@ -14,6 +13,7 @@ import {
 import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
 import { supabase } from "@/lib/supabase";
+import { DesktopIcon } from "@/components/DesktopIcon";
 
 const workBranding = "https://images.unsplash.com/photo-1541462608141-ad4d60da3e8a?q=80&w=2670&auto=format&fit=crop";
 const workEvent = "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?q=80&w=2612&auto=format&fit=crop";
@@ -67,7 +67,7 @@ export const Portfolio = () => {
           {!selectedCat ? (
             <motion.div key="folders" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
               <div className="mb-12 md:mb-20 max-w-2xl px-4">
-                <p className="text-[10px] uppercase tracking-[0.3em] text-primary mb-4 flex items-center gap-3">
+                <p className="text-[10px] uppercase tracking-[0.4em] text-primary mb-4 flex items-center gap-3">
                   <span className="h-px w-6 bg-primary" /> Gallery
                 </p>
                 <h2 className="font-display text-3xl md:text-6xl font-light leading-tight tracking-tight text-slate-900">
@@ -75,48 +75,19 @@ export const Portfolio = () => {
                 </h2>
               </div>
               
-              <div className="grid grid-cols-3 md:grid-cols-[repeat(auto-fit,minmax(180px,1fr))] gap-x-2 md:gap-x-12 gap-y-16 md:gap-y-24 justify-items-center">
+              <div className="grid grid-cols-3 md:grid-cols-5 gap-x-2 md:gap-x-12 gap-y-12 md:gap-y-24 justify-items-center">
                 {categories.map((cat) => {
                   const catProjects = works.filter(w => w.cat?.trim().toLowerCase() === cat.id.toLowerCase());
-                  const previewImages = catProjects.length > 0 ? catProjects.slice(0, 2).map(p => p.img) : (cat as any).images;
-                  
                   return (
-                    <motion.div
+                    <DesktopIcon
                       key={cat.id}
-                      whileHover="hover"
-                      whileTap={{ scale: 0.98 }}
+                      id={cat.id}
+                      label={cat.label}
+                      icon={cat.icon}
+                      color={cat.color}
+                      subtext={`${catProjects.length}`}
                       onClick={() => setSelectedCat(cat.id)}
-                      className="group cursor-pointer flex flex-col items-center w-20 md:w-44"
-                    >
-                      <div className="relative w-full h-20 md:h-36 mb-4 md:mb-6 transition-all duration-500">
-                        <div className={cn("absolute top-0 left-0 w-2/3 h-4 rounded-t-xl bg-gradient-to-br opacity-90", cat.color)} />
-                        <div className="absolute inset-0 z-0">
-                          {previewImages.map((img: string, idx: number) => (
-                            <motion.div
-                              key={idx}
-                              variants={{ hover: { y: -40 - (idx * 20), rotate: idx % 2 === 0 ? -10 : 10, x: idx % 2 === 0 ? -12 : 12, transition: { type: "spring", stiffness: 200, damping: 15 } } }}
-                              className={cn("absolute left-1 right-1 md:left-4 md:right-4 h-16 md:h-32 rounded-md md:rounded-lg border-[1px] md:border-2 border-white shadow-xl overflow-hidden z-[5]", idx === 0 ? "top-1 md:top-2 rotate-[-2deg]" : "top-2 md:top-4 rotate-[3deg]")}
-                            >
-                              <img src={img || workBranding} className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-700" alt="" />
-                            </motion.div>
-                          ))}
-                        </div>
-                        <div className={cn("absolute bottom-0 left-0 right-0 h-16 md:h-32 rounded-xl md:rounded-2xl bg-gradient-to-br shadow-2xl z-10 p-2 md:p-6 flex flex-col justify-between overflow-hidden transition-all duration-500 group-hover:rotate-1 group-hover:translate-x-1", cat.color)}>
-                          <div className="absolute inset-0 bg-white/10 backdrop-blur-[4px] group-hover:opacity-0 transition-opacity" />
-                          <div className="relative z-20 flex justify-between items-start">
-                            <cat.icon className="size-4 md:size-8 text-white/50 group-hover:text-white transition-colors" />
-                            <span className="text-[6px] md:text-[10px] font-bold text-white/40 uppercase tracking-widest text-right leading-none">
-                              {catProjects.length}<br/>Items
-                            </span>
-                          </div>
-                          <div className="relative z-20">
-                            <div className="h-0.5 md:h-1 w-4 md:w-8 bg-white/40 rounded-full mb-1 md:mb-2" />
-                            <div className="h-0.5 md:h-1 w-6 md:w-12 bg-white/20 rounded-full" />
-                          </div>
-                        </div>
-                      </div>
-                      <h3 className="font-display text-[10px] md:text-xl text-black/80 font-medium group-hover:text-primary transition-colors text-center">{cat.label}</h3>
-                    </motion.div>
+                    />
                   );
                 })}
               </div>
