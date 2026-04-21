@@ -126,10 +126,13 @@ const AdminDashboard = () => {
     }
   };
 
+  const isSectionEditing = SECTIONS.some(s => s.id === editingId);
+
   const handleOpenEditSection = (id: string) => {
     const existing = sectionSettings.find(s => s.id === id);
+    const lowercaseId = id.toLowerCase();
     setNewLink({
-      title: id.toUpperCase(),
+      title: id.charAt(0).toUpperCase() + id.slice(1),
       url: "#",
       icon_name: "Folder",
       icon_url: "",
@@ -137,7 +140,7 @@ const AdminDashboard = () => {
       top: existing?.top || "10%",
       left: existing?.left || "10%"
     });
-    setEditingId(id);
+    setEditingId(lowercaseId);
     setIsEditing(true);
     setIsLinkModalOpen(true);
   };
@@ -159,7 +162,7 @@ const AdminDashboard = () => {
       setEditingId(null);
       fetchSectionSettings();
     } catch (error: any) {
-      toast.error("Update failed");
+      toast.error("Update failed: " + (error.message || "Check your table settings"));
     }
   };
 
@@ -181,8 +184,7 @@ const AdminDashboard = () => {
   const handleLinkSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (isEditing && editingId) {
-      const isSection = SECTIONS.some(s => s.id === editingId);
-      if (isSection) {
+      if (isSectionEditing) {
         await updateSectionPosition();
       } else {
         await handleUpdateLink();
@@ -825,72 +827,81 @@ const AdminDashboard = () => {
                   <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-4">Display Name</label>
                   <input 
                     required
+                    readOnly={isSectionEditing}
                     type="text" 
                     value={newLink.title}
                     onChange={(e) => setNewLink({...newLink, title: e.target.value})}
-                    className="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 focus:ring-2 focus:ring-primary/20 transition-all font-bold"
+                    className={cn(
+                      "w-full bg-slate-50 border-none rounded-2xl py-4 px-6 focus:ring-2 focus:ring-primary/20 transition-all font-bold",
+                      isSectionEditing && "opacity-50 cursor-not-allowed"
+                    )}
                     placeholder="e.g. My Instagram"
                   />
                 </div>
-                <div className="grid md:grid-cols-2 gap-6">
+                
+                { !isSectionEditing && (
+                  <>
+                    <div className="grid md:grid-cols-2 gap-6">
+                      <div className="space-y-2">
+                        <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-4">External URL</label>
+                        <input 
+                          required
+                          type="text" 
+                          value={newLink.url}
+                          onChange={(e) => setNewLink({...newLink, url: e.target.value})}
+                          className="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 focus:ring-2 focus:ring-primary/20 transition-all font-bold"
+                          placeholder="https://social.com/..."
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-4">Icon Image URL (Optional)</label>
+                        <input 
+                          type="text" 
+                          value={newLink.icon_url}
+                          onChange={(e) => setNewLink({...newLink, icon_url: e.target.value})}
+                          className="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 focus:ring-2 focus:ring-primary/20 transition-all font-bold"
+                          placeholder="https://site.com/icon.png"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-4">Accent Color</label>
+                      <select 
+                        value={newLink.color}
+                        onChange={(e) => setNewLink({...newLink, color: e.target.value})}
+                        className="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 focus:ring-2 focus:ring-primary/20 transition-all font-bold appearance-none"
+                      >
+                        <option value="text-pink-500">Pink (Instagram)</option>
+                        <option value="text-black">Black (TikTok/Medium)</option>
+                        <option value="text-blue-500">Blue (LinkedIn)</option>
+                        <option value="text-orange-500">Orange (Behance)</option>
+                        <option value="text-purple-600">Purple (Figma)</option>
+                      </select>
+                    </div>
+                  </>
+                )}
+
+                <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-4">External URL</label>
+                    <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-4">Top Position (%)</label>
                     <input 
-                      required
                       type="text" 
-                      value={newLink.url}
-                      onChange={(e) => setNewLink({...newLink, url: e.target.value})}
+                      value={newLink.top}
+                      onChange={(e) => setNewLink({...newLink, top: e.target.value})}
                       className="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 focus:ring-2 focus:ring-primary/20 transition-all font-bold"
-                      placeholder="https://social.com/..."
+                      placeholder="e.g. 25%"
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-4">Icon Image URL (Optional)</label>
+                    <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-4">Left Position (%)</label>
                     <input 
                       type="text" 
-                      value={newLink.icon_url}
-                      onChange={(e) => setNewLink({...newLink, icon_url: e.target.value})}
+                      value={newLink.left}
+                      onChange={(e) => setNewLink({...newLink, left: e.target.value})}
                       className="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 focus:ring-2 focus:ring-primary/20 transition-all font-bold"
-                      placeholder="https://site.com/icon.png"
+                      placeholder="e.g. 10%"
                     />
-                  </div>
-                </div>
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-4">Accent Color</label>
-                    <select 
-                      value={newLink.color}
-                      onChange={(e) => setNewLink({...newLink, color: e.target.value})}
-                      className="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 focus:ring-2 focus:ring-primary/20 transition-all font-bold appearance-none"
-                    >
-                      <option value="text-pink-500">Pink (Instagram)</option>
-                      <option value="text-black">Black (TikTok/Medium)</option>
-                      <option value="text-blue-500">Blue (LinkedIn)</option>
-                      <option value="text-orange-500">Orange (Behance)</option>
-                      <option value="text-purple-600">Purple (Figma)</option>
-                    </select>
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-4">Top (%)</label>
-                      <input 
-                        type="text" 
-                        value={newLink.top}
-                        onChange={(e) => setNewLink({...newLink, top: e.target.value})}
-                        className="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 focus:ring-2 focus:ring-primary/20 transition-all font-bold"
-                        placeholder="e.g. 25%"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-4">Left (%)</label>
-                      <input 
-                        type="text" 
-                        value={newLink.left}
-                        onChange={(e) => setNewLink({...newLink, left: e.target.value})}
-                        className="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 focus:ring-2 focus:ring-primary/20 transition-all font-bold"
-                        placeholder="e.g. 10%"
-                      />
-                    </div>
                   </div>
                 </div>
 
