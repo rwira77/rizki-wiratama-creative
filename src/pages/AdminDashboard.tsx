@@ -17,7 +17,7 @@ import {
   Star,
   Folder
 } from "lucide-react";
-import { SECTIONS } from "@/pages/Index";
+import { SECTIONS } from "@/config/sections";
 import { initialWorks, categories } from "@/components/Portfolio";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
