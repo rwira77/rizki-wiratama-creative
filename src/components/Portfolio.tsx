@@ -235,9 +235,14 @@ export const Portfolio = () => {
                       initial={{ opacity: 0, y: 30 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.7, delay: i * 0.1 }}
-                      className={w.span || "md:col-span-6"}
+                      className="md:col-span-6 col-span-12"
                     >
-                      <CardWrapper className="group block">
+                      <CardWrapper className="group block relative">
+                        {/* Debug Index Badge */}
+                        <div className="absolute top-4 left-4 z-30 bg-white text-black text-[10px] font-black size-6 flex items-center justify-center rounded-full shadow-xl">
+                          {i + 1}
+                        </div>
+                        
                         <div className={cn(
                           "relative overflow-hidden rounded-[2.5rem] bg-slate-100 shadow-xl border border-slate-50",
                           w.aspect || "aspect-[4/3]"
