@@ -89,10 +89,7 @@ export const Portfolio = () => {
                       className="group cursor-pointer flex flex-col items-center w-44"
                     >
                       <div className="relative w-full h-36 mb-6 transition-all duration-500">
-                        {/* Folder Tab */}
                         <div className={cn("absolute top-0 left-0 w-2/3 h-4 rounded-t-xl bg-gradient-to-br opacity-90", cat.color)} />
-                        
-                        {/* Pop-out Images */}
                         <div className="absolute inset-0 z-0">
                           {previewImages.map((img: string, idx: number) => (
                             <motion.div
@@ -104,8 +101,6 @@ export const Portfolio = () => {
                             </motion.div>
                           ))}
                         </div>
-
-                        {/* Folder Body */}
                         <div className={cn("absolute bottom-0 left-0 right-0 h-32 rounded-2xl bg-gradient-to-br shadow-2xl z-10 p-6 flex flex-col justify-between overflow-hidden transition-all duration-500 group-hover:rotate-1 group-hover:translate-x-1", cat.color)}>
                           <div className="absolute inset-0 bg-white/10 backdrop-blur-[4px] group-hover:opacity-0 transition-opacity" />
                           <div className="relative z-20 flex justify-between items-start">
@@ -127,7 +122,7 @@ export const Portfolio = () => {
               </div>
             </motion.div>
           ) : (
-            <motion.div key="grid" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
+            <motion.div key="grid" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
               <div className="flex items-center justify-between mb-16 border-b border-slate-100 pb-12 px-4 shadow-sm">
                 <button onClick={() => setSelectedCat(null)} className="group flex items-center gap-3 text-xs font-bold text-slate-400 hover:text-black transition-all uppercase tracking-widest">
                   <div className="size-10 rounded-full border border-slate-100 flex items-center justify-center group-hover:bg-slate-50 transition-colors shadow-sm">
@@ -141,50 +136,60 @@ export const Portfolio = () => {
                 </div>
               </div>
 
-              {/* Pinterest Style Masonry (Preserved) */}
-              <div className="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6 px-4 pb-40">
+              {/* TRUE PINTEREST MASONRY (Based on image ratio) */}
+              <div className="columns-1 md:columns-2 gap-8 space-y-8 px-4 pb-48">
                 {sortedWorks.map((w, i) => (
                   <motion.div 
                     key={w.id || i} 
-                    initial={{ opacity: 0, y: 20 }}
+                    initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: i * 0.05 }}
+                    transition={{ delay: i * 0.1, duration: 0.8 }}
                     className="break-inside-avoid relative group cursor-pointer"
                   >
-                    <Link to={w.hasDetail ? `/portfolio/${w.id}` : "#contact"} className="block overflow-hidden rounded-[2.5rem] bg-slate-50 border border-slate-100 shadow-lg hover:shadow-2xl transition-all duration-500">
-                      <div className={cn(
-                        "relative w-full",
-                        i % 2 === 0 ? "aspect-[4/5]" : "aspect-[3/4]"
-                      )}>
+                    <div className="block overflow-hidden rounded-[2.5rem] bg-slate-50 border border-slate-100 shadow-xl hover:shadow-2xl transition-all duration-700">
+                      <div className="relative w-full h-auto">
                         <img
                           src={w.img || "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop"}
                           alt={w.title}
-                          className="w-full h-full object-cover transition-transform duration-[1.5s] group-hover:scale-105"
+                          className="w-full h-auto object-contain transition-transform duration-[2s] group-hover:scale-105"
                         />
                         
+                        {/* Pinterest Hover Reveal */}
                         <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-10">
-                          <div className="translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                            <p className="text-[9px] font-black uppercase tracking-[0.4em] text-primary mb-3">{w.cat || "Portfolio"}</p>
+                          <div className="translate-y-6 group-hover:translate-y-0 transition-transform duration-500">
+                            <p className="text-[10px] font-black uppercase tracking-[0.4em] text-primary mb-3">{w.cat || "Portfolio"}</p>
                             <h3 className="font-special-serif text-3xl text-white mb-4 leading-tight">{w.title}</h3>
+                            <p className="text-white/60 text-sm line-clamp-3 mb-6 font-medium leading-relaxed">{w.problem || "Explore the creative journey of this project."}</p>
                             
                             <div className="flex items-center justify-between">
-                               <div className="text-white/50 text-[10px] font-bold uppercase tracking-widest">
-                                  {w.hasDetail ? "Case Study" : "Creative"}
-                               </div>
-                               <div className="size-10 rounded-full bg-white text-black flex items-center justify-center shadow-xl">
-                                  <Plus className="size-5" />
-                               </div>
+                               {w.hasDetail ? (
+                                 <Link to={`/portfolio/${w.id}`} className="flex items-center gap-3 text-white text-[11px] font-black uppercase tracking-widest hover:text-primary transition-colors">
+                                    Full Story
+                                    <div className="size-10 rounded-full bg-white text-black flex items-center justify-center shadow-2xl">
+                                       <Plus className="size-6" />
+                                    </div>
+                                 </Link>
+                               ) : (
+                                 <a href="#contact" className="flex items-center gap-3 text-white text-[11px] font-black uppercase tracking-widest hover:text-primary transition-colors">
+                                    Inquire Now
+                                    <div className="size-10 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white flex items-center justify-center">
+                                       <ArrowUpRight className="size-5" />
+                                    </div>
+                                 </a>
+                               )}
                             </div>
                           </div>
                         </div>
 
+                        {/* Detail Tag (Subtle Floating) */}
                         {w.hasDetail && (
-                          <div className="absolute top-6 right-6 z-20 size-10 rounded-full bg-primary/20 backdrop-blur-md border border-white/30 text-white flex items-center justify-center shadow-lg group-hover:scale-0 transition-transform">
-                             <ArrowUpRight className="size-5" />
+                          <div className="absolute top-8 right-8 z-20 flex items-center gap-2 bg-primary/20 backdrop-blur-md border border-white/30 text-white px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest group-hover:scale-0 transition-transform">
+                             <div className="size-2 rounded-full bg-white animate-pulse" />
+                             Case Study
                           </div>
                         )}
                       </div>
-                    </Link>
+                    </div>
                   </motion.div>
                 ))}
               </div>
