@@ -62,7 +62,7 @@ export const Portfolio = () => {
 
   return (
     <section id="work" className="py-24 bg-transparent min-h-screen">
-      <div className="max-w-none w-full px-12 mx-auto">
+      <div className="max-w-[1200px] px-8 mx-auto">
         <AnimatePresence mode="wait">
           {!selectedCat ? (
             <motion.div key="folders" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
@@ -122,30 +122,25 @@ export const Portfolio = () => {
               </div>
             </motion.div>
           ) : (
-            <motion.div key="grid" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-              <div className="flex items-center justify-between mb-16 border-b border-slate-100 pb-12 px-4 shadow-sm">
-                <button onClick={() => setSelectedCat(null)} className="group flex items-center gap-3 text-xs font-bold text-slate-400 hover:text-black transition-all uppercase tracking-widest">
-                  <div className="size-10 rounded-full border border-slate-100 flex items-center justify-center group-hover:bg-slate-50 transition-colors shadow-sm">
-                    <ChevronLeft className="size-4" />
-                  </div>
-                  Back
+            <motion.div key="grid" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
+              <div className="flex items-center gap-12 mb-8 px-4">
+                <button onClick={() => setSelectedCat(null)} className="flex items-center gap-2 text-xs font-bold text-slate-300 hover:text-black transition-colors uppercase tracking-[0.2em]">
+                   <ChevronLeft className="size-4" /> Back
                 </button>
-                <div className="text-right">
-                  <h2 className="font-display text-4xl font-light text-slate-900">{selectedCat}</h2>
-                </div>
+                <h2 className="font-display text-4xl font-light text-slate-800 tracking-tight">{selectedCat}</h2>
               </div>
 
-              {/* TRUE PINTEREST MASONRY (Based on image ratio) */}
-              <div className="columns-1 md:columns-2 gap-4 space-y-4 px-4 pb-48">
+              {/* ULTRA PINTEREST MASONRY (Based on image ratio) */}
+              <div className="columns-1 md:columns-2 gap-4 space-y-4 pb-48">
                 {sortedWorks.map((w, i) => (
                   <motion.div 
                     key={w.id || i} 
-                    initial={{ opacity: 0, y: 30 }}
+                    initial={{ opacity: 0, y: 40 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: i * 0.1, duration: 0.8 }}
+                    transition={{ delay: i * 0.1, duration: 1 }}
                     className="break-inside-avoid relative group cursor-pointer"
                   >
-                    <div className="block overflow-hidden rounded-[2.5rem] bg-slate-50 border border-slate-100 shadow-xl hover:shadow-2xl transition-all duration-700">
+                    <div className="block overflow-hidden rounded-[3.5rem] bg-slate-50 border border-slate-50 shadow-lg hover:shadow-2xl transition-all duration-700">
                       <div className="relative w-full h-auto">
                         <img
                           src={w.img || "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop"}
@@ -153,37 +148,36 @@ export const Portfolio = () => {
                           className="w-full h-auto object-contain transition-transform duration-[2s] group-hover:scale-105"
                         />
                         
-                        {/* Pinterest Hover Reveal */}
-                        <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-10">
+                        {/* Elegant Minimal Overlay */}
+                        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-12">
                           <div className="translate-y-6 group-hover:translate-y-0 transition-transform duration-500">
-                            <p className="text-[10px] font-black uppercase tracking-[0.4em] text-primary mb-3">{w.cat || "Portfolio"}</p>
-                            <h3 className="font-special-serif text-3xl text-white mb-4 leading-tight">{w.title}</h3>
-                            <p className="text-white/60 text-sm line-clamp-3 mb-6 font-medium leading-relaxed">{w.problem || "Explore the creative journey of this project."}</p>
+                            <p className="text-[10px] font-black uppercase tracking-[0.4em] text-primary mb-3">Portfolio</p>
+                            <h3 className="font-special-serif text-3xl text-white mb-6 leading-tight">{w.title}</h3>
                             
-                            <div className="flex items-center justify-between">
+                            <div className="flex justify-between items-center">
                                {w.hasDetail ? (
-                                 <Link to={`/portfolio/${w.id}`} className="flex items-center gap-3 text-white text-[11px] font-black uppercase tracking-widest hover:text-primary transition-colors">
-                                    Full Story
-                                    <div className="size-10 rounded-full bg-white text-black flex items-center justify-center shadow-2xl">
+                                 <Link to={`/portfolio/${w.id}`} className="flex items-center gap-3">
+                                    <div className="size-12 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white flex items-center justify-center hover:bg-white hover:text-black transition-all">
                                        <Plus className="size-6" />
                                     </div>
+                                    <span className="text-white text-[10px] font-black uppercase tracking-widest">Case Study</span>
                                  </Link>
                                ) : (
-                                 <a href="#contact" className="flex items-center gap-3 text-white text-[11px] font-black uppercase tracking-widest hover:text-primary transition-colors">
-                                    Inquire Now
-                                    <div className="size-10 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white flex items-center justify-center">
-                                       <ArrowUpRight className="size-5" />
+                                 <a href="#contact" className="flex items-center gap-3">
+                                    <div className="size-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white flex items-center justify-center">
+                                       <ArrowUpRight className="size-6" />
                                     </div>
+                                    <span className="text-white/50 text-[10px] font-black uppercase tracking-widest">Inquire</span>
                                  </a>
                                )}
                             </div>
                           </div>
                         </div>
 
-                        {/* Minimal Arrow Tag for Detail Page */}
+                        {/* Minimal floating icon (Not Hovered) */}
                         {w.hasDetail && (
-                          <div className="absolute top-8 right-8 z-20 size-10 rounded-full bg-primary/20 backdrop-blur-md border border-white/30 text-white flex items-center justify-center shadow-lg group-hover:scale-0 transition-transform">
-                             <ArrowUpRight className="size-5" />
+                          <div className="absolute top-10 right-10 z-20 size-12 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white flex items-center justify-center shadow-2xl group-hover:scale-0 transition-transform">
+                             <ArrowUpRight className="size-6 rotate-[-45deg] group-hover:rotate-0 transition-transform" />
                           </div>
                         )}
                       </div>
