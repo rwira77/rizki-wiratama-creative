@@ -9,7 +9,7 @@ import {
   ChevronRight, 
   ChevronLeft,
   ArrowUpRight,
-  ExternalLink
+  Plus
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
@@ -54,7 +54,6 @@ export const Portfolio = () => {
     ? works.filter((w) => w.cat?.trim().toLowerCase() === selectedCat.toLowerCase())
     : works;
 
-  // Sorting Logic: Projects with hasDetail enabled go first
   const sortedWorks = [...filteredWorks].sort((a, b) => {
     if (a.hasDetail && !b.hasDetail) return -1;
     if (!a.hasDetail && b.hasDetail) return 1;
@@ -66,17 +65,15 @@ export const Portfolio = () => {
       <div className="container px-6 mx-auto">
         <AnimatePresence mode="wait">
           {!selectedCat ? (
-            <motion.div key="folders" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
-              <div className="mb-20 max-w-2xl">
-                <p className="text-xs uppercase tracking-[0.3em] text-primary mb-6 flex items-center gap-3">
-                  <span className="h-px w-8 bg-primary" /> Gallery
-                </p>
-                <h2 className="font-display text-5xl md:text-6xl font-light leading-tight tracking-tight text-slate-900">
-                   Organized by <em className="text-primary italic">discipline</em>.
+            <motion.div key="folders" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 1.05 }} className="space-y-20">
+              <div className="max-w-2xl px-4">
+                <p className="text-xs uppercase tracking-[0.4em] text-primary mb-4">Portfolio</p>
+                <h2 className="font-display text-4xl md:text-5xl font-light text-slate-900 leading-tight">
+                  Discover our creative <br/> <em className="text-primary italic font-serif">universe</em>.
                 </h2>
               </div>
               
-              <div className="grid grid-cols-[repeat(auto-fit,minmax(180px,1fr))] gap-x-8 gap-y-24 justify-items-center">
+              <div className="grid grid-cols-[repeat(auto-fit,minmax(160px,1fr))] gap-x-12 gap-y-24 justify-items-center">
                 {categories.map((cat) => {
                   const catProjects = works.filter(w => w.cat?.trim().toLowerCase() === cat.id.toLowerCase());
                   const previewImages = catProjects.length > 0 ? catProjects.slice(0, 2).map(p => p.img) : (cat as any).images;
@@ -85,38 +82,38 @@ export const Portfolio = () => {
                     <motion.div
                       key={cat.id}
                       whileHover="hover"
-                      whileTap={{ scale: 0.98 }}
                       onClick={() => setSelectedCat(cat.id)}
-                      className="group cursor-pointer flex flex-col items-center w-40"
+                      className="group cursor-pointer flex flex-col items-center w-full max-w-[180px]"
                     >
-                      <div className="relative w-full h-32 mb-4">
-                        <div className={cn("absolute top-0 left-0 w-2/3 h-4 rounded-t-xl bg-gradient-to-br opacity-90", cat.color)} />
+                      <div className="relative w-full aspect-[4/5] mb-6">
+                        <div className={cn("absolute -top-2 left-0 w-1/2 h-3 rounded-t-xl opacity-40 transition-transform group-hover:-translate-y-1", cat.color)} />
                         <div className="absolute inset-0 z-0">
                           {previewImages.map((img: string, idx: number) => (
                             <motion.div
                               key={idx}
-                              variants={{ hover: { y: -30 - (idx * 15), rotate: idx % 2 === 0 ? -8 : 8, x: idx % 2 === 0 ? -10 : 10, transition: { type: "spring", stiffness: 300, damping: 20 } } }}
-                              className={cn("absolute left-4 right-4 h-28 rounded-lg border-2 border-white shadow-xl overflow-hidden z-[5]", idx === 0 ? "top-2 rotate-[-2deg]" : "top-4 rotate-[3deg]")}
+                              variants={{ hover: { y: -30 - (idx * 15), rotate: idx % 2 === 0 ? -12 : 12, scale: 1.05, transition: { type: "spring", stiffness: 200, damping: 15 } } }}
+                              className={cn("absolute inset-0 rounded-2xl border-2 border-white shadow-xl overflow-hidden z-[5]", idx === 0 ? "rotate-[-3deg] translate-y-1" : "rotate-[4deg] translate-y-3")}
                             >
-                              <img src={img || workBranding} className="w-full h-full object-cover" alt="" />
+                              <img src={img || workBranding} className="w-full h-full object-cover grayscale-[0.2] group-hover:grayscale-0 transition-all duration-700" alt="" />
                             </motion.div>
                           ))}
                         </div>
-                        <div className={cn("absolute bottom-0 left-0 right-0 h-28 rounded-2xl bg-gradient-to-br shadow-2xl z-10 p-5 flex flex-col justify-between overflow-hidden transition-all duration-500", cat.color)}>
-                          <div className="absolute inset-0 bg-white/10 backdrop-blur-[4px] group-hover:opacity-0 transition-opacity" />
-                          <div className="relative z-20 flex justify-between items-start">
-                            <cat.icon className="size-6 text-white/50 group-hover:text-white transition-colors" />
-                            <span className="text-[9px] font-bold text-white/40 uppercase tracking-widest text-right leading-none">
-                              {catProjects.length}<br/>Items
-                            </span>
-                          </div>
-                          <div className="relative z-20">
-                            <div className="h-0.5 w-6 bg-white/40 rounded-full mb-1" />
-                            <div className="h-0.5 w-10 bg-white/20 rounded-full" />
-                          </div>
+                        <div className={cn("absolute bottom-0 left-0 right-0 h-full rounded-2xl bg-gradient-to-br shadow-2xl z-10 p-6 flex flex-col justify-between overflow-hidden transition-all duration-500", cat.color)}>
+                           <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors" />
+                           <div className="relative z-20 flex justify-between items-start">
+                              <cat.icon className="size-8 text-white/80 group-hover:text-white transition-colors" />
+                              <div className="text-right">
+                                <p className="text-[10px] font-black text-white/50">{catProjects.length}</p>
+                                <p className="text-[8px] font-bold text-white/30 uppercase tracking-tighter">Items</p>
+                              </div>
+                           </div>
+                           <div className="relative z-20">
+                              <div className="h-0.5 w-8 bg-white/40 rounded-full mb-1.5" />
+                              <div className="h-0.5 w-12 bg-white/20 rounded-full" />
+                           </div>
                         </div>
                       </div>
-                      <h3 className="font-display text-base text-black/80 font-medium group-hover:text-primary transition-colors text-center">{cat.label}</h3>
+                      <h3 className="font-display text-lg text-slate-800 font-medium group-hover:text-primary transition-colors text-center">{cat.label}</h3>
                     </motion.div>
                   );
                 })}
@@ -124,72 +121,64 @@ export const Portfolio = () => {
             </motion.div>
           ) : (
             <motion.div key="grid" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-12">
-              <div className="flex items-center justify-between mb-16 border-b border-slate-100 pb-12 px-4">
-                <button onClick={() => setSelectedCat(null)} className="group flex items-center gap-3 text-sm font-bold text-slate-400 hover:text-black transition-all">
-                  <div className="size-10 rounded-full border border-slate-100 flex items-center justify-center group-hover:bg-slate-50 transition-colors">
-                    <ChevronLeft className="size-4" />
-                  </div>
-                  Back to Folders
+              <div className="flex items-center justify-between mb-12 border-b border-slate-100 pb-10 px-4">
+                <button onClick={() => setSelectedCat(null)} className="flex items-center gap-2 text-xs font-bold text-slate-400 hover:text-primary transition-colors uppercase tracking-widest">
+                  <ChevronLeft className="size-4" /> Back
                 </button>
                 <div className="text-right">
-                  <h2 className="font-display text-4xl font-light text-slate-900">{selectedCat}</h2>
-                  <p className="text-[10px] font-black uppercase tracking-widest text-primary mt-2">{sortedWorks.length} Projects Detected</p>
+                  <h2 className="font-display text-4xl font-light text-slate-900 tracking-tight">{selectedCat}</h2>
+                  <p className="text-[10px] font-black text-primary uppercase tracking-[0.3em] mt-1">{sortedWorks.length} Projects</p>
                 </div>
               </div>
 
-              {/* Masonry Layout Container */}
-              <div className="columns-1 md:columns-2 lg:columns-3 gap-8 space-y-8 px-4 pb-32">
+              {/* Pinterest Style Masonry */}
+              <div className="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6 px-4 pb-40">
                 {sortedWorks.map((w, i) => (
-                  <div key={w.id || i} className="break-inside-avoid">
-                    <div className="relative group block rounded-[2.5rem] overflow-hidden bg-slate-100 shadow-xl hover:shadow-2xl transition-all duration-500 border border-slate-100">
-                      {/* Image Layer */}
+                  <motion.div 
+                    key={w.id || i} 
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: i * 0.05 }}
+                    className="break-inside-avoid relative group cursor-pointer"
+                  >
+                    <Link to={w.hasDetail ? `/portfolio/${w.id}` : "#contact"} className="block overflow-hidden rounded-3xl bg-slate-50 border border-slate-100 shadow-lg hover:shadow-2xl transition-all duration-500">
                       <div className={cn(
-                        "relative overflow-hidden w-full",
-                        i % 3 === 0 ? "aspect-[3/4]" : i % 3 === 1 ? "aspect-[4/5]" : "aspect-[1/1]"
+                        "relative w-full",
+                        i % 2 === 0 ? "aspect-[4/5]" : "aspect-[3/4]"
                       )}>
+                        {/* Image */}
                         <img
                           src={w.img || "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop"}
                           alt={w.title}
-                          className="absolute inset-0 w-full h-full object-cover transition-transform duration-[2s] ease-out group-hover:scale-110"
+                          className="w-full h-full object-cover transition-transform duration-[1.5s] group-hover:scale-105"
                         />
                         
-                        {/* Detail Tag (If enabled) */}
-                        {w.hasDetail && (
-                          <div className="absolute top-6 left-6 z-20 flex items-center gap-2 bg-white/20 backdrop-blur-md border border-white/30 text-white px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest">
-                            <ExternalLink className="size-3" /> Case Study
+                        {/* Pinterest Style Hover Overlay */}
+                        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-8">
+                          <div className="translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                            <p className="text-[9px] font-black uppercase tracking-[0.4em] text-primary/80 mb-2">{w.cat}</p>
+                            <h3 className="font-special-serif text-2xl text-white mb-3">{w.title}</h3>
+                            
+                            <div className="flex items-center justify-between mt-auto">
+                               <div className="flex items-center gap-2 text-white/50 text-[10px] font-bold uppercase tracking-widest">
+                                  {w.hasDetail ? "Case Study" : "Creative"}
+                               </div>
+                               <div className="size-10 rounded-full bg-white text-black flex items-center justify-center hover:bg-primary hover:text-white transition-colors">
+                                  <Plus className="size-5" />
+                               </div>
+                            </div>
                           </div>
-                        )}
-                        
-                        {/* Index Number (Subtle) */}
-                        <div className="absolute top-6 right-6 z-20 size-8 rounded-full border border-white/20 text-white/50 flex items-center justify-center text-[10px] font-black backdrop-blur-sm">
-                          {String(i + 1).padStart(2, '0')}
                         </div>
 
-                        {/* Content Overlay */}
-                        <div className="absolute inset-0 flex flex-col justify-end p-8 bg-gradient-to-t from-black/90 via-black/20 to-transparent">
-                          <p className="text-[9px] font-black uppercase tracking-[0.4em] text-primary mb-2">{w.cat}</p>
-                          <h3 className="font-special-serif text-3xl text-white mb-2 leading-tight">{w.title || "Untitled Project"}</h3>
-                          <p className="text-white/60 text-xs line-clamp-2 max-w-[80%] font-medium mb-4">{w.problem || "Explore the story behind this creative execution."}</p>
-                          
-                          {w.hasDetail ? (
-                            <Link to={`/portfolio/${w.id}`} className="inline-flex items-center gap-2 text-white text-[10px] font-black uppercase tracking-widest group/btn">
-                               View Story 
-                               <div className="size-8 rounded-full bg-white text-black flex items-center justify-center group-hover/btn:scale-110 transition-transform duration-300 shadow-lg">
-                                  <ArrowUpRight className="size-4" />
-                               </div>
-                            </Link>
-                          ) : (
-                            <a href="#contact" className="inline-flex items-center gap-2 text-white text-[10px] font-black uppercase tracking-widest group/btn">
-                               Inquire 
-                               <div className="size-8 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white flex items-center justify-center group-hover/btn:scale-110 transition-transform duration-300">
-                                  <ArrowUpRight className="size-4" />
-                               </div>
-                            </a>
-                          )}
-                        </div>
+                        {/* Subtle Badge for Detail Page */}
+                        {w.hasDetail && (
+                          <div className="absolute top-5 right-5 z-20 size-8 rounded-full bg-primary text-white flex items-center justify-center shadow-lg group-hover:scale-0 transition-transform">
+                             <ArrowUpRight className="size-4" />
+                          </div>
+                        )}
                       </div>
-                    </div>
-                  </div>
+                    </Link>
+                  </motion.div>
                 ))}
               </div>
             </motion.div>
