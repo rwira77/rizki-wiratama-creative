@@ -191,9 +191,9 @@ export const Window = ({
             </aside>
 
             {/* Main Window Content */}
-            <main className="flex-1 overflow-auto bg-white/5 relative custom-scrollbar z-0">
-              <div className="sticky top-0 h-16 bg-gradient-to-b from-[#FDFCF9]/80 to-transparent pointer-events-none z-10" />
-              <div className="px-8 pb-24 md:px-16">
+            <main className="flex-1 overflow-auto bg-transparent relative custom-scrollbar z-0">
+              <div className="sticky top-0 h-16 bg-gradient-to-b from-[#FDFCF9]/80 to-transparent pointer-events-none z-10 hidden md:block" />
+              <div className="px-0 pb-24 md:px-16">
                 {children}
               </div>
             </main>
