@@ -134,18 +134,70 @@ const PortfolioDetail = () => {
            </motion.a>
         </aside>
 
-        <section className="md:col-span-8 space-y-16">
-           <div className="space-y-6">
-              <div className="flex items-center gap-3">
-                 <div className="size-8 rounded-xl bg-primary/10 flex items-center justify-center">
-                    <Target className="size-4 text-primary" />
-                 </div>
-                 <h2 className="font-special-serif text-3xl">The Mission</h2>
-              </div>
-              <p className="text-xl md:text-2xl font-light text-slate-500 leading-relaxed">
-                 {work.problem}. Our goal was to redefine the visual narrative and establish a new benchmark for premium brand interaction in the 2026 market.
-              </p>
-           </div>
+         <section className="md:col-span-8 space-y-16">
+            {Array.isArray(work.content_blocks) && work.content_blocks.length > 0 ? (
+               <div className="space-y-12 md:space-y-24">
+                  {work.content_blocks.map((block: any, i: number) => (
+                    <motion.div
+                      key={block.id || i}
+                      initial={{ opacity: 0, y: 30 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      className="w-full"
+                    >
+                      {block.type === 'text' && (
+                        <div className="max-w-3xl">
+                          {block.style === 'heading' ? (
+                            <h2 className="font-special-serif text-4xl md:text-6xl text-slate-900 mb-8">{block.content}</h2>
+                          ) : block.style === 'quote' ? (
+                            <p className="font-special-serif text-3xl md:text-5xl italic text-primary border-l-8 border-primary pl-10 my-16 leading-tight">
+                              "{block.content}"
+                            </p>
+                          ) : (
+                            <p className="text-xl md:text-2xl font-light text-slate-500 leading-relaxed">
+                              {block.content}
+                            </p>
+                          )}
+                        </div>
+                      )}
+
+                      {block.type === 'image' && (
+                        <div className="w-full rounded-[2.5rem] md:rounded-[4rem] overflow-hidden shadow-2xl bg-slate-50 border border-slate-100">
+                          <img src={getOptimizedUrl(block.content, 'gallery')} className="w-full h-auto object-contain" alt="" />
+                        </div>
+                      )}
+
+                      {block.type === 'grid' && (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-12">
+                          {Array.isArray(block.urls) && block.urls.map((url: string, j: number) => (
+                            <div 
+                              key={j} 
+                              className={cn(
+                                "rounded-[2rem] md:rounded-[3.5rem] overflow-hidden shadow-xl bg-slate-50 border border-slate-100",
+                                j % 2 !== 0 ? "md:mt-16" : ""
+                              )}
+                            >
+                              <img src={getOptimizedUrl(url, 'gallery')} className="w-full h-auto object-cover" alt="" />
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </motion.div>
+                  ))}
+               </div>
+            ) : (
+               <div className="space-y-6">
+                  <div className="flex items-center gap-3">
+                     <div className="size-8 rounded-xl bg-primary/10 flex items-center justify-center">
+                        <Target className="size-4 text-primary" />
+                     </div>
+                     <h2 className="font-special-serif text-3xl">The Mission</h2>
+                  </div>
+                  <p className="text-xl md:text-2xl font-light text-slate-500 leading-relaxed">
+                     {work.problem}. Our goal was to redefine the visual narrative and establish a new benchmark for premium brand interaction in the 2026 market.
+                  </p>
+               </div>
+            )}
 
            {Array.isArray(work.gallery) && work.gallery.length > 0 ? (
              <div className="space-y-4 md:space-y-8 pt-8">

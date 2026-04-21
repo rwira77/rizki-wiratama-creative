@@ -15,7 +15,13 @@ import {
   ExternalLink,
   Info,
   Star,
-  Folder
+  Folder,
+  Type,
+  AlignLeft,
+  LayoutGrid,
+  ChevronUp,
+  ChevronDown,
+  GripVertical
 } from "lucide-react";
 import { SECTIONS } from "@/config/sections";
 import { initialWorks, categories } from "@/components/Portfolio";
@@ -43,7 +49,8 @@ const AdminDashboard = () => {
     result: "",
     year: new Date().getFullYear().toString(),
     hasDetail: false,
-    gallery: ""
+    gallery: "",
+    content_blocks: [] as any[]
   });
 
   const [newLink, setNewLink] = useState({
@@ -319,11 +326,49 @@ const AdminDashboard = () => {
       result: work.result,
       year: work.year,
       hasDetail: work.hasDetail,
-      gallery: Array.isArray(work.gallery) ? work.gallery.join(', ') : ""
+      gallery: Array.isArray(work.gallery) ? work.gallery.join(', ') : "",
+      content_blocks: Array.isArray(work.content_blocks) ? work.content_blocks : []
     });
     setEditingId(work.id);
     setIsEditing(true);
     setIsModalOpen(true);
+  };
+
+  const addBlock = (type: 'text' | 'image' | 'grid') => {
+    const newBlock = {
+      id: Math.random().toString(36).substr(2, 9),
+      type,
+      content: type === 'text' ? 'New text block...' : '',
+      urls: type === 'grid' ? [] : undefined,
+      style: type === 'text' ? 'paragraph' : undefined
+    };
+    setNewProject(prev => ({
+      ...prev,
+      content_blocks: [...prev.content_blocks, newBlock]
+    }));
+  };
+
+  const updateBlock = (id: string, data: any) => {
+    setNewProject(prev => ({
+      ...prev,
+      content_blocks: prev.content_blocks.map(b => b.id === id ? { ...b, ...data } : b)
+    }));
+  };
+
+  const removeBlock = (id: string) => {
+    setNewProject(prev => ({
+      ...prev,
+      content_blocks: prev.content_blocks.filter(b => b.id !== id)
+    }));
+  };
+
+  const moveBlock = (index: number, direction: 'up' | 'down') => {
+    const blocks = [...newProject.content_blocks];
+    const newIndex = direction === 'up' ? index - 1 : index + 1;
+    if (newIndex < 0 || newIndex >= blocks.length) return;
+    
+    [blocks[index], blocks[newIndex]] = [blocks[newIndex], blocks[index]];
+    setNewProject(prev => ({ ...prev, content_blocks: blocks }));
   };
 
   const handleFormSubmit = async (e: React.FormEvent) => {
@@ -373,7 +418,8 @@ const AdminDashboard = () => {
       result: "",
       year: new Date().getFullYear().toString(),
       hasDetail: false,
-      gallery: ""
+      gallery: "",
+      content_blocks: []
     });
   };
 
@@ -700,7 +746,7 @@ const AdminDashboard = () => {
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative w-full max-w-2xl bg-white rounded-[3rem] shadow-2xl overflow-hidden"
+              className="relative w-full max-w-4xl bg-white rounded-[3rem] shadow-2xl overflow-y-auto max-h-[90vh] custom-scrollbar"
             >
               <div className="p-10 border-b border-slate-100 flex items-center justify-between">
                 <div>
@@ -815,6 +861,112 @@ const AdminDashboard = () => {
                     />
                   </button>
                 </div>
+
+                {newProject.hasDetail && (
+                  <div className="space-y-6 pt-6 border-t border-slate-100">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-xs font-black uppercase tracking-widest text-slate-400">Visual Case Study Builder</h3>
+                      <div className="flex gap-2">
+                        <button type="button" onClick={() => addBlock('text')} className="flex items-center gap-2 px-3 py-2 bg-white border border-slate-100 hover:bg-slate-900 hover:text-white rounded-xl text-[10px] font-bold transition-all">
+                          <Type className="size-3" /> Add Text
+                        </button>
+                        <button type="button" onClick={() => addBlock('image')} className="flex items-center gap-2 px-3 py-2 bg-white border border-slate-100 hover:bg-slate-900 hover:text-white rounded-xl text-[10px] font-bold transition-all">
+                          <ImageIcon className="size-3" /> Add Image
+                        </button>
+                        <button type="button" onClick={() => addBlock('grid')} className="flex items-center gap-2 px-3 py-2 bg-white border border-slate-100 hover:bg-slate-900 hover:text-white rounded-xl text-[10px] font-bold transition-all">
+                          <LayoutGrid className="size-3" /> Add Grid
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="space-y-4 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+                      {newProject.content_blocks.length === 0 && (
+                        <div className="py-20 border-2 border-dashed border-slate-100 rounded-[2rem] flex flex-col items-center justify-center text-slate-300">
+                          <ImageIcon className="size-8 mb-4 opacity-20" />
+                          <p className="text-xs font-bold uppercase tracking-widest">No content blocks yet</p>
+                          <p className="text-[10px] opacity-60 text-center">Start building your story by adding blocks above</p>
+                        </div>
+                      )}
+                      
+                      <AnimatePresence initial={false}>
+                        {newProject.content_blocks.map((block, idx) => (
+                          <motion.div
+                            key={block.id}
+                            initial={{ opacity: 0, x: -10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, scale: 0.95 }}
+                            layout
+                            className="group relative bg-white border border-slate-100 rounded-3xl p-5 shadow-sm hover:shadow-md transition-all"
+                          >
+                            <div className="flex items-center justify-between mb-4">
+                              <div className="flex items-center gap-3">
+                                <div className={cn(
+                                  "p-2 rounded-lg",
+                                  block.type === 'text' ? "bg-amber-50 text-amber-500" : 
+                                  block.type === 'image' ? "bg-blue-50 text-blue-500" : "bg-emerald-50 text-emerald-500"
+                                )}>
+                                  {block.type === 'text' ? <Type className="size-3" /> : 
+                                   block.type === 'image' ? <ImageIcon className="size-3" /> : 
+                                   <LayoutGrid className="size-3" />}
+                                </div>
+                                <div>
+                                  <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 block">{block.type}</span>
+                                  {block.type === 'text' && (
+                                    <select 
+                                      value={block.style || 'paragraph'}
+                                      onChange={(e) => updateBlock(block.id, { style: e.target.value })}
+                                      className="text-[9px] font-bold text-primary uppercase bg-transparent p-0 border-none focus:ring-0 cursor-pointer"
+                                    >
+                                      <option value="paragraph">Paragraph</option>
+                                      <option value="heading">Heading</option>
+                                      <option value="quote">Quote</option>
+                                    </select>
+                                  )}
+                                </div>
+                              </div>
+                              <div className="flex items-center gap-1 opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity">
+                                <button type="button" onClick={() => moveBlock(idx, 'up')} disabled={idx === 0} className="p-1.5 hover:bg-slate-50 rounded-md text-slate-400 disabled:opacity-20"><ChevronUp className="size-3" /></button>
+                                <button type="button" onClick={() => moveBlock(idx, 'down')} disabled={idx === newProject.content_blocks.length - 1} className="p-1.5 hover:bg-slate-50 rounded-md text-slate-400 disabled:opacity-20"><ChevronDown className="size-3" /></button>
+                                <button type="button" onClick={() => removeBlock(block.id)} className="p-1.5 hover:bg-red-50 text-red-300 hover:text-red-500 rounded-md"><Trash2 className="size-3" /></button>
+                              </div>
+                            </div>
+
+                            {block.type === 'text' && (
+                              <textarea
+                                value={block.content}
+                                onChange={(e) => updateBlock(block.id, { content: e.target.value })}
+                                className={cn(
+                                  "w-full bg-slate-50 border-none rounded-2xl p-4 text-slate-900 focus:ring-2 focus:ring-primary/10 transition-all min-h-[100px]",
+                                  block.style === 'heading' ? "text-lg font-special-serif" : "text-xs"
+                                )}
+                                placeholder="Content here..."
+                              />
+                            )}
+
+                            {block.type === 'image' && (
+                              <input
+                                type="text"
+                                value={block.content}
+                                onChange={(e) => updateBlock(block.id, { content: e.target.value })}
+                                className="w-full bg-slate-50 border-none rounded-2xl p-4 text-xs font-bold focus:ring-2 focus:ring-primary/10 transition-all"
+                                placeholder="Image URL..."
+                              />
+                            )}
+
+                            {block.type === 'grid' && (
+                              <textarea
+                                value={Array.isArray(block.urls) ? block.urls.join(', ') : ''}
+                                onChange={(e) => updateBlock(block.id, { urls: e.target.value.split(',').map((s: string) => s.trim()).filter(Boolean) })}
+                                className="w-full bg-slate-50 border-none rounded-2xl p-4 text-xs font-bold focus:ring-2 focus:ring-primary/10 transition-all min-h-[80px]"
+                                placeholder="URLs (comma separated)..."
+                              />
+                            )}
+                          </motion.div>
+                        ))}
+                      </AnimatePresence>
+                    </div>
+                  </div>
+                )}
 
                 <div className="pt-4 flex gap-4">
                   <button 
