@@ -1058,58 +1058,89 @@ const AdminDashboard = () => {
                             )}
 
                             {block.type === 'image' && (
-                              <div className="flex gap-2">
-                                <input
-                                  type="text"
-                                  value={block.content}
-                                  onChange={(e) => updateBlock(block.id, { content: e.target.value })}
-                                  className="flex-1 bg-slate-50 border-none rounded-2xl p-4 text-xs font-bold focus:ring-2 focus:ring-primary/10 transition-all"
-                                  placeholder="Image URL..."
-                                />
-                                <label className="shrink-0 bg-white border border-slate-100 p-4 rounded-2xl cursor-pointer hover:bg-slate-900 hover:text-white transition-all flex items-center justify-center">
-                                  <ImageIcon className="size-4" />
-                                  <input 
-                                    type="file" 
-                                    className="hidden" 
-                                    accept="image/*"
-                                    onChange={async (e) => {
-                                      const file = e.target.files?.[0];
-                                      if (file) {
-                                        const url = await handleCloudinaryUpload(file);
-                                        if (url) updateBlock(block.id, { content: url });
-                                      }
-                                    }}
+                              <div className="space-y-4">
+                                {block.content && (
+                                  <div className="relative group/thumb w-32 aspect-video rounded-xl overflow-hidden bg-slate-50 border border-slate-100">
+                                    <img 
+                                      src={getOptimizedUrl(block.content, 'thumb')} 
+                                      className="w-full h-full object-cover" 
+                                      alt="Preview" 
+                                    />
+                                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/thumb:opacity-100 transition-opacity flex items-center justify-center">
+                                      <button 
+                                        type="button"
+                                        onClick={() => window.open(block.content, '_blank')}
+                                        className="p-1.5 bg-white rounded-lg text-slate-900"
+                                      >
+                                        <ExternalLink className="size-3" />
+                                      </button>
+                                    </div>
+                                  </div>
+                                )}
+                                <div className="flex gap-2">
+                                  <input
+                                    type="text"
+                                    value={block.content}
+                                    onChange={(e) => updateBlock(block.id, { content: e.target.value })}
+                                    className="flex-1 bg-slate-50 border-none rounded-2xl p-4 text-xs font-bold focus:ring-2 focus:ring-primary/10 transition-all"
+                                    placeholder="Image URL..."
                                   />
-                                </label>
+                                  <label className="shrink-0 bg-white border border-slate-100 p-4 rounded-2xl cursor-pointer hover:bg-slate-900 hover:text-white transition-all flex items-center justify-center">
+                                    <ImageIcon className="size-4" />
+                                    <input 
+                                      type="file" 
+                                      className="hidden" 
+                                      accept="image/*"
+                                      onChange={async (e) => {
+                                        const file = e.target.files?.[0];
+                                        if (file) {
+                                          const url = await handleCloudinaryUpload(file);
+                                          if (url) updateBlock(block.id, { content: url });
+                                        }
+                                      }}
+                                    />
+                                  </label>
+                                </div>
                               </div>
                             )}
 
                             {block.type === 'grid' && (
-                              <div className="flex gap-2">
-                                <textarea
-                                  value={Array.isArray(block.urls) ? block.urls.join(', ') : ''}
-                                  onChange={(e) => updateBlock(block.id, { urls: e.target.value.split(',').map((s: string) => s.trim()).filter(Boolean) })}
-                                  className="flex-1 bg-slate-50 border-none rounded-2xl p-4 text-xs font-bold focus:ring-2 focus:ring-primary/10 transition-all min-h-[80px]"
-                                  placeholder="URLs (comma separated)..."
-                                />
-                                <label className="shrink-0 bg-white border border-slate-100 p-4 rounded-2xl cursor-pointer hover:bg-slate-900 hover:text-white transition-all flex items-center justify-center min-h-[80px] w-12">
-                                  <Plus className="size-5" />
-                                  <input 
-                                    type="file" 
-                                    className="hidden" 
-                                    accept="image/*"
-                                    onChange={async (e) => {
-                                      const file = e.target.files?.[0];
-                                      if (file) {
-                                        const url = await handleCloudinaryUpload(file);
-                                        if (url) {
-                                          const currentUrls = Array.isArray(block.urls) ? block.urls : [];
-                                          updateBlock(block.id, { urls: [...currentUrls, url] });
-                                        }
-                                      }
-                                    }}
+                              <div className="space-y-4">
+                                {Array.isArray(block.urls) && block.urls.length > 0 && (
+                                  <div className="flex flex-wrap gap-3">
+                                    {block.urls.map((url: string, i: number) => (
+                                      <div key={i} className="w-20 aspect-square rounded-lg overflow-hidden border border-slate-100">
+                                        <img src={getOptimizedUrl(url, 'thumb')} className="w-full h-full object-cover" alt="" />
+                                      </div>
+                                    ))}
+                                  </div>
+                                )}
+                                <div className="flex gap-2">
+                                  <textarea
+                                    value={Array.isArray(block.urls) ? block.urls.join(', ') : ''}
+                                    onChange={(e) => updateBlock(block.id, { urls: e.target.value.split(',').map((s: string) => s.trim()).filter(Boolean) })}
+                                    className="flex-1 bg-slate-50 border-none rounded-2xl p-4 text-xs font-bold focus:ring-2 focus:ring-primary/10 transition-all min-h-[80px]"
+                                    placeholder="URLs (comma separated)..."
                                   />
-                                </label>
+                                  <label className="shrink-0 bg-white border border-slate-100 p-4 rounded-2xl cursor-pointer hover:bg-slate-900 hover:text-white transition-all flex items-center justify-center min-h-[80px] w-12">
+                                    <Plus className="size-5" />
+                                    <input 
+                                      type="file" 
+                                      className="hidden" 
+                                      accept="image/*"
+                                      onChange={async (e) => {
+                                        const file = e.target.files?.[0];
+                                        if (file) {
+                                          const url = await handleCloudinaryUpload(file);
+                                          if (url) {
+                                            const currentUrls = Array.isArray(block.urls) ? block.urls : [];
+                                            updateBlock(block.id, { urls: [...currentUrls, url] });
+                                          }
+                                        }
+                                      }}
+                                    />
+                                  </label>
+                                </div>
                               </div>
                             )}
                           </motion.div>
