@@ -354,15 +354,17 @@ const AdminDashboard = () => {
   };
 
   const handleOpenEdit = (work: any) => {
+    if (!work) return;
+    
     setNewProject({
-      title: work.title,
-      cat: work.cat,
-      img: work.img,
-      problem: work.problem,
-      result: work.result,
-      year: work.year,
-      hasDetail: work.hasDetail,
-      block_gap: work.block_gap || 80,
+      title: work.title || "",
+      cat: work.cat || "Branding",
+      img: work.img || "",
+      problem: work.problem || "",
+      result: work.result || "",
+      year: work.year || new Date().getFullYear().toString(),
+      hasDetail: !!work.hasDetail,
+      block_gap: typeof work.block_gap === 'number' ? work.block_gap : 80,
       content_blocks: Array.isArray(work.content_blocks) ? work.content_blocks : []
     });
     setEditingId(work.id);
@@ -1002,149 +1004,152 @@ const AdminDashboard = () => {
                       )}
                       
                       <AnimatePresence initial={false}>
-                        {newProject.content_blocks.map((block, idx) => (
-                          <motion.div
-                            key={block.id}
-                            initial={{ opacity: 0, x: -10 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, scale: 0.95 }}
-                            layout
-                            className="group relative bg-white border border-slate-100 rounded-3xl p-5 shadow-sm hover:shadow-md transition-all"
-                          >
-                            <div className="flex items-center justify-between mb-4">
-                              <div className="flex items-center gap-3">
-                                <div className={cn(
-                                  "p-2 rounded-lg",
-                                  block.type === 'text' ? "bg-amber-50 text-amber-500" : 
-                                  block.type === 'image' ? "bg-blue-50 text-blue-500" : "bg-emerald-50 text-emerald-500"
-                                )}>
-                                  {block.type === 'text' ? <Type className="size-3" /> : 
-                                   block.type === 'image' ? <ImageIcon className="size-3" /> : 
-                                   <LayoutGrid className="size-3" />}
-                                </div>
-                                <div>
-                                  <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 block">{block.type}</span>
-                                  {block.type === 'text' && (
-                                    <select 
-                                      value={block.style || 'paragraph'}
-                                      onChange={(e) => updateBlock(block.id, { style: e.target.value })}
-                                      className="text-[9px] font-bold text-primary uppercase bg-transparent p-0 border-none focus:ring-0 cursor-pointer"
-                                    >
-                                      <option value="paragraph">Paragraph</option>
-                                      <option value="heading">Heading</option>
-                                      <option value="quote">Quote</option>
-                                    </select>
-                                  )}
-                                </div>
-                              </div>
-                              <div className="flex items-center gap-1 opacity-100 transition-opacity">
-                                <button type="button" onClick={() => moveBlock(idx, 'up')} disabled={idx === 0} className="p-2 bg-slate-50 hover:bg-slate-900 hover:text-white rounded-lg text-slate-400 disabled:opacity-10 transition-all"><ChevronUp className="size-3.5" /></button>
-                                <button type="button" onClick={() => moveBlock(idx, 'down')} disabled={idx === newProject.content_blocks.length - 1} className="p-2 bg-slate-50 hover:bg-slate-900 hover:text-white rounded-lg text-slate-400 disabled:opacity-10 transition-all"><ChevronDown className="size-3.5" /></button>
-                                <div className="w-px h-4 bg-slate-100 mx-1" />
-                                <button type="button" onClick={() => removeBlock(block.id)} className="p-2 hover:bg-red-50 text-red-300 hover:text-red-500 rounded-lg transition-all"><Trash2 className="size-3.5" /></button>
-                              </div>
-                            </div>
-
-                            {block.type === 'text' && (
-                              <textarea
-                                value={block.content}
-                                onChange={(e) => updateBlock(block.id, { content: e.target.value })}
-                                className={cn(
-                                  "w-full bg-slate-50 border-none rounded-2xl p-4 text-slate-900 focus:ring-2 focus:ring-primary/10 transition-all min-h-[100px]",
-                                  block.style === 'heading' ? "text-lg font-special-serif" : "text-xs"
-                                )}
-                                placeholder="Content here..."
-                              />
-                            )}
-
-                            {block.type === 'image' && (
-                              <div className="space-y-4">
-                                {block.content && (
-                                  <div className="relative group/thumb w-32 aspect-video rounded-xl overflow-hidden bg-slate-50 border border-slate-100">
-                                    <img 
-                                      src={getOptimizedUrl(block.content, 'thumb')} 
-                                      className="w-full h-full object-cover" 
-                                      alt="Preview" 
-                                    />
-                                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/thumb:opacity-100 transition-opacity flex items-center justify-center">
-                                      <button 
-                                        type="button"
-                                        onClick={() => window.open(block.content, '_blank')}
-                                        className="p-1.5 bg-white rounded-lg text-slate-900"
+                        {Array.isArray(newProject.content_blocks) && newProject.content_blocks.map((block, idx) => {
+                          if (!block) return null;
+                          return (
+                            <motion.div
+                              key={block.id || idx}
+                              initial={{ opacity: 0, x: -10 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              exit={{ opacity: 0, scale: 0.95 }}
+                              layout
+                              className="group relative bg-white border border-slate-100 rounded-3xl p-5 shadow-sm hover:shadow-md transition-all"
+                            >
+                              <div className="flex items-center justify-between mb-4">
+                                <div className="flex items-center gap-3">
+                                  <div className={cn(
+                                    "p-2 rounded-lg",
+                                    block.type === 'text' ? "bg-amber-50 text-amber-500" : 
+                                    block.type === 'image' ? "bg-blue-50 text-blue-500" : "bg-emerald-50 text-emerald-500"
+                                  )}>
+                                    {block.type === 'text' ? <Type className="size-3" /> : 
+                                     block.type === 'image' ? <ImageIcon className="size-3" /> : 
+                                     <LayoutGrid className="size-3" />}
+                                  </div>
+                                  <div>
+                                    <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 block">{block.type}</span>
+                                    {block.type === 'text' && (
+                                      <select 
+                                        value={block.style || 'paragraph'}
+                                        onChange={(e) => updateBlock(block.id, { style: e.target.value })}
+                                        className="text-[9px] font-bold text-primary uppercase bg-transparent p-0 border-none focus:ring-0 cursor-pointer"
                                       >
-                                        <ExternalLink className="size-3" />
-                                      </button>
-                                    </div>
+                                        <option value="paragraph">Paragraph</option>
+                                        <option value="heading">Heading</option>
+                                        <option value="quote">Quote</option>
+                                      </select>
+                                    )}
                                   </div>
-                                )}
-                                <div className="flex gap-2">
-                                  <input
-                                    type="text"
-                                    value={block.content}
-                                    onChange={(e) => updateBlock(block.id, { content: e.target.value })}
-                                    className="flex-1 bg-slate-50 border-none rounded-2xl p-4 text-xs font-bold focus:ring-2 focus:ring-primary/10 transition-all"
-                                    placeholder="Image URL..."
-                                  />
-                                  <label className="shrink-0 bg-white border border-slate-100 p-4 rounded-2xl cursor-pointer hover:bg-slate-900 hover:text-white transition-all flex items-center justify-center">
-                                    <ImageIcon className="size-4" />
-                                    <input 
-                                      type="file" 
-                                      className="hidden" 
-                                      accept="image/*"
-                                      onChange={async (e) => {
-                                        const file = e.target.files?.[0];
-                                        if (file) {
-                                          const url = await handleCloudinaryUpload(file);
-                                          if (url) updateBlock(block.id, { content: url });
-                                        }
-                                      }}
-                                    />
-                                  </label>
+                                </div>
+                                <div className="flex items-center gap-1 opacity-100 transition-opacity">
+                                  <button type="button" onClick={() => moveBlock(idx, 'up')} disabled={idx === 0} className="p-2 bg-slate-50 hover:bg-slate-900 hover:text-white rounded-lg text-slate-400 disabled:opacity-10 transition-all"><ChevronUp className="size-3.5" /></button>
+                                  <button type="button" onClick={() => moveBlock(idx, 'down')} disabled={idx === newProject.content_blocks.length - 1} className="p-2 bg-slate-50 hover:bg-slate-900 hover:text-white rounded-lg text-slate-400 disabled:opacity-10 transition-all"><ChevronDown className="size-3.5" /></button>
+                                  <div className="w-px h-4 bg-slate-100 mx-1" />
+                                  <button type="button" onClick={() => removeBlock(block.id)} className="p-2 hover:bg-red-50 text-red-300 hover:text-red-500 rounded-lg transition-all"><Trash2 className="size-3.5" /></button>
                                 </div>
                               </div>
-                            )}
 
-                            {block.type === 'grid' && (
-                              <div className="space-y-4">
-                                {Array.isArray(block.urls) && block.urls.length > 0 && (
-                                  <div className="flex flex-wrap gap-3">
-                                    {block.urls.map((url: string, i: number) => (
-                                      <div key={i} className="w-20 aspect-square rounded-lg overflow-hidden border border-slate-100">
-                                        <img src={getOptimizedUrl(url, 'thumb')} className="w-full h-full object-cover" alt="" />
+                              {block.type === 'text' && (
+                                <textarea
+                                  value={block.content || ""}
+                                  onChange={(e) => updateBlock(block.id, { content: e.target.value })}
+                                  className={cn(
+                                    "w-full bg-slate-50 border-none rounded-2xl p-4 text-slate-900 focus:ring-2 focus:ring-primary/10 transition-all min-h-[100px]",
+                                    block.style === 'heading' ? "text-lg font-special-serif" : "text-xs"
+                                  )}
+                                  placeholder="Content here..."
+                                />
+                              )}
+
+                              {block.type === 'image' && (
+                                <div className="space-y-4">
+                                  {block.content && (
+                                    <div className="relative group/thumb w-32 aspect-video rounded-xl overflow-hidden bg-slate-50 border border-slate-100">
+                                      <img 
+                                        src={getOptimizedUrl(block.content, 'thumb')} 
+                                        className="w-full h-full object-cover" 
+                                        alt="Preview" 
+                                      />
+                                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/thumb:opacity-100 transition-opacity flex items-center justify-center">
+                                        <button 
+                                          type="button"
+                                          onClick={() => window.open(block.content, '_blank')}
+                                          className="p-1.5 bg-white rounded-lg text-slate-900"
+                                        >
+                                          <ExternalLink className="size-3" />
+                                        </button>
                                       </div>
-                                    ))}
-                                  </div>
-                                )}
-                                <div className="flex gap-2">
-                                  <textarea
-                                    value={Array.isArray(block.urls) ? block.urls.join(', ') : ''}
-                                    onChange={(e) => updateBlock(block.id, { urls: e.target.value.split(',').map((s: string) => s.trim()).filter(Boolean) })}
-                                    className="flex-1 bg-slate-50 border-none rounded-2xl p-4 text-xs font-bold focus:ring-2 focus:ring-primary/10 transition-all min-h-[80px]"
-                                    placeholder="URLs (comma separated)..."
-                                  />
-                                  <label className="shrink-0 bg-white border border-slate-100 p-4 rounded-2xl cursor-pointer hover:bg-slate-900 hover:text-white transition-all flex items-center justify-center min-h-[80px] w-12">
-                                    <Plus className="size-5" />
-                                    <input 
-                                      type="file" 
-                                      className="hidden" 
-                                      accept="image/*"
-                                      onChange={async (e) => {
-                                        const file = e.target.files?.[0];
-                                        if (file) {
-                                          const url = await handleCloudinaryUpload(file);
-                                          if (url) {
-                                            const currentUrls = Array.isArray(block.urls) ? block.urls : [];
-                                            updateBlock(block.id, { urls: [...currentUrls, url] });
-                                          }
-                                        }
-                                      }}
+                                    </div>
+                                  )}
+                                  <div className="flex gap-2">
+                                    <input
+                                      type="text"
+                                      value={block.content || ""}
+                                      onChange={(e) => updateBlock(block.id, { content: e.target.value })}
+                                      className="flex-1 bg-slate-50 border-none rounded-2xl p-4 text-xs font-bold focus:ring-2 focus:ring-primary/10 transition-all"
+                                      placeholder="Image URL..."
                                     />
-                                  </label>
+                                    <label className="shrink-0 bg-white border border-slate-100 p-4 rounded-2xl cursor-pointer hover:bg-slate-900 hover:text-white transition-all flex items-center justify-center">
+                                      <ImageIcon className="size-4" />
+                                      <input 
+                                        type="file" 
+                                        className="hidden" 
+                                        accept="image/*"
+                                        onChange={async (e) => {
+                                          const file = e.target.files?.[0];
+                                          if (file) {
+                                            const url = await handleCloudinaryUpload(file);
+                                            if (url) updateBlock(block.id, { content: url });
+                                          }
+                                        }}
+                                      />
+                                    </label>
+                                  </div>
                                 </div>
-                              </div>
-                            )}
-                          </motion.div>
-                        ))}
+                              )}
+
+                              {block.type === 'grid' && (
+                                <div className="space-y-4">
+                                  {Array.isArray(block.urls) && block.urls.length > 0 && (
+                                    <div className="flex flex-wrap gap-3">
+                                      {block.urls.map((url: string, i: number) => (
+                                        <div key={i} className="w-20 aspect-square rounded-lg overflow-hidden border border-slate-100">
+                                          <img src={getOptimizedUrl(url, 'thumb')} className="w-full h-full object-cover" alt="" />
+                                        </div>
+                                      ))}
+                                    </div>
+                                  )}
+                                  <div className="flex gap-2">
+                                    <textarea
+                                      value={Array.isArray(block.urls) ? block.urls.join(', ') : ''}
+                                      onChange={(e) => updateBlock(block.id, { urls: e.target.value.split(',').map((s: string) => s.trim()).filter(Boolean) })}
+                                      className="flex-1 bg-slate-50 border-none rounded-2xl p-4 text-xs font-bold focus:ring-2 focus:ring-primary/10 transition-all min-h-[80px]"
+                                      placeholder="URLs (comma separated)..."
+                                    />
+                                    <label className="shrink-0 bg-white border border-slate-100 p-4 rounded-2xl cursor-pointer hover:bg-slate-900 hover:text-white transition-all flex items-center justify-center min-h-[80px] w-12">
+                                      <Plus className="size-5" />
+                                      <input 
+                                        type="file" 
+                                        className="hidden" 
+                                        accept="image/*"
+                                        onChange={async (e) => {
+                                          const file = e.target.files?.[0];
+                                          if (file) {
+                                            const url = await handleCloudinaryUpload(file);
+                                            if (url) {
+                                              const currentUrls = Array.isArray(block.urls) ? block.urls : [];
+                                              updateBlock(block.id, { urls: [...currentUrls, url] });
+                                            }
+                                          }
+                                        }}
+                                      />
+                                    </label>
+                                  </div>
+                                </div>
+                              )}
+                            </motion.div>
+                          );
+                        })}
                       </AnimatePresence>
                     </div>
                   </div>
