@@ -946,6 +946,49 @@ const AdminDashboard = () => {
                         <button type="button" onClick={() => addBlock('grid')} className="flex items-center gap-2 px-3 py-2 bg-white border border-slate-100 hover:bg-slate-900 hover:text-white rounded-xl text-[10px] font-bold transition-all">
                           <LayoutGrid className="size-3" /> Add Grid
                         </button>
+                        <div className="h-6 w-px bg-slate-100 mx-1" />
+                        <label className="flex items-center gap-2 px-4 py-2 bg-primary/10 text-primary hover:bg-primary hover:text-white rounded-xl text-[10px] font-black uppercase tracking-widest cursor-pointer transition-all">
+                          {uploading ? (
+                            <div className="size-3 border-2 border-current border-t-transparent animate-spin" />
+                          ) : (
+                            <ImageIcon className="size-3" />
+                          )}
+                          Bulk Upload
+                          <input 
+                            multiple
+                            type="file" 
+                            className="hidden" 
+                            accept="image/*"
+                            disabled={uploading}
+                            onChange={async (e) => {
+                              const files = Array.from(e.target.files || []);
+                              if (files.length === 0) return;
+                              
+                              // Sort by filename
+                              const sortedFiles = files.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
+                              
+                              toast.info(`Uploading ${files.length} images...`);
+                              const uploadPromises = sortedFiles.map(file => handleCloudinaryUpload(file));
+                              const results = await Promise.all(uploadPromises);
+                              
+                              const newBlocks = results
+                                .filter((url): url is string => url !== null)
+                                .map(url => ({
+                                  id: Math.random().toString(36).substr(2, 9),
+                                  type: 'image' as const,
+                                  content: url
+                                }));
+                              
+                              if (newBlocks.length > 0) {
+                                setNewProject(prev => ({
+                                  ...prev,
+                                  content_blocks: [...prev.content_blocks, ...newBlocks]
+                                }));
+                                toast.success(`Added ${newBlocks.length} images to case study!`);
+                              }
+                            }}
+                          />
+                        </label>
                       </div>
                     </div>
 
@@ -994,10 +1037,11 @@ const AdminDashboard = () => {
                                   )}
                                 </div>
                               </div>
-                              <div className="flex items-center gap-1 opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity">
-                                <button type="button" onClick={() => moveBlock(idx, 'up')} disabled={idx === 0} className="p-1.5 hover:bg-slate-50 rounded-md text-slate-400 disabled:opacity-20"><ChevronUp className="size-3" /></button>
-                                <button type="button" onClick={() => moveBlock(idx, 'down')} disabled={idx === newProject.content_blocks.length - 1} className="p-1.5 hover:bg-slate-50 rounded-md text-slate-400 disabled:opacity-20"><ChevronDown className="size-3" /></button>
-                                <button type="button" onClick={() => removeBlock(block.id)} className="p-1.5 hover:bg-red-50 text-red-300 hover:text-red-500 rounded-md"><Trash2 className="size-3" /></button>
+                              <div className="flex items-center gap-1 opacity-100 transition-opacity">
+                                <button type="button" onClick={() => moveBlock(idx, 'up')} disabled={idx === 0} className="p-2 bg-slate-50 hover:bg-slate-900 hover:text-white rounded-lg text-slate-400 disabled:opacity-10 transition-all"><ChevronUp className="size-3.5" /></button>
+                                <button type="button" onClick={() => moveBlock(idx, 'down')} disabled={idx === newProject.content_blocks.length - 1} className="p-2 bg-slate-50 hover:bg-slate-900 hover:text-white rounded-lg text-slate-400 disabled:opacity-10 transition-all"><ChevronDown className="size-3.5" /></button>
+                                <div className="w-px h-4 bg-slate-100 mx-1" />
+                                <button type="button" onClick={() => removeBlock(block.id)} className="p-2 hover:bg-red-50 text-red-300 hover:text-red-500 rounded-lg transition-all"><Trash2 className="size-3.5" /></button>
                               </div>
                             </div>
 
