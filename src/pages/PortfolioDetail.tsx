@@ -70,58 +70,58 @@ const PortfolioDetail = () => {
       </nav>
 
       {/* Hero Section */}
-      <header className="pt-40 pb-20 px-8 md:px-12 max-w-7xl mx-auto text-center space-y-8">
+      <header className="pt-40 pb-16 px-8 md:px-12 max-w-7xl mx-auto">
         <motion.div
-           initial={{ opacity: 0, y: 30 }}
-           animate={{ opacity: 1, y: 0 }}
-           className="space-y-4"
+           initial={{ opacity: 0, x: -20 }}
+           animate={{ opacity: 1, x: 0 }}
+           className="space-y-4 text-left"
         >
            <p className="text-[10px] font-black uppercase tracking-[0.5em] text-primary">
              {work.cat}
            </p>
-           <h1 className="font-special-serif text-6xl md:text-[10rem] leading-[0.85] tracking-tighter text-slate-900">
+           <h1 className="font-special-serif text-4xl md:text-6xl tracking-tight text-slate-900">
              {work.title}
            </h1>
-           <div className="pt-8 flex items-center justify-center gap-4 text-[10px] font-bold uppercase tracking-widest text-slate-400">
-              <span>Published 2026</span>
-              <div className="size-1 rounded-full bg-slate-200" />
+           <div className="pt-4 flex items-center gap-4 text-[9px] font-bold uppercase tracking-widest text-slate-300">
+              <span>Case Study 2026</span>
+              <div className="size-1 rounded-full bg-slate-100" />
               <span>Rizki Wiratama</span>
            </div>
         </motion.div>
       </header>
 
-      <main className="relative">
+      <main className="relative max-w-[1600px] mx-auto">
         <div className="grid md:grid-cols-12 gap-0">
-          {/* Main Case Study Content - Behance Style (Full Width Focus) */}
-          <div className="md:col-span-9 lg:col-span-10">
-            <div className="flex flex-col">
+          {/* Main Case Study Content - Refined with Padding */}
+          <div className="md:col-span-9 lg:col-span-10 px-4 md:px-12 lg:px-20">
+            <div className="flex flex-col space-y-12 md:space-y-20">
                {Array.isArray(work.content_blocks) && work.content_blocks.length > 0 ? (
                   work.content_blocks.map((block: any, i: number) => (
                     <motion.div
                       key={block.id || i}
-                      initial={{ opacity: 0 }}
-                      whileInView={{ opacity: 1 }}
-                      viewport={{ once: true, margin: "-10%" }}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, margin: "-5%" }}
                       transition={{ duration: 0.8 }}
                       className="w-full"
                     >
                       {block.type === 'text' && (
-                        <div className="py-24 px-8 md:px-24 bg-white">
+                        <div className="py-12 md:py-20">
                           <div className={cn(
-                            "mx-auto",
-                            block.style === 'quote' ? "max-w-4xl" : "max-w-3xl"
+                            "mr-auto",
+                            block.style === 'quote' ? "max-w-4xl" : "max-w-2xl"
                           )}>
                             {block.style === 'heading' ? (
-                              <h2 className="font-special-serif text-5xl md:text-8xl text-slate-900 mb-12 tracking-tighter">{block.content}</h2>
+                              <h2 className="font-special-serif text-3xl md:text-5xl text-slate-900 mb-8 tracking-tight">{block.content}</h2>
                             ) : block.style === 'quote' ? (
-                              <div className="space-y-10">
-                                 <div className="h-1.5 w-20 bg-primary" />
-                                 <p className="font-special-serif text-4xl md:text-7xl italic text-slate-900 leading-[1.1] tracking-tight">
+                              <div className="space-y-8">
+                                 <div className="h-1 w-12 bg-primary" />
+                                 <p className="font-special-serif text-3xl md:text-5xl italic text-slate-900 leading-tight">
                                    "{block.content}"
                                  </p>
                               </div>
                             ) : (
-                              <p className="text-xl md:text-4xl font-light text-slate-500 leading-tight font-sans">
+                              <p className="text-lg md:text-2xl font-light text-slate-500 leading-relaxed font-sans">
                                 {block.content}
                               </p>
                             )}
@@ -130,7 +130,7 @@ const PortfolioDetail = () => {
                       )}
 
                       {block.type === 'image' && (
-                        <div className="w-full bg-slate-50">
+                        <div className="w-full rounded-[2rem] md:rounded-[3rem] overflow-hidden shadow-xl bg-slate-50">
                           <img 
                             src={getOptimizedUrl(block.content, 'gallery')} 
                             className="w-full h-auto block" 
@@ -140,9 +140,9 @@ const PortfolioDetail = () => {
                       )}
 
                       {block.type === 'grid' && (
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-0 bg-slate-50">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10">
                           {Array.isArray(block.urls) && block.urls.map((url: string, j: number) => (
-                            <div key={j} className="overflow-hidden">
+                            <div key={j} className="rounded-[1.5rem] md:rounded-[2.5rem] overflow-hidden shadow-lg">
                               <img 
                                 src={getOptimizedUrl(url, 'gallery')} 
                                 className="w-full h-auto block hover:scale-105 transition-transform duration-1000" 
@@ -155,88 +155,76 @@ const PortfolioDetail = () => {
                     </motion.div>
                   ))
                ) : (
-                  <div className="flex flex-col">
-                     {/* Hero as first image if no blocks */}
-                     <img src={getOptimizedUrl(work.img, 'hero')} className="w-full h-auto" alt="" />
+                  <div className="flex flex-col space-y-12 md:space-y-20">
+                     <div className="rounded-[3rem] overflow-hidden shadow-2xl">
+                        <img src={getOptimizedUrl(work.img, 'hero')} className="w-full h-auto" alt="" />
+                     </div>
                      
-                     <div className="py-32 px-8 md:px-24 bg-white">
-                        <div className="max-w-3xl mx-auto space-y-10">
-                           <h2 className="font-special-serif text-6xl md:text-8xl tracking-tighter">The Mission</h2>
-                           <p className="text-2xl md:text-5xl font-light text-slate-500 leading-[1.1]">
+                     <div className="py-12">
+                        <div className="max-w-2xl space-y-8">
+                           <h2 className="font-special-serif text-4xl md:text-5xl tracking-tight">The Mission</h2>
+                           <p className="text-xl md:text-2xl font-light text-slate-500 leading-relaxed">
                               {work.problem}
                            </p>
                         </div>
                      </div>
 
-                     {Array.isArray(work.gallery) && work.gallery.map((imgUrl: string, idx: number) => (
-                       <img 
-                         key={idx}
-                         src={getOptimizedUrl(imgUrl, 'gallery')} 
-                         className="w-full h-auto block" 
-                         alt="" 
-                       />
-                     ))}
+                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        {Array.isArray(work.gallery) && work.gallery.map((imgUrl: string, idx: number) => (
+                          <div key={idx} className="rounded-[2rem] overflow-hidden shadow-lg">
+                             <img 
+                               src={getOptimizedUrl(imgUrl, 'gallery')} 
+                               className="w-full h-auto block" 
+                               alt="" 
+                             />
+                          </div>
+                        ))}
+                     </div>
                   </div>
                )}
             </div>
 
             {/* Footer Navigation */}
-            <div className="p-12 md:p-32 bg-slate-900 text-white text-center space-y-12">
+            <div className="mt-32 p-12 md:p-24 bg-slate-50 rounded-[4rem] text-center space-y-10 mb-20">
                <div className="space-y-4">
-                  <p className="text-[10px] font-black uppercase tracking-[0.5em] text-white/40">Next Project</p>
-                  <h3 className="font-special-serif text-5xl md:text-9xl tracking-tighter hover:text-primary transition-colors cursor-pointer">Stay Tuned</h3>
+                  <p className="text-[10px] font-black uppercase tracking-[0.5em] text-slate-300">Next Project</p>
+                  <h3 className="font-special-serif text-4xl md:text-6xl tracking-tight hover:text-primary transition-colors cursor-pointer">Stay Tuned</h3>
                </div>
                <button 
                   onClick={() => navigate("/")}
-                  className="px-12 py-5 border border-white/10 rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-white hover:text-slate-900 transition-all"
+                  className="px-10 py-4 border border-slate-200 rounded-full text-[9px] font-black uppercase tracking-widest hover:bg-slate-900 hover:text-white transition-all"
                >
                   Back to Portfolio
                </button>
             </div>
           </div>
 
-          {/* Sticky Sidebar Info - Behance Style */}
-          <aside className="hidden md:block md:col-span-3 lg:col-span-2 border-l border-slate-100 bg-white">
-            <div className="sticky top-20 p-10 space-y-12">
-               <div className="space-y-10">
+          {/* Sticky Sidebar Info - Refined */}
+          <aside className="hidden md:block md:col-span-3 lg:col-span-2">
+            <div className="sticky top-32 p-6 space-y-12">
+               <div className="space-y-8">
                   <div className="space-y-2">
-                     <p className="text-[10px] font-black uppercase tracking-widest text-slate-300">Timeline</p>
-                     <p className="font-bold text-sm">{work.year}</p>
+                     <p className="text-[9px] font-black uppercase tracking-widest text-slate-300">Timeline</p>
+                     <p className="font-bold text-xs">{work.year}</p>
                   </div>
                   <div className="space-y-2">
-                     <p className="text-[10px] font-black uppercase tracking-widest text-slate-300">Discipline</p>
-                     <p className="font-bold text-sm">{work.cat}</p>
+                     <p className="text-[9px] font-black uppercase tracking-widest text-slate-300">Discipline</p>
+                     <p className="font-bold text-xs">{work.cat}</p>
                   </div>
                   <div className="space-y-2">
-                     <p className="text-[10px] font-black uppercase tracking-widest text-primary">Result</p>
-                     <p className="font-special-serif text-xl italic leading-tight">{work.result}</p>
+                     <p className="text-[9px] font-black uppercase tracking-widest text-primary">Result</p>
+                     <p className="font-special-serif text-lg italic leading-tight">{work.result}</p>
                   </div>
                </div>
 
                <div className="h-px bg-slate-100" />
 
                <div className="space-y-6">
-                  <div className="flex items-center gap-4">
-                     <div className="size-12 rounded-full bg-slate-900 flex items-center justify-center text-white font-black text-xs">RW</div>
+                  <div className="flex items-center gap-3">
+                     <div className="size-10 rounded-full bg-slate-900 flex items-center justify-center text-white font-black text-[10px]">RW</div>
                      <div>
-                        <p className="text-xs font-bold">Rizki Wiratama</p>
-                        <p className="text-[10px] text-slate-400 uppercase tracking-widest font-black">Creator</p>
-                     </div>
-                  </div>
-                  <button className="w-full py-4 bg-primary text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-900 transition-colors">
-                     Follow
-                  </button>
-               </div>
-
-               <div className="pt-20">
-                  <div className="flex items-center gap-8 text-slate-300">
-                     <div className="text-center">
-                        <p className="text-lg font-bold text-slate-900">1.2k</p>
-                        <p className="text-[9px] uppercase font-black tracking-widest">Views</p>
-                     </div>
-                     <div className="text-center">
-                        <p className="text-lg font-bold text-slate-900">458</p>
-                        <p className="text-[9px] uppercase font-black tracking-widest">Appreciations</p>
+                        <p className="text-[10px] font-bold">Rizki Wiratama</p>
+                        <p className="text-[8px] text-slate-300 uppercase tracking-widest font-black">Creator</p>
                      </div>
                   </div>
                </div>
@@ -245,21 +233,17 @@ const PortfolioDetail = () => {
         </div>
       </main>
 
-      {/* Mobile Meta Info (at bottom) */}
+      {/* Mobile Meta Info */}
       <div className="md:hidden p-8 bg-white border-t border-slate-100 space-y-8">
          <div className="grid grid-cols-2 gap-8">
             <div className="space-y-1">
                <p className="text-[10px] font-black uppercase tracking-widest text-slate-300">Timeline</p>
-               <p className="font-bold">{work.year}</p>
+               <p className="font-bold text-sm">{work.year}</p>
             </div>
             <div className="space-y-1">
                <p className="text-[10px] font-black uppercase tracking-widest text-slate-300">Discipline</p>
-               <p className="font-bold">{work.cat}</p>
+               <p className="font-bold text-sm">{work.cat}</p>
             </div>
-         </div>
-         <div className="space-y-1">
-            <p className="text-[10px] font-black uppercase tracking-widest text-primary">Result</p>
-            <p className="font-special-serif text-2xl italic leading-tight">{work.result}</p>
          </div>
       </div>
 
