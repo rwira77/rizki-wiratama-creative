@@ -65,8 +65,8 @@ const AdminDashboard = () => {
 
   const [uploading, setUploading] = useState(false);
   const [cloudinarySettings, setCloudinarySettings] = useState({
-    cloudName: localStorage.getItem('cloudinary_cloud_name') || "",
-    uploadPreset: localStorage.getItem('cloudinary_upload_preset') || ""
+    cloudName: localStorage.getItem('cloudinary_cloud_name') || "dpnkhbgdc",
+    uploadPreset: localStorage.getItem('cloudinary_upload_preset') || "portfolio_upload"
   });
 
   const handleCloudinaryUpload = async (file: File): Promise<string | null> => {
