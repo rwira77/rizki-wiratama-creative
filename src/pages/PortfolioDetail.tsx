@@ -70,172 +70,168 @@ const PortfolioDetail = () => {
       </nav>
 
       {/* Hero Section */}
-      <header className="pt-32 pb-20 px-8 md:px-12 max-w-7xl mx-auto space-y-12">
+      <header className="pt-32 pb-16 px-8 md:px-12 max-w-7xl mx-auto text-center space-y-12">
         <motion.div
-           initial={{ opacity: 0, y: 20 }}
+           initial={{ opacity: 0, y: 30 }}
            animate={{ opacity: 1, y: 0 }}
-           className="space-y-6"
+           transition={{ duration: 0.8 }}
+           className="space-y-8"
         >
-           <div className="inline-flex items-center gap-2 px-4 py-2 bg-slate-900 rounded-full text-[10px] font-black text-white uppercase tracking-widest">
+           <div className="inline-flex items-center gap-2 px-6 py-2.5 bg-slate-900 rounded-full text-[10px] font-black text-white uppercase tracking-[0.3em]">
              {work.cat}
            </div>
-           <h1 className="font-special-serif text-6xl md:text-9xl leading-[0.9] tracking-tighter">
+           <h1 className="font-special-serif text-6xl md:text-[12rem] leading-[0.8] tracking-tighter text-slate-900">
              {work.title}
            </h1>
         </motion.div>
 
         <motion.div 
-           initial={{ opacity: 0, scale: 0.95 }}
+           initial={{ opacity: 0, scale: 0.98 }}
            animate={{ opacity: 1, scale: 1 }}
-           transition={{ duration: 1, ease: [0.65, 0, 0.35, 1] }}
-           className="relative aspect-[21/9] rounded-[3rem] overflow-hidden shadow-2xl border border-white"
+           transition={{ duration: 1.2, ease: [0.65, 0, 0.35, 1] }}
+           className="relative aspect-[21/9] rounded-[3rem] md:rounded-[5rem] overflow-hidden shadow-2xl border border-white"
         >
            <img src={getOptimizedUrl(work.img, 'hero')} className="w-full h-full object-cover" alt="" />
-           <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+           <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
         </motion.div>
       </header>
 
-      {/* Content Grid */}
-      <main className="px-8 md:px-12 max-w-7xl mx-auto grid md:grid-cols-12 gap-16 pb-32">
-        <aside className="md:col-span-4 space-y-12">
-           <div className="p-8 bg-white rounded-[2rem] border border-slate-100 shadow-sm space-y-8">
-              <div className="space-y-1">
-                 <p className="text-[10px] font-black uppercase tracking-widest text-slate-300 flex items-center gap-2">
-                   <Calendar className="size-3" /> Timeline
-                 </p>
-                 <p className="font-bold text-slate-900">{work.year}</p>
-              </div>
-              <div className="space-y-1">
-                 <p className="text-[10px] font-black uppercase tracking-widest text-slate-300 flex items-center gap-2">
-                   <Tag className="size-3" /> Discipline
-                 </p>
-                 <p className="font-bold text-slate-900">{work.cat}</p>
-              </div>
-              <div className="h-px bg-slate-100" />
-              <div className="space-y-1">
-                 <p className="text-[10px] font-black uppercase tracking-widest text-primary flex items-center gap-2">
-                   <BarChart3 className="size-3" /> Key Results
-                 </p>
-                 <p className="text-2xl font-special-serif text-slate-900 leading-tight italic">{work.result}</p>
-              </div>
-           </div>
+      {/* Meta Info Bar */}
+      <section className="max-w-7xl mx-auto px-8 md:px-12 mb-20 md:mb-32">
+         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 py-12 border-y border-slate-100">
+            <div className="space-y-2">
+               <p className="text-[10px] font-black uppercase tracking-widest text-slate-300">Timeline</p>
+               <p className="font-bold text-lg">{work.year}</p>
+            </div>
+            <div className="space-y-2">
+               <p className="text-[10px] font-black uppercase tracking-widest text-slate-300">Discipline</p>
+               <p className="font-bold text-lg">{work.cat}</p>
+            </div>
+            <div className="col-span-2 space-y-2">
+               <p className="text-[10px] font-black uppercase tracking-widest text-primary">Key Result</p>
+               <p className="font-special-serif text-2xl md:text-3xl text-slate-900 leading-tight italic">{work.result}</p>
+            </div>
+         </div>
+      </section>
 
-           <motion.a
-             href="/"
-             className="flex items-center justify-between p-8 bg-primary rounded-[2rem] text-white group"
-           >
-              <div className="space-y-1">
-                 <p className="text-[10px] font-black uppercase tracking-widest text-white/60">Ready to start?</p>
-                 <p className="font-special-serif text-2xl group-hover:underline">Contact Rizki</p>
-              </div>
-              <div className="size-12 rounded-full border border-white/20 flex items-center justify-center group-hover:rotate-45 transition-transform">
-                <ArrowUpRight className="size-5" />
-              </div>
-           </motion.a>
-        </aside>
-
-         <section className="md:col-span-8 space-y-16">
+      {/* Main Content Area */}
+      <main className="max-w-7xl mx-auto px-8 md:px-12 pb-32">
+         <div className="max-w-5xl mx-auto space-y-24 md:space-y-40">
             {Array.isArray(work.content_blocks) && work.content_blocks.length > 0 ? (
-               <div className="space-y-12 md:space-y-24">
-                  {work.content_blocks.map((block: any, i: number) => (
-                    <motion.div
-                      key={block.id || i}
-                      initial={{ opacity: 0, y: 30 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      className="w-full"
-                    >
-                      {block.type === 'text' && (
-                        <div className="max-w-3xl">
-                          {block.style === 'heading' ? (
-                            <h2 className="font-special-serif text-4xl md:text-6xl text-slate-900 mb-8">{block.content}</h2>
-                          ) : block.style === 'quote' ? (
-                            <p className="font-special-serif text-3xl md:text-5xl italic text-primary border-l-8 border-primary pl-10 my-16 leading-tight">
+               work.content_blocks.map((block: any, i: number) => (
+                 <motion.div
+                   key={block.id || i}
+                   initial={{ opacity: 0, y: 50 }}
+                   whileInView={{ opacity: 1, y: 0 }}
+                   viewport={{ once: true, margin: "-10%" }}
+                   transition={{ duration: 1, ease: "easeOut" }}
+                   className="w-full"
+                 >
+                   {block.type === 'text' && (
+                     <div className={cn(
+                       "mx-auto",
+                       block.style === 'quote' ? "max-w-4xl" : "max-w-3xl"
+                     )}>
+                       {block.style === 'heading' ? (
+                         <h2 className="font-special-serif text-5xl md:text-[5rem] text-slate-900 leading-none mb-12 tracking-tighter">{block.content}</h2>
+                       ) : block.style === 'quote' ? (
+                         <div className="space-y-6 my-24">
+                            <div className="size-12 rounded-full bg-primary/10 flex items-center justify-center mb-8">
+                               <ArrowUpRight className="size-6 text-primary rotate-45" />
+                            </div>
+                            <p className="font-special-serif text-4xl md:text-7xl italic text-slate-900 leading-[1.1] tracking-tight">
                               "{block.content}"
                             </p>
-                          ) : (
-                            <p className="text-xl md:text-2xl font-light text-slate-500 leading-relaxed">
-                              {block.content}
-                            </p>
-                          )}
-                        </div>
-                      )}
-
-                      {block.type === 'image' && (
-                        <div className="w-full rounded-[2.5rem] md:rounded-[4rem] overflow-hidden shadow-2xl bg-slate-50 border border-slate-100">
-                          <img src={getOptimizedUrl(block.content, 'gallery')} className="w-full h-auto object-contain" alt="" />
-                        </div>
-                      )}
-
-                      {block.type === 'grid' && (
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-12">
-                          {Array.isArray(block.urls) && block.urls.map((url: string, j: number) => (
-                            <div 
-                              key={j} 
-                              className={cn(
-                                "rounded-[2rem] md:rounded-[3.5rem] overflow-hidden shadow-xl bg-slate-50 border border-slate-100",
-                                j % 2 !== 0 ? "md:mt-16" : ""
-                              )}
-                            >
-                              <img src={getOptimizedUrl(url, 'gallery')} className="w-full h-auto object-cover" alt="" />
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </motion.div>
-                  ))}
-               </div>
-            ) : (
-               <div className="space-y-6">
-                  <div className="flex items-center gap-3">
-                     <div className="size-8 rounded-xl bg-primary/10 flex items-center justify-center">
-                        <Target className="size-4 text-primary" />
+                         </div>
+                       ) : (
+                         <p className="text-xl md:text-3xl font-light text-slate-500 leading-relaxed font-sans">
+                           {block.content}
+                         </p>
+                       )}
                      </div>
-                     <h2 className="font-special-serif text-3xl">The Mission</h2>
+                   )}
+
+                   {block.type === 'image' && (
+                     <div className="w-full rounded-[3rem] md:rounded-[5rem] overflow-hidden shadow-[0_40px_100px_-20px_rgba(0,0,0,0.1)] bg-slate-50 border border-slate-100">
+                       <img src={getOptimizedUrl(block.content, 'gallery')} className="w-full h-auto object-contain" alt="" />
+                     </div>
+                   )}
+
+                   {block.type === 'grid' && (
+                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16">
+                       {Array.isArray(block.urls) && block.urls.map((url: string, j: number) => (
+                         <div 
+                           key={j} 
+                           className={cn(
+                             "rounded-[2.5rem] md:rounded-[4rem] overflow-hidden shadow-xl bg-slate-50 border border-slate-100",
+                             j % 2 !== 0 ? "md:translate-y-20" : ""
+                           )}
+                         >
+                           <img src={getOptimizedUrl(url, 'gallery')} className="w-full h-auto object-cover" alt="" />
+                         </div>
+                       ))}
+                     </div>
+                   )}
+                 </motion.div>
+               ))
+            ) : (
+               <div className="space-y-32">
+                  <div className="max-w-3xl mx-auto space-y-8">
+                     <div className="flex items-center gap-4">
+                        <div className="size-12 rounded-2xl bg-primary/10 flex items-center justify-center">
+                           <Target className="size-6 text-primary" />
+                        </div>
+                        <h2 className="font-special-serif text-4xl md:text-6xl">The Mission</h2>
+                     </div>
+                     <p className="text-2xl md:text-4xl font-light text-slate-500 leading-tight">
+                        {work.problem}. Our goal was to establish a new benchmark for premium brand interaction in the 2026 market.
+                     </p>
                   </div>
-                  <p className="text-xl md:text-2xl font-light text-slate-500 leading-relaxed">
-                     {work.problem}. Our goal was to redefine the visual narrative and establish a new benchmark for premium brand interaction in the 2026 market.
-                  </p>
+
+                  {Array.isArray(work.gallery) && work.gallery.length > 0 && (
+                    <div className="space-y-12 md:space-y-24">
+                      {work.gallery.map((imgUrl: string, idx: number) => (
+                        <motion.div 
+                          key={idx}
+                          initial={{ opacity: 0, y: 50 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          viewport={{ once: true }}
+                          className="w-full rounded-[3rem] md:rounded-[5rem] overflow-hidden bg-slate-100 shadow-2xl"
+                        >
+                          <img 
+                            src={getOptimizedUrl(imgUrl, 'gallery')} 
+                            className="w-full h-auto object-cover" 
+                            alt={`${work.title} - view ${idx + 1}`} 
+                          />
+                        </motion.div>
+                      ))}
+                    </div>
+                  )}
                </div>
             )}
 
-           {Array.isArray(work.gallery) && work.gallery.length > 0 ? (
-             <div className="space-y-4 md:space-y-8 pt-8">
-               {work.gallery.map((imgUrl: string, idx: number) => (
-                 <motion.div 
-                   key={idx}
-                   initial={{ opacity: 0, y: 30 }}
-                   whileInView={{ opacity: 1, y: 0 }}
-                   viewport={{ once: true }}
-                   className="w-full rounded-[2rem] overflow-hidden bg-slate-100 shadow-xl"
-                 >
-                   <img 
-                     src={getOptimizedUrl(imgUrl, 'gallery')} 
-                     className="w-full h-auto object-cover" 
-                     alt={`${work.title} - view ${idx + 1}`} 
-                   />
-                 </motion.div>
-               ))}
-             </div>
-           ) : (
-             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-8">
-                <div className="aspect-[4/5] rounded-[2rem] bg-slate-200 overflow-hidden">
-                  <img src={work.img} className="w-full h-full object-cover grayscale-[0.5]" alt="" />
-                </div>
-                <div className="aspect-[4/5] rounded-[2rem] bg-slate-200 overflow-hidden mt-12">
-                  <img src={work.img} className="w-full h-full object-cover" alt="" />
-                </div>
-             </div>
-           )}
-
-           <div className="space-y-8">
-              <h3 className="font-special-serif text-3xl italic">"Visual empathy is the core of every design decision we made on this project."</h3>
-              <div className="h-px bg-slate-100" />
-              <p className="text-slate-500 max-w-xl">
-                 Every pixel was considered for its emotional impact and commercial viability. This case study represents our commitment to blending cinematic aesthetics with conversion-driven design.
-              </p>
-           </div>
-        </section>
+            {/* CTA Section */}
+            <motion.div
+               initial={{ opacity: 0, y: 30 }}
+               whileInView={{ opacity: 1, y: 0 }}
+               viewport={{ once: true }}
+               className="pt-20 text-center space-y-12"
+            >
+               <div className="h-px bg-slate-100 w-full" />
+               <div className="space-y-6">
+                  <h3 className="font-special-serif text-4xl md:text-7xl">Ready to craft your story?</h3>
+                  <motion.a
+                    href="#contact"
+                    className="inline-flex items-center gap-6 px-12 py-6 bg-slate-900 rounded-full text-white group hover:bg-primary transition-colors"
+                  >
+                     <span className="font-bold text-lg">Work with Rizki</span>
+                     <div className="size-10 rounded-full border border-white/20 flex items-center justify-center group-hover:rotate-45 transition-transform">
+                        <ArrowUpRight className="size-5" />
+                     </div>
+                  </motion.a>
+               </div>
+            </motion.div>
+         </div>
       </main>
 
       {/* Footer */}
