@@ -382,21 +382,23 @@ const AdminDashboard = () => {
     };
     setNewProject(prev => ({
       ...prev,
-      content_blocks: [...prev.content_blocks, newBlock]
+      content_blocks: [...(Array.isArray(prev.content_blocks) ? prev.content_blocks : []), newBlock]
     }));
   };
 
   const updateBlock = (id: string, data: any) => {
     setNewProject(prev => ({
       ...prev,
-      content_blocks: prev.content_blocks.map(b => b.id === id ? { ...b, ...data } : b)
+      content_blocks: (Array.isArray(prev.content_blocks) ? prev.content_blocks : []).map(b => 
+        (b && b.id === id) ? { ...b, ...data } : b
+      )
     }));
   };
 
   const removeBlock = (id: string) => {
     setNewProject(prev => ({
       ...prev,
-      content_blocks: prev.content_blocks.filter(b => b.id !== id)
+      content_blocks: (Array.isArray(prev.content_blocks) ? prev.content_blocks : []).filter(b => b && b.id !== id)
     }));
   };
 
@@ -974,7 +976,7 @@ const AdminDashboard = () => {
                               const results = await Promise.all(uploadPromises);
                               
                               const newBlocks = results
-                                .filter((url): url is string => url !== null)
+                                .filter((url): url is string => typeof url === 'string')
                                 .map(url => ({
                                   id: Math.random().toString(36).substr(2, 9),
                                   type: 'image' as const,
@@ -984,7 +986,7 @@ const AdminDashboard = () => {
                               if (newBlocks.length > 0) {
                                 setNewProject(prev => ({
                                   ...prev,
-                                  content_blocks: [...prev.content_blocks, ...newBlocks]
+                                  content_blocks: [...(Array.isArray(prev.content_blocks) ? prev.content_blocks : []), ...newBlocks]
                                 }));
                                 toast.success(`Added ${newBlocks.length} images to case study!`);
                               }
