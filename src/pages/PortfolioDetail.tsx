@@ -96,7 +96,7 @@ const PortfolioDetail = () => {
           <div className="md:col-span-9 lg:col-span-10 px-4 md:px-12 lg:px-20">
             <div 
               className="flex flex-col"
-              style={{ gap: `${work.block_gap || 80}px` }}
+              style={{ gap: `${work.block_gap ?? 80}px` }}
             >
                {Array.isArray(work.content_blocks) && work.content_blocks.length > 0 ? (
                   work.content_blocks.map((block: any, i: number) => (

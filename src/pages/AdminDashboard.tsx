@@ -63,6 +63,42 @@ const AdminDashboard = () => {
     left: "20%"
   });
 
+  const [uploading, setUploading] = useState(false);
+  const [cloudinarySettings, setCloudinarySettings] = useState({
+    cloudName: localStorage.getItem('cloudinary_cloud_name') || "",
+    uploadPreset: localStorage.getItem('cloudinary_upload_preset') || ""
+  });
+
+  const handleCloudinaryUpload = async (file: File): Promise<string | null> => {
+    if (!cloudinarySettings.cloudName || !cloudinarySettings.uploadPreset) {
+      toast.error("Please configure Cloudinary settings in the Profile tab first");
+      return null;
+    }
+
+    setUploading(true);
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', cloudinarySettings.uploadPreset);
+
+    try {
+      const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudinarySettings.cloudName}/image/upload`, {
+        method: 'POST',
+        body: formData
+      });
+      const data = await res.json();
+      if (data.secure_url) {
+        toast.success("Image uploaded successfully!");
+        return data.secure_url;
+      }
+      throw new Error(data.error?.message || "Upload failed");
+    } catch (error: any) {
+      toast.error("Upload failed: " + error.message);
+      return null;
+    } finally {
+      setUploading(false);
+    }
+  };
+
   const fetchWorks = async () => {
     setIsLoading(true);
     try {
@@ -713,6 +749,44 @@ const AdminDashboard = () => {
                    </div>
                 </div>
                 
+                <div className="pt-8 border-t border-slate-50 space-y-6">
+                   <div className="flex items-center gap-2 mb-2">
+                      <ImageIcon className="size-4 text-primary" />
+                      <h3 className="text-sm font-bold">Cloudinary Configuration</h3>
+                   </div>
+                   <div className="grid md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                         <label className="text-[9px] font-black uppercase tracking-widest text-slate-400">Cloud Name</label>
+                         <input 
+                            type="text" 
+                            value={cloudinarySettings.cloudName}
+                            onChange={(e) => {
+                               setCloudinarySettings({...cloudinarySettings, cloudName: e.target.value});
+                               localStorage.setItem('cloudinary_cloud_name', e.target.value);
+                            }}
+                            className="w-full bg-slate-50 border-none rounded-xl py-3 px-4 focus:ring-2 focus:ring-primary/20 transition-all font-bold text-sm" 
+                            placeholder="e.g. dxyz1234"
+                         />
+                      </div>
+                      <div className="space-y-2">
+                         <label className="text-[9px] font-black uppercase tracking-widest text-slate-400">Upload Preset (Unsigned)</label>
+                         <input 
+                            type="text" 
+                            value={cloudinarySettings.uploadPreset}
+                            onChange={(e) => {
+                               setCloudinarySettings({...cloudinarySettings, uploadPreset: e.target.value});
+                               localStorage.setItem('cloudinary_upload_preset', e.target.value);
+                            }}
+                            className="w-full bg-slate-50 border-none rounded-xl py-3 px-4 focus:ring-2 focus:ring-primary/20 transition-all font-bold text-sm" 
+                            placeholder="e.g. my_preset"
+                         />
+                      </div>
+                   </div>
+                   <p className="text-[10px] text-slate-400 leading-relaxed italic">
+                      * Settings are saved locally in your browser for security.
+                   </p>
+                </div>
+
                 <button className="bg-slate-900 text-white w-full py-4 rounded-2xl font-bold flex items-center justify-center gap-3 hover:bg-black transition-colors">
                   <Save className="size-4" /> Update Dossier
                 </button>
@@ -779,15 +853,31 @@ const AdminDashboard = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-4">Banner Image URL</label>
-                  <input 
-                    required
-                    type="text" 
-                    value={newProject.img}
-                    onChange={(e) => setNewProject({...newProject, img: e.target.value})}
-                    className="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 focus:ring-2 focus:ring-primary/20 transition-all font-bold"
-                    placeholder="https://images.unsplash.com/..."
-                  />
+                    <div className="flex gap-2">
+                      <input 
+                        required
+                        type="text" 
+                        value={newProject.img}
+                        onChange={(e) => setNewProject({...newProject, img: e.target.value})}
+                        className="flex-1 bg-slate-50 border-none rounded-2xl py-4 px-6 focus:ring-2 focus:ring-primary/20 transition-all font-bold"
+                        placeholder="https://images.unsplash.com/..."
+                      />
+                      <label className="shrink-0 bg-white border border-slate-100 p-4 rounded-2xl cursor-pointer hover:bg-slate-900 hover:text-white transition-all flex items-center justify-center">
+                        <ImageIcon className="size-5" />
+                        <input 
+                          type="file" 
+                          className="hidden" 
+                          accept="image/*"
+                          onChange={async (e) => {
+                            const file = e.target.files?.[0];
+                            if (file) {
+                              const url = await handleCloudinaryUpload(file);
+                              if (url) setNewProject({...newProject, img: url});
+                            }
+                          }}
+                        />
+                      </label>
+                    </div>
                   <p className="text-[9px] font-bold text-blue-400 mt-1 ml-4 uppercase tracking-widest">
                     Tip: Cloudinary URLs are automatically optimized for performance.
                   </p>
@@ -924,22 +1014,59 @@ const AdminDashboard = () => {
                             )}
 
                             {block.type === 'image' && (
-                              <input
-                                type="text"
-                                value={block.content}
-                                onChange={(e) => updateBlock(block.id, { content: e.target.value })}
-                                className="w-full bg-slate-50 border-none rounded-2xl p-4 text-xs font-bold focus:ring-2 focus:ring-primary/10 transition-all"
-                                placeholder="Image URL..."
-                              />
+                              <div className="flex gap-2">
+                                <input
+                                  type="text"
+                                  value={block.content}
+                                  onChange={(e) => updateBlock(block.id, { content: e.target.value })}
+                                  className="flex-1 bg-slate-50 border-none rounded-2xl p-4 text-xs font-bold focus:ring-2 focus:ring-primary/10 transition-all"
+                                  placeholder="Image URL..."
+                                />
+                                <label className="shrink-0 bg-white border border-slate-100 p-4 rounded-2xl cursor-pointer hover:bg-slate-900 hover:text-white transition-all flex items-center justify-center">
+                                  <ImageIcon className="size-4" />
+                                  <input 
+                                    type="file" 
+                                    className="hidden" 
+                                    accept="image/*"
+                                    onChange={async (e) => {
+                                      const file = e.target.files?.[0];
+                                      if (file) {
+                                        const url = await handleCloudinaryUpload(file);
+                                        if (url) updateBlock(block.id, { content: url });
+                                      }
+                                    }}
+                                  />
+                                </label>
+                              </div>
                             )}
 
                             {block.type === 'grid' && (
-                              <textarea
-                                value={Array.isArray(block.urls) ? block.urls.join(', ') : ''}
-                                onChange={(e) => updateBlock(block.id, { urls: e.target.value.split(',').map((s: string) => s.trim()).filter(Boolean) })}
-                                className="w-full bg-slate-50 border-none rounded-2xl p-4 text-xs font-bold focus:ring-2 focus:ring-primary/10 transition-all min-h-[80px]"
-                                placeholder="URLs (comma separated)..."
-                              />
+                              <div className="flex gap-2">
+                                <textarea
+                                  value={Array.isArray(block.urls) ? block.urls.join(', ') : ''}
+                                  onChange={(e) => updateBlock(block.id, { urls: e.target.value.split(',').map((s: string) => s.trim()).filter(Boolean) })}
+                                  className="flex-1 bg-slate-50 border-none rounded-2xl p-4 text-xs font-bold focus:ring-2 focus:ring-primary/10 transition-all min-h-[80px]"
+                                  placeholder="URLs (comma separated)..."
+                                />
+                                <label className="shrink-0 bg-white border border-slate-100 p-4 rounded-2xl cursor-pointer hover:bg-slate-900 hover:text-white transition-all flex items-center justify-center min-h-[80px] w-12">
+                                  <Plus className="size-5" />
+                                  <input 
+                                    type="file" 
+                                    className="hidden" 
+                                    accept="image/*"
+                                    onChange={async (e) => {
+                                      const file = e.target.files?.[0];
+                                      if (file) {
+                                        const url = await handleCloudinaryUpload(file);
+                                        if (url) {
+                                          const currentUrls = Array.isArray(block.urls) ? block.urls : [];
+                                          updateBlock(block.id, { urls: [...currentUrls, url] });
+                                        }
+                                      }
+                                    }}
+                                  />
+                                </label>
+                              </div>
                             )}
                           </motion.div>
                         ))}
