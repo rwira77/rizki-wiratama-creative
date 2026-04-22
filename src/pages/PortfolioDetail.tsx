@@ -94,7 +94,10 @@ const PortfolioDetail = () => {
         <div className="grid md:grid-cols-12 gap-0">
           {/* Main Case Study Content - Refined with Padding */}
           <div className="md:col-span-9 lg:col-span-10 px-4 md:px-12 lg:px-20">
-            <div className="flex flex-col space-y-12 md:space-y-20">
+            <div 
+              className="flex flex-col"
+              style={{ gap: `${work.block_gap || 80}px` }}
+            >
                {Array.isArray(work.content_blocks) && work.content_blocks.length > 0 ? (
                   work.content_blocks.map((block: any, i: number) => (
                     <motion.div
@@ -130,7 +133,7 @@ const PortfolioDetail = () => {
                       )}
 
                       {block.type === 'image' && (
-                        <div className="w-full rounded-[2rem] md:rounded-[3rem] overflow-hidden shadow-xl bg-slate-50">
+                        <div className="w-full overflow-hidden shadow-xl bg-slate-50">
                           <img 
                             src={getOptimizedUrl(block.content, 'gallery')} 
                             className="w-full h-auto block" 
@@ -140,9 +143,9 @@ const PortfolioDetail = () => {
                       )}
 
                       {block.type === 'grid' && (
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
                           {Array.isArray(block.urls) && block.urls.map((url: string, j: number) => (
-                            <div key={j} className="rounded-[1.5rem] md:rounded-[2.5rem] overflow-hidden shadow-lg">
+                            <div key={j} className="overflow-hidden shadow-lg">
                               <img 
                                 src={getOptimizedUrl(url, 'gallery')} 
                                 className="w-full h-auto block hover:scale-105 transition-transform duration-1000" 
@@ -155,31 +158,9 @@ const PortfolioDetail = () => {
                     </motion.div>
                   ))
                ) : (
-                  <div className="flex flex-col space-y-12 md:space-y-20">
-                     <div className="rounded-[3rem] overflow-hidden shadow-2xl">
-                        <img src={getOptimizedUrl(work.img, 'hero')} className="w-full h-auto" alt="" />
-                     </div>
-                     
-                     <div className="py-12">
-                        <div className="max-w-2xl space-y-8">
-                           <h2 className="font-special-serif text-4xl md:text-5xl tracking-tight">The Mission</h2>
-                           <p className="text-xl md:text-2xl font-light text-slate-500 leading-relaxed">
-                              {work.problem}
-                           </p>
-                        </div>
-                     </div>
-
-                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        {Array.isArray(work.gallery) && work.gallery.map((imgUrl: string, idx: number) => (
-                          <div key={idx} className="rounded-[2rem] overflow-hidden shadow-lg">
-                             <img 
-                               src={getOptimizedUrl(imgUrl, 'gallery')} 
-                               className="w-full h-auto block" 
-                               alt="" 
-                             />
-                          </div>
-                        ))}
-                     </div>
+                  <div className="py-40 text-center text-slate-300">
+                     <p className="text-sm font-bold uppercase tracking-widest">No Content Blocks Defined</p>
+                     <p className="text-xs">Add blocks in Admin Dashboard to build your case study.</p>
                   </div>
                )}
             </div>

@@ -49,7 +49,7 @@ const AdminDashboard = () => {
     result: "",
     year: new Date().getFullYear().toString(),
     hasDetail: false,
-    gallery: "",
+    block_gap: 80,
     content_blocks: [] as any[]
   });
 
@@ -326,7 +326,7 @@ const AdminDashboard = () => {
       result: work.result,
       year: work.year,
       hasDetail: work.hasDetail,
-      gallery: Array.isArray(work.gallery) ? work.gallery.join(', ') : "",
+      block_gap: work.block_gap || 80,
       content_blocks: Array.isArray(work.content_blocks) ? work.content_blocks : []
     });
     setEditingId(work.id);
@@ -382,13 +382,8 @@ const AdminDashboard = () => {
 
   const handleUpdateProject = async () => {
     try {
-      const galleryArray = newProject.gallery 
-        ? newProject.gallery.split(',').map(s => s.trim()).filter(Boolean)
-        : [];
-
       const payload = {
-        ...newProject,
-        gallery: galleryArray
+        ...newProject
       };
 
       const { error } = await supabase
@@ -418,7 +413,7 @@ const AdminDashboard = () => {
       result: "",
       year: new Date().getFullYear().toString(),
       hasDetail: false,
-      gallery: "",
+      block_gap: 80,
       content_blocks: []
     });
   };
@@ -427,14 +422,9 @@ const AdminDashboard = () => {
     const id = newProject.title.toLowerCase().replace(/\s+/g, '-');
     
     try {
-      const galleryArray = newProject.gallery 
-        ? newProject.gallery.split(',').map(s => s.trim()).filter(Boolean)
-        : [];
-
       const payload = {
         ...newProject,
-        id,
-        gallery: galleryArray
+        id
       };
 
       const { error } = await supabase
@@ -803,33 +793,23 @@ const AdminDashboard = () => {
                   </p>
                 </div>
 
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-4">Gallery Image URLs (Comma Separated)</label>
-                  <textarea 
-                    value={newProject.gallery}
-                    onChange={(e) => setNewProject({...newProject, gallery: e.target.value})}
-                    className="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 focus:ring-2 focus:ring-primary/20 transition-all font-bold min-h-[80px]"
-                    placeholder="https://img1.jpg, https://img2.jpg, ..."
-                  />
-                </div>
-
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-4">The Problem (Challenge)</label>
-                    <textarea 
-                      required
-                      value={newProject.problem}
-                      onChange={(e) => setNewProject({...newProject, problem: e.target.value})}
-                      className="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 focus:ring-2 focus:ring-primary/20 transition-all font-bold min-h-[100px]"
+                    <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-4">Release Year</label>
+                    <input 
+                      type="text" 
+                      value={newProject.year}
+                      onChange={(e) => setNewProject({...newProject, year: e.target.value})}
+                      className="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 focus:ring-2 focus:ring-primary/20 transition-all font-bold"
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-4">The Result (Metric)</label>
-                    <textarea 
-                      required
-                      value={newProject.result}
-                      onChange={(e) => setNewProject({...newProject, result: e.target.value})}
-                      className="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 focus:ring-2 focus:ring-primary/20 transition-all font-bold min-h-[100px]"
+                    <label className="text-[10px] font-black uppercase tracking-widest text-primary ml-4">Block Vertical Gap (px)</label>
+                    <input 
+                      type="number" 
+                      value={newProject.block_gap}
+                      onChange={(e) => setNewProject({...newProject, block_gap: parseInt(e.target.value) || 0})}
+                      className="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 focus:ring-2 focus:ring-primary/20 transition-all font-bold"
                     />
                   </div>
                 </div>
