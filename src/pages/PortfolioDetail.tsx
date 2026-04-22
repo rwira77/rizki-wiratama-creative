@@ -70,169 +70,198 @@ const PortfolioDetail = () => {
       </nav>
 
       {/* Hero Section */}
-      <header className="pt-32 pb-16 px-8 md:px-12 max-w-7xl mx-auto text-center space-y-12">
+      <header className="pt-40 pb-20 px-8 md:px-12 max-w-7xl mx-auto text-center space-y-8">
         <motion.div
            initial={{ opacity: 0, y: 30 }}
            animate={{ opacity: 1, y: 0 }}
-           transition={{ duration: 0.8 }}
-           className="space-y-8"
+           className="space-y-4"
         >
-           <div className="inline-flex items-center gap-2 px-6 py-2.5 bg-slate-900 rounded-full text-[10px] font-black text-white uppercase tracking-[0.3em]">
+           <p className="text-[10px] font-black uppercase tracking-[0.5em] text-primary">
              {work.cat}
-           </div>
-           <h1 className="font-special-serif text-6xl md:text-[12rem] leading-[0.8] tracking-tighter text-slate-900">
+           </p>
+           <h1 className="font-special-serif text-6xl md:text-[10rem] leading-[0.85] tracking-tighter text-slate-900">
              {work.title}
            </h1>
-        </motion.div>
-
-        <motion.div 
-           initial={{ opacity: 0, scale: 0.98 }}
-           animate={{ opacity: 1, scale: 1 }}
-           transition={{ duration: 1.2, ease: [0.65, 0, 0.35, 1] }}
-           className="relative aspect-[21/9] rounded-[3rem] md:rounded-[5rem] overflow-hidden shadow-2xl border border-white"
-        >
-           <img src={getOptimizedUrl(work.img, 'hero')} className="w-full h-full object-cover" alt="" />
-           <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+           <div className="pt-8 flex items-center justify-center gap-4 text-[10px] font-bold uppercase tracking-widest text-slate-400">
+              <span>Published 2026</span>
+              <div className="size-1 rounded-full bg-slate-200" />
+              <span>Rizki Wiratama</span>
+           </div>
         </motion.div>
       </header>
 
-      {/* Meta Info Bar */}
-      <section className="max-w-7xl mx-auto px-8 md:px-12 mb-20 md:mb-32">
-         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 py-12 border-y border-slate-100">
-            <div className="space-y-2">
-               <p className="text-[10px] font-black uppercase tracking-widest text-slate-300">Timeline</p>
-               <p className="font-bold text-lg">{work.year}</p>
-            </div>
-            <div className="space-y-2">
-               <p className="text-[10px] font-black uppercase tracking-widest text-slate-300">Discipline</p>
-               <p className="font-bold text-lg">{work.cat}</p>
-            </div>
-            <div className="col-span-2 space-y-2">
-               <p className="text-[10px] font-black uppercase tracking-widest text-primary">Key Result</p>
-               <p className="font-special-serif text-2xl md:text-3xl text-slate-900 leading-tight italic">{work.result}</p>
-            </div>
-         </div>
-      </section>
-
-      {/* Main Content Area */}
-      <main className="max-w-7xl mx-auto px-8 md:px-12 pb-32">
-         <div className="max-w-5xl mx-auto space-y-24 md:space-y-40">
-            {Array.isArray(work.content_blocks) && work.content_blocks.length > 0 ? (
-               work.content_blocks.map((block: any, i: number) => (
-                 <motion.div
-                   key={block.id || i}
-                   initial={{ opacity: 0, y: 50 }}
-                   whileInView={{ opacity: 1, y: 0 }}
-                   viewport={{ once: true, margin: "-10%" }}
-                   transition={{ duration: 1, ease: "easeOut" }}
-                   className="w-full"
-                 >
-                   {block.type === 'text' && (
-                     <div className={cn(
-                       "mx-auto",
-                       block.style === 'quote' ? "max-w-4xl" : "max-w-3xl"
-                     )}>
-                       {block.style === 'heading' ? (
-                         <h2 className="font-special-serif text-5xl md:text-[5rem] text-slate-900 leading-none mb-12 tracking-tighter">{block.content}</h2>
-                       ) : block.style === 'quote' ? (
-                         <div className="space-y-6 my-24">
-                            <div className="size-12 rounded-full bg-primary/10 flex items-center justify-center mb-8">
-                               <ArrowUpRight className="size-6 text-primary rotate-45" />
-                            </div>
-                            <p className="font-special-serif text-4xl md:text-7xl italic text-slate-900 leading-[1.1] tracking-tight">
-                              "{block.content}"
-                            </p>
-                         </div>
-                       ) : (
-                         <p className="text-xl md:text-3xl font-light text-slate-500 leading-relaxed font-sans">
-                           {block.content}
-                         </p>
-                       )}
-                     </div>
-                   )}
-
-                   {block.type === 'image' && (
-                     <div className="w-full rounded-[3rem] md:rounded-[5rem] overflow-hidden shadow-[0_40px_100px_-20px_rgba(0,0,0,0.1)] bg-slate-50 border border-slate-100">
-                       <img src={getOptimizedUrl(block.content, 'gallery')} className="w-full h-auto object-contain" alt="" />
-                     </div>
-                   )}
-
-                   {block.type === 'grid' && (
-                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16">
-                       {Array.isArray(block.urls) && block.urls.map((url: string, j: number) => (
-                         <div 
-                           key={j} 
-                           className={cn(
-                             "rounded-[2.5rem] md:rounded-[4rem] overflow-hidden shadow-xl bg-slate-50 border border-slate-100",
-                             j % 2 !== 0 ? "md:translate-y-20" : ""
-                           )}
-                         >
-                           <img src={getOptimizedUrl(url, 'gallery')} className="w-full h-auto object-cover" alt="" />
-                         </div>
-                       ))}
-                     </div>
-                   )}
-                 </motion.div>
-               ))
-            ) : (
-               <div className="space-y-32">
-                  <div className="max-w-3xl mx-auto space-y-8">
-                     <div className="flex items-center gap-4">
-                        <div className="size-12 rounded-2xl bg-primary/10 flex items-center justify-center">
-                           <Target className="size-6 text-primary" />
+      <main className="relative">
+        <div className="grid md:grid-cols-12 gap-0">
+          {/* Main Case Study Content - Behance Style (Full Width Focus) */}
+          <div className="md:col-span-9 lg:col-span-10">
+            <div className="flex flex-col">
+               {Array.isArray(work.content_blocks) && work.content_blocks.length > 0 ? (
+                  work.content_blocks.map((block: any, i: number) => (
+                    <motion.div
+                      key={block.id || i}
+                      initial={{ opacity: 0 }}
+                      whileInView={{ opacity: 1 }}
+                      viewport={{ once: true, margin: "-10%" }}
+                      transition={{ duration: 0.8 }}
+                      className="w-full"
+                    >
+                      {block.type === 'text' && (
+                        <div className="py-24 px-8 md:px-24 bg-white">
+                          <div className={cn(
+                            "mx-auto",
+                            block.style === 'quote' ? "max-w-4xl" : "max-w-3xl"
+                          )}>
+                            {block.style === 'heading' ? (
+                              <h2 className="font-special-serif text-5xl md:text-8xl text-slate-900 mb-12 tracking-tighter">{block.content}</h2>
+                            ) : block.style === 'quote' ? (
+                              <div className="space-y-10">
+                                 <div className="h-1.5 w-20 bg-primary" />
+                                 <p className="font-special-serif text-4xl md:text-7xl italic text-slate-900 leading-[1.1] tracking-tight">
+                                   "{block.content}"
+                                 </p>
+                              </div>
+                            ) : (
+                              <p className="text-xl md:text-4xl font-light text-slate-500 leading-tight font-sans">
+                                {block.content}
+                              </p>
+                            )}
+                          </div>
                         </div>
-                        <h2 className="font-special-serif text-4xl md:text-6xl">The Mission</h2>
-                     </div>
-                     <p className="text-2xl md:text-4xl font-light text-slate-500 leading-tight">
-                        {work.problem}. Our goal was to establish a new benchmark for premium brand interaction in the 2026 market.
-                     </p>
-                  </div>
+                      )}
 
-                  {Array.isArray(work.gallery) && work.gallery.length > 0 && (
-                    <div className="space-y-12 md:space-y-24">
-                      {work.gallery.map((imgUrl: string, idx: number) => (
-                        <motion.div 
-                          key={idx}
-                          initial={{ opacity: 0, y: 50 }}
-                          whileInView={{ opacity: 1, y: 0 }}
-                          viewport={{ once: true }}
-                          className="w-full rounded-[3rem] md:rounded-[5rem] overflow-hidden bg-slate-100 shadow-2xl"
-                        >
+                      {block.type === 'image' && (
+                        <div className="w-full bg-slate-50">
                           <img 
-                            src={getOptimizedUrl(imgUrl, 'gallery')} 
-                            className="w-full h-auto object-cover" 
-                            alt={`${work.title} - view ${idx + 1}`} 
+                            src={getOptimizedUrl(block.content, 'gallery')} 
+                            className="w-full h-auto block" 
+                            alt="" 
                           />
-                        </motion.div>
-                      ))}
-                    </div>
-                  )}
-               </div>
-            )}
+                        </div>
+                      )}
 
-            {/* CTA Section */}
-            <motion.div
-               initial={{ opacity: 0, y: 30 }}
-               whileInView={{ opacity: 1, y: 0 }}
-               viewport={{ once: true }}
-               className="pt-20 text-center space-y-12"
-            >
-               <div className="h-px bg-slate-100 w-full" />
-               <div className="space-y-6">
-                  <h3 className="font-special-serif text-4xl md:text-7xl">Ready to craft your story?</h3>
-                  <motion.a
-                    href="#contact"
-                    className="inline-flex items-center gap-6 px-12 py-6 bg-slate-900 rounded-full text-white group hover:bg-primary transition-colors"
-                  >
-                     <span className="font-bold text-lg">Work with Rizki</span>
-                     <div className="size-10 rounded-full border border-white/20 flex items-center justify-center group-hover:rotate-45 transition-transform">
-                        <ArrowUpRight className="size-5" />
+                      {block.type === 'grid' && (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-0 bg-slate-50">
+                          {Array.isArray(block.urls) && block.urls.map((url: string, j: number) => (
+                            <div key={j} className="overflow-hidden">
+                              <img 
+                                src={getOptimizedUrl(url, 'gallery')} 
+                                className="w-full h-auto block hover:scale-105 transition-transform duration-1000" 
+                                alt="" 
+                              />
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </motion.div>
+                  ))
+               ) : (
+                  <div className="flex flex-col">
+                     {/* Hero as first image if no blocks */}
+                     <img src={getOptimizedUrl(work.img, 'hero')} className="w-full h-auto" alt="" />
+                     
+                     <div className="py-32 px-8 md:px-24 bg-white">
+                        <div className="max-w-3xl mx-auto space-y-10">
+                           <h2 className="font-special-serif text-6xl md:text-8xl tracking-tighter">The Mission</h2>
+                           <p className="text-2xl md:text-5xl font-light text-slate-500 leading-[1.1]">
+                              {work.problem}
+                           </p>
+                        </div>
                      </div>
-                  </motion.a>
+
+                     {Array.isArray(work.gallery) && work.gallery.map((imgUrl: string, idx: number) => (
+                       <img 
+                         key={idx}
+                         src={getOptimizedUrl(imgUrl, 'gallery')} 
+                         className="w-full h-auto block" 
+                         alt="" 
+                       />
+                     ))}
+                  </div>
+               )}
+            </div>
+
+            {/* Footer Navigation */}
+            <div className="p-12 md:p-32 bg-slate-900 text-white text-center space-y-12">
+               <div className="space-y-4">
+                  <p className="text-[10px] font-black uppercase tracking-[0.5em] text-white/40">Next Project</p>
+                  <h3 className="font-special-serif text-5xl md:text-9xl tracking-tighter hover:text-primary transition-colors cursor-pointer">Stay Tuned</h3>
                </div>
-            </motion.div>
-         </div>
+               <button 
+                  onClick={() => navigate("/")}
+                  className="px-12 py-5 border border-white/10 rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-white hover:text-slate-900 transition-all"
+               >
+                  Back to Portfolio
+               </button>
+            </div>
+          </div>
+
+          {/* Sticky Sidebar Info - Behance Style */}
+          <aside className="hidden md:block md:col-span-3 lg:col-span-2 border-l border-slate-100 bg-white">
+            <div className="sticky top-20 p-10 space-y-12">
+               <div className="space-y-10">
+                  <div className="space-y-2">
+                     <p className="text-[10px] font-black uppercase tracking-widest text-slate-300">Timeline</p>
+                     <p className="font-bold text-sm">{work.year}</p>
+                  </div>
+                  <div className="space-y-2">
+                     <p className="text-[10px] font-black uppercase tracking-widest text-slate-300">Discipline</p>
+                     <p className="font-bold text-sm">{work.cat}</p>
+                  </div>
+                  <div className="space-y-2">
+                     <p className="text-[10px] font-black uppercase tracking-widest text-primary">Result</p>
+                     <p className="font-special-serif text-xl italic leading-tight">{work.result}</p>
+                  </div>
+               </div>
+
+               <div className="h-px bg-slate-100" />
+
+               <div className="space-y-6">
+                  <div className="flex items-center gap-4">
+                     <div className="size-12 rounded-full bg-slate-900 flex items-center justify-center text-white font-black text-xs">RW</div>
+                     <div>
+                        <p className="text-xs font-bold">Rizki Wiratama</p>
+                        <p className="text-[10px] text-slate-400 uppercase tracking-widest font-black">Creator</p>
+                     </div>
+                  </div>
+                  <button className="w-full py-4 bg-primary text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-900 transition-colors">
+                     Follow
+                  </button>
+               </div>
+
+               <div className="pt-20">
+                  <div className="flex items-center gap-8 text-slate-300">
+                     <div className="text-center">
+                        <p className="text-lg font-bold text-slate-900">1.2k</p>
+                        <p className="text-[9px] uppercase font-black tracking-widest">Views</p>
+                     </div>
+                     <div className="text-center">
+                        <p className="text-lg font-bold text-slate-900">458</p>
+                        <p className="text-[9px] uppercase font-black tracking-widest">Appreciations</p>
+                     </div>
+                  </div>
+               </div>
+            </div>
+          </aside>
+        </div>
       </main>
+
+      {/* Mobile Meta Info (at bottom) */}
+      <div className="md:hidden p-8 bg-white border-t border-slate-100 space-y-8">
+         <div className="grid grid-cols-2 gap-8">
+            <div className="space-y-1">
+               <p className="text-[10px] font-black uppercase tracking-widest text-slate-300">Timeline</p>
+               <p className="font-bold">{work.year}</p>
+            </div>
+            <div className="space-y-1">
+               <p className="text-[10px] font-black uppercase tracking-widest text-slate-300">Discipline</p>
+               <p className="font-bold">{work.cat}</p>
+            </div>
+         </div>
+         <div className="space-y-1">
+            <p className="text-[10px] font-black uppercase tracking-widest text-primary">Result</p>
+            <p className="font-special-serif text-2xl italic leading-tight">{work.result}</p>
+         </div>
+      </div>
 
       {/* Footer */}
       <footer className="py-20 px-8 text-center bg-white border-t border-slate-100">
