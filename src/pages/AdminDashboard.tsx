@@ -614,6 +614,7 @@ const AdminDashboard = () => {
               </motion.div>
             ))}
           </div>
+        ) : null}
       </main>
 
       {/* Project Modal */}
