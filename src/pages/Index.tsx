@@ -36,7 +36,7 @@ const Index = () => {
   const [isPositionsLoaded, setIsPositionsLoaded] = useState(false);
 
   useEffect(() => {
-    document.title = "Rizki Wiratama — Portfolio 2026";
+    document.title = "Rizki Wiratama - Portfolio";
     fetchDesktopLinks();
     fetchSectionPositions();
   }, []);
