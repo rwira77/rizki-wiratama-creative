@@ -901,8 +901,7 @@ const AdminDashboard = () => {
           </div>
         )}
       </AnimatePresence>
-    </div>
-  );
+
       {/* Link Modal */}
       <AnimatePresence>
         {isLinkModalOpen && (
