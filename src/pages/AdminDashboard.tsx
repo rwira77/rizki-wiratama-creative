@@ -1011,16 +1011,15 @@ const AdminDashboard = () => {
                         </div>
                       )}
                       
-                      <AnimatePresence initial={false}>
+                      <div className="space-y-4">
                         {Array.isArray(newProject.content_blocks) && newProject.content_blocks.map((block, idx) => {
-                          if (!block) return null;
+                          if (!block || !block.id) return null;
                           return (
                             <motion.div
-                              key={block.id || idx}
-                              initial={{ opacity: 0, x: -10 }}
-                              animate={{ opacity: 1, x: 0 }}
+                              key={`block-${block.id}`}
+                              initial={{ opacity: 0, y: 10 }}
+                              animate={{ opacity: 1, y: 0 }}
                               exit={{ opacity: 0, scale: 0.95 }}
-                              layout
                               className="group relative bg-white border border-slate-100 rounded-3xl p-5 shadow-sm hover:shadow-md transition-all"
                             >
                               <div className="flex items-center justify-between mb-4">
@@ -1171,7 +1170,7 @@ const AdminDashboard = () => {
                             </motion.div>
                           );
                         })}
-                      </AnimatePresence>
+                      </div>
                     </div>
                   </div>
                 )}
