@@ -413,6 +413,24 @@ const AdminDashboard = () => {
     setWorks(updatedWorks);
   };
 
+  const saveOrder = async () => {
+    setIsLoading(true);
+    try {
+      // Update each project with its new order_index based on its position in the array
+      const promises = works.map((w, index) => 
+        supabase.from('works').update({ order_index: index }).eq('id', w.id)
+      );
+      
+      await Promise.all(promises);
+      toast.success("Project order saved permanently!");
+    } catch (err: any) {
+      console.error(err);
+      toast.error("Failed to save order. Make sure 'order_index' column exists in Supabase.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const addBlock = (type: 'text' | 'image' | 'grid') => {
     const newBlock = {
       id: Math.random().toString(36).substr(2, 9),
@@ -598,15 +616,24 @@ const AdminDashboard = () => {
                </button>
              )}
              {activeTab === "portfolio" && (
-               <button 
-                 onClick={() => {
-                   setIsEditing(false);
-                   setIsModalOpen(true);
-                 }}
-                 className="bg-primary text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 hover:bg-primary/90 transition-colors shadow-lg active:scale-95"
-               >
-                 <Plus className="size-4" /> New Project
-               </button>
+               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                      <h2 className="text-2xl font-special-serif text-slate-900">Portfolio Management</h2>
+                      <div className="flex items-center gap-2">
+                        <button 
+                          onClick={saveOrder}
+                          disabled={isLoading}
+                          className="bg-emerald-500 text-white px-6 py-3 rounded-2xl font-bold text-[10px] uppercase tracking-widest hover:bg-emerald-600 transition-all flex items-center gap-2 shadow-lg disabled:opacity-50"
+                        >
+                          <Save className="size-4" /> Save Order
+                        </button>
+                        <button 
+                          onClick={handleOpenCreate}
+                          className="bg-primary text-white px-6 py-3 rounded-2xl font-bold text-[10px] uppercase tracking-widest hover:bg-slate-900 transition-all flex items-center gap-2 shadow-lg"
+                        >
+                          <Plus className="size-4" /> New Project
+                        </button>
+                      </div>
+                    </div>
              )}
              {activeTab === "desktop" && (
                <button 

@@ -44,7 +44,10 @@ export const Portfolio = () => {
   useEffect(() => {
     const fetchWorks = async () => {
       try {
-        const { data, error } = await supabase.from('works').select('*').order('year', { ascending: false });
+        const { data, error } = await supabase
+          .from('works')
+          .select('*')
+          .order('order_index', { ascending: true });
         if (error) throw error;
         setWorks(data && data.length > 0 ? data : initialWorks);
       } catch (error) {
