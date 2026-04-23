@@ -102,61 +102,48 @@ export const Portfolio = () => {
                 <h2 className="font-display text-4xl font-light text-slate-800 tracking-tight">{selectedCat}</h2>
               </div>
 
-              {/* ULTRA PINTEREST MASONRY (Based on image ratio) */}
-              <div className="columns-2 gap-3 space-y-3 md:gap-4 md:space-y-4 pb-48 px-0">
+              {/* ULTRA PINTEREST MASONRY (Based on image ratio) */}              <div className="columns-2 gap-4 md:gap-8 space-y-8 md:space-y-16 pb-48 px-0">
                 {sortedWorks.map((w, i) => (
                   <motion.div 
                     key={w.id || i} 
                     initial={{ opacity: 0, y: 40 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.1, duration: 1 }}
-                    className="break-inside-avoid relative group cursor-pointer"
+                    className="break-inside-avoid relative"
                   >
-                    <div className="block overflow-hidden rounded-2xl bg-slate-50 border border-slate-50 shadow-lg hover:shadow-2xl transition-all duration-700">
-                      <div className="relative w-full h-auto">
+                    <Link 
+                      to={w.hasDetail ? `/portfolio/${w.id}` : '#'} 
+                      onClick={(e) => !w.hasDetail && e.preventDefault()}
+                      className={cn(
+                        "block group",
+                        !w.hasDetail && "cursor-default"
+                      )}
+                    >
+                      {/* Image Container - SHARP & CLEAN */}
+                      <div className="overflow-hidden bg-slate-50 border border-slate-100">
                         <img
                           src={getOptimizedUrl(w.img || "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop", 'thumb')}
                           alt={w.title}
-                          className="w-full h-auto object-contain transition-transform duration-[2s] group-hover:scale-105"
+                          className="w-full h-auto block"
                         />
-                        
-                        {/* Elegant Minimal Overlay */}
-                        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-4 md:p-12">
-                          <div className="translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                            <p className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.4em] text-primary mb-1 md:mb-3">Portfolio</p>
-                            <h3 className="font-special-serif text-lg md:text-3xl text-white mb-3 md:mb-6 leading-tight">{w.title}</h3>
-                            
-                            <div className="flex justify-between items-center">
-                               {w.hasDetail ? (
-                                 <Link to={`/portfolio/${w.id}`} className="flex items-center gap-2 md:gap-3">
-                                    <div className="size-8 md:size-12 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white flex items-center justify-center hover:bg-white hover:text-black transition-all">
-                                       <Plus className="size-4 md:size-6" />
-                                    </div>
-                                    <span className="text-white text-[8px] md:text-[10px] font-black uppercase tracking-widest leading-none">View Story</span>
-                                 </Link>
-                               ) : (
-                                 <a href="#contact" className="flex items-center gap-2 md:gap-3">
-                                    <div className="size-8 md:size-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white flex items-center justify-center">
-                                       <ArrowUpRight className="size-4 md:size-6" />
-                                    </div>
-                                    <span className="text-white/50 text-[8px] md:text-[10px] font-black uppercase tracking-widest leading-none">Inquire</span>
-                                 </a>
-                               )}
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Minimal floating icon (Not Hovered) */}
-                        {w.hasDetail && (
-                          <div className="absolute top-4 right-4 md:top-10 md:right-10 z-20 size-8 md:size-12 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white flex items-center justify-center shadow-2xl group-hover:scale-0 transition-transform">
-                             <ArrowUpRight className="size-4 md:size-6 rotate-[-45deg] group-hover:rotate-0 transition-transform" />
-                          </div>
-                        )}
                       </div>
-                    </div>
+                      
+                      {/* Text Content - Static below image */}
+                      <div className="mt-6 space-y-1">
+                        <div className="flex items-center justify-between">
+                          <h3 className="font-special-serif text-lg md:text-2xl text-slate-900 leading-tight">
+                            {w.title}
+                          </h3>
+                        </div>
+                        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-300">
+                          {w.cat} — {w.year}
+                        </p>
+                      </div>
+                    </Link>
                   </motion.div>
                 ))}
               </div>
+
             </motion.div>
           )}
         </AnimatePresence>
