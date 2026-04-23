@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, Reorder } from "framer-motion";
 import { 
   LayoutDashboard, 
   FileText, 
@@ -396,6 +396,23 @@ const AdminDashboard = () => {
     toast.success("Order changed! Don't forget to save your projects to persist changes.");
   };
 
+  const handleReorder = (newOrder: any[]) => {
+    if (selectedCategory === 'all') {
+      setWorks(newOrder);
+      return;
+    }
+
+    // Advanced merging: preserve the positions of other categories
+    const updatedWorks = [...works];
+    const categoryIndices = works.map((w, i) => w.cat === selectedCategory ? i : -1).filter(i => i !== -1);
+    
+    categoryIndices.forEach((originalIdx, i) => {
+      updatedWorks[originalIdx] = newOrder[i];
+    });
+    
+    setWorks(updatedWorks);
+  };
+
   const addBlock = (type: 'text' | 'image' | 'grid') => {
     const newBlock = {
       id: Math.random().toString(36).substr(2, 9),
@@ -644,41 +661,31 @@ const AdminDashboard = () => {
               ))}
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <Reorder.Group 
+              axis="y" 
+              values={works.filter(w => selectedCategory === 'all' || w.cat === selectedCategory)} 
+              onReorder={handleReorder}
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+            >
               {works.filter(w => selectedCategory === 'all' || w.cat === selectedCategory).map((work, idx) => (
-                <motion.div 
+                <Reorder.Item 
                   key={work.id}
+                  value={work}
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="bg-white border border-slate-100 rounded-[2.5rem] p-6 shadow-sm hover:shadow-xl transition-all group"
+                  whileDrag={{ scale: 1.05, boxShadow: "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)" }}
+                  className="bg-white border border-slate-100 rounded-[2.5rem] p-6 shadow-sm hover:shadow-xl transition-shadow group cursor-grab active:cursor-grabbing"
                 >
                   <div className="relative aspect-video rounded-3xl overflow-hidden mb-6 bg-slate-50">
                     <img src={work.img} alt={work.title} className="w-full h-full object-cover" />
-                    <div className="absolute top-4 left-4">
+                    <div className="absolute top-4 left-4 flex items-center gap-2">
                       <span className="px-3 py-1.5 bg-white/90 backdrop-blur-md rounded-full text-[8px] font-black uppercase tracking-widest text-slate-900 border border-white">
                         {work.cat}
                       </span>
-                    </div>
-                    
-                    {/* Reorder Controls */}
-                    {selectedCategory !== 'all' && (
-                      <div className="absolute bottom-4 right-4 flex gap-2 translate-y-12 group-hover:translate-y-0 transition-transform duration-300">
-                        <button 
-                          onClick={() => moveProject(idx, 'up')}
-                          disabled={idx === 0}
-                          className="size-10 rounded-full bg-white/90 backdrop-blur-md flex items-center justify-center text-slate-900 hover:bg-primary hover:text-white disabled:opacity-30 transition-all border border-white shadow-lg"
-                        >
-                          <ChevronUp className="size-4" />
-                        </button>
-                        <button 
-                          onClick={() => moveProject(idx, 'down')}
-                          disabled={idx === works.filter(w => w.cat === selectedCategory).length - 1}
-                          className="size-10 rounded-full bg-white/90 backdrop-blur-md flex items-center justify-center text-slate-900 hover:bg-primary hover:text-white disabled:opacity-30 transition-all border border-white shadow-lg"
-                        >
-                          <ChevronDown className="size-4" />
-                        </button>
+                      <div className="p-1.5 bg-slate-900/10 backdrop-blur-md rounded-lg text-slate-900 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <GripVertical className="size-3" />
                       </div>
-                    )}
+                    </div>
                   </div>
 
                   <div className="space-y-4">
@@ -710,9 +717,9 @@ const AdminDashboard = () => {
                       <span className="text-[10px] font-black uppercase tracking-widest text-slate-300">{work.year}</span>
                     </div>
                   </div>
-                </motion.div>
+                </Reorder.Item>
               ))}
-            </div>
+            </Reorder.Group>
           </div>
         ) : activeTab === "desktop" ? (
           <div className="space-y-12">
