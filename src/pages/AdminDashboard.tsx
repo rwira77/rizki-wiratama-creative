@@ -304,6 +304,7 @@ const AdminDashboard = () => {
   }, [navigate]);
 
   return (
+    <div className="min-h-screen bg-slate-50 flex">
       {/* Sidebar */}
       <aside className="w-80 bg-white border-r border-slate-100 flex flex-col p-8 sticky top-0 h-screen">
         <div className="mb-12">
