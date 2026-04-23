@@ -3,7 +3,7 @@
  * Helps in generating optimized image URLs for different use cases.
  */
 
-export type TransformType = 'thumb' | 'hero' | 'gallery' | 'blur';
+export type TransformType = 'thumb' | 'hero' | 'gallery' | 'full' | 'blur';
 
 export const getOptimizedUrl = (url: string, type: TransformType = 'thumb') => {
   if (!url || !url.includes('cloudinary.com')) return url;
@@ -29,7 +29,11 @@ export const getOptimizedUrl = (url: string, type: TransformType = 'thumb') => {
       break;
     case 'gallery':
       // Balanced high quality for vertical scrolling
-      transformation = 'upload/c_limit,w_1400,q_auto,f_auto';
+      transformation = 'upload/c_limit,w_1600,q_auto:good,f_auto';
+      break;
+    case 'full':
+      // Maximum quality for high-impact photography
+      transformation = 'upload/c_limit,w_2560,q_auto:best,f_auto';
       break;
     case 'blur':
       // Tiny version for LQIP placeholder

@@ -135,7 +135,7 @@ const PortfolioDetail = () => {
                       {block.type === 'image' && (
                         <div className="w-full overflow-hidden shadow-xl bg-slate-50">
                           <img 
-                            src={getOptimizedUrl(block.content, 'gallery')} 
+                            src={getOptimizedUrl(block.content, 'full')} 
                             className="w-full h-auto block" 
                             alt="" 
                           />
