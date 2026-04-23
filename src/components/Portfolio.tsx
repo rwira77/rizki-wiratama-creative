@@ -47,7 +47,7 @@ export const Portfolio = () => {
         const { data, error } = await supabase
           .from('works')
           .select('*')
-          .order('year', { ascending: false });
+          .order('order_index', { ascending: true });
         if (error) throw error;
         setWorks(data && data.length > 0 ? data : initialWorks);
       } catch (error) {

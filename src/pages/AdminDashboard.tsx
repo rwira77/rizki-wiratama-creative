@@ -60,7 +60,7 @@ const AdminDashboard = () => {
       const { data, error } = await supabase
         .from('works')
         .select('*')
-        .order('year', { ascending: false });
+        .order('order_index', { ascending: true });
 
       if (error) {
         console.error('Supabase Error:', error);
