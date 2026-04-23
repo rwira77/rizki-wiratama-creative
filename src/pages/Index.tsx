@@ -33,6 +33,7 @@ const Index = () => {
   const [maxZ, setMaxZ] = useState(100);
   const [desktopLinks, setDesktopLinks] = useState<any[]>([]);
   const [sectionPositions, setSectionPositions] = useState<Record<string, {top: string, left: string}>>({});
+  const [isPositionsLoaded, setIsPositionsLoaded] = useState(false);
 
   useEffect(() => {
     document.title = "Rizki Wiratama — Portfolio 2026";
@@ -59,8 +60,10 @@ const Index = () => {
         return acc;
       }, {});
       setSectionPositions(positions);
+      setIsPositionsLoaded(true);
     } catch (err) {
       console.error(err);
+      setIsPositionsLoaded(true); // Still set to true to show default icons if fetch fails
     }
   };
 
@@ -127,25 +130,29 @@ const Index = () => {
       <main className="relative h-full w-full pt-8 custom-scrollbar overflow-auto md:overflow-hidden pb-32 md:pb-0">
         {/* Real Content Folders (Desktop Only) */}
         <div className="hidden md:block">
-          {SECTIONS.map((section) => (
-            <div 
-              key={section.id} 
-              className="absolute transition-all" 
-              style={{ 
-                top: getPos(section.id).top, 
-                left: getPos(section.id).left 
-              }}
-            >
-              <DesktopIcon
-                id={section.id}
-                label={section.title}
-                icon={section.icon}
-                color={section.color}
-                subtext={section.subtext}
-                onClick={() => openWindow(section.id)}
-              />
-            </div>
-          ))}
+          <AnimatePresence>
+            {isPositionsLoaded && SECTIONS.map((section) => (
+              <motion.div 
+                key={section.id} 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="absolute transition-all" 
+                style={{ 
+                  top: getPos(section.id).top, 
+                  left: getPos(section.id).left 
+                }}
+              >
+                <DesktopIcon
+                  id={section.id}
+                  label={section.title}
+                  icon={section.icon}
+                  color={section.color}
+                  subtext={section.subtext}
+                  onClick={() => openWindow(section.id)}
+                />
+              </motion.div>
+            ))}
+          </AnimatePresence>
 
           {/* Dynamic Desktop Ecosystem Links */}
           {desktopLinks.map((link) => {
