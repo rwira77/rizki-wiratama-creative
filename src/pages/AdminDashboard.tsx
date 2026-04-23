@@ -40,6 +40,7 @@ const AdminDashboard = () => {
   const [isLinkModalOpen, setIsLinkModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState("all");
   
   const [newProject, setNewProject] = useState({
     title: "",
@@ -378,6 +379,23 @@ const AdminDashboard = () => {
     setIsModalOpen(true);
   };
 
+  const moveProject = (index: number, direction: 'up' | 'down') => {
+    // Get only projects in the current selected category
+    const filteredWorks = works.filter(w => selectedCategory === 'all' || w.cat === selectedCategory);
+    const targetIndex = direction === 'up' ? index - 1 : index + 1;
+    
+    if (targetIndex < 0 || targetIndex >= filteredWorks.length) return;
+
+    // Create a copy of the filtered works and swap
+    const newFiltered = [...filteredWorks];
+    [newFiltered[index], newFiltered[targetIndex]] = [newFiltered[targetIndex], newFiltered[index]];
+
+    // Merge back with works from other categories to maintain global state
+    const otherWorks = works.filter(w => selectedCategory !== 'all' && w.cat !== selectedCategory);
+    setWorks([...otherWorks, ...newFiltered]);
+    toast.success("Order changed! Don't forget to save your projects to persist changes.");
+  };
+
   const addBlock = (type: 'text' | 'image' | 'grid') => {
     const newBlock = {
       id: Math.random().toString(36).substr(2, 9),
@@ -600,21 +618,6 @@ const AdminDashboard = () => {
                      Some projects only require a single image showcase. Toggle the <strong>Detail View</strong> switch to decide if a project should link to its case study page.
                    </p>
                 </div>
-             </div>
-
-             <AnimatePresence>
-               {works.map((work) => (
-                 <motion.div
-                   key={work.id}
-                   layout
-                   initial={{ opacity: 0, y: 10 }}
-                   animate={{ opacity: 1, y: 0 }}
-                   className="bg-white border border-slate-100 rounded-[2rem] p-8 flex items-center gap-10 hover:shadow-md transition-shadow group"
-                 >
-                    <div className="size-24 rounded-2xl bg-slate-100 overflow-hidden shrink-0">
-                       <img src={work.img} className="w-full h-full object-cover" alt="" />
-                    </div>
-
                     <div className="flex-1 space-y-2">
                        <div className="flex items-center gap-3">
                           <h3 className="font-special-serif text-2xl text-slate-900">{work.title}</h3>

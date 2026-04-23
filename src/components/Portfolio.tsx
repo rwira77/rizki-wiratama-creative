@@ -8,7 +8,8 @@ import {
   Layout, 
   ChevronLeft,
   ArrowUpRight,
-  Plus
+  Plus,
+  Megaphone
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Link, useLocation } from "react-router-dom";
@@ -31,7 +32,8 @@ export const categories = [
   { id: "Social Media", label: "Social Media", icon: Share2, color: "from-purple-500 to-pink-600", images: [workSocial, workCampaign] },
   { id: "Photography", label: "Photography", icon: Camera, color: "from-orange-500 to-red-600", images: [workCampaign, workBranding] },
   { id: "Videography", label: "Videography", icon: Video, color: "from-emerald-500 to-teal-600", images: [workEvent, workSocial] },
-  { id: "Graphic Design", label: "Graphic Design", icon: Layout, color: "from-slate-700 to-slate-900", images: [workBranding, workSocial] }
+  { id: "Graphic Design", label: "Graphic Design", icon: Layout, color: "from-slate-700 to-slate-900", images: [workBranding, workSocial] },
+  { id: "Campaign & Event", label: "Campaign & Event", icon: Megaphone, color: "from-amber-500 to-orange-600", images: [workEvent, workCampaign] }
 ];
 
 export const Portfolio = () => {
