@@ -4,28 +4,52 @@ import { cn } from "@/lib/utils";
 
 const track = [
   {
-    year: "2022 — 2024",
-    role: "Marketing Manager",
-    company: "Indie Fashion Label",
-    description: "Driving commercial success through high-impact visual strategy and lifecycle marketing.",
-    stats: ["+1,400% IG Growth", "+85% Sales YoY", "14 Campaigns"],
+    year: "2026",
+    role: "Creative Marketing Manager",
+    company: "DOFACE",
+    description: "Driving commercial success through high-impact visual strategy and innovative lifecycle marketing management to dominate the skincare market.",
+    stats: ["Visual Strategy", "Lifecycle Marketing"],
     isLatest: true
   },
   {
-    year: "2020 — 2022",
-    role: "Brand & Content Lead",
-    company: "Creative Studio (Jakarta)",
-    description: "Orchestrating brand ecosystems for tech founders and high-growth SMEs.",
-    stats: ["12M organic imp.", "20+ brand systems"],
-    isLatest: false
+    year: "2024 — PRESENT",
+    role: "Chief Business Officer",
+    company: "SOBATRIP",
+    description: "Orchestrating an end-to-end tourism ecosystem, ranging from travel agencies (Borneo Tour Center) and specialized documentation (Nemora Pictures) to a comprehensive digital travel platform.",
+    stats: ["1K+ TRIPS ORGANIZED", "3 SUBSIDIARY BRANDS", "+45% REVENUE GROWTH"],
+    isLatest: true
   },
   {
-    year: "2019 — 2020",
-    role: "Freelance Designer",
-    company: "Independent",
-    description: "High-end editorial design and photography for premium lifestyle brands.",
-    stats: ["Signature Visual Style", "F&B Specialist"],
-    isLatest: false
+    year: "2023 — PRESENT",
+    role: "Chief Education Officer",
+    company: "CERAH INDONESIA",
+    description: "Leading a socio-educational platform and community dedicated to advancing political literacy, cultural awareness, and accessible learning through strategic digital programs.",
+    stats: ["Socio-Education", "Political Literacy"],
+    isLatest: true
+  },
+  {
+    year: "2021 — PRESENT",
+    role: "Creative Manager",
+    company: "DONNA PRIVE",
+    description: "Overseeing visual identity and brand communication strategies to expand market reach and cultivate customer loyalty within the modest fashion industry.",
+    stats: ["+250K SOCIAL REACH", "20+ MAJOR CAMPAIGNS", "85% BRAND RETENTION"],
+    isLatest: true
+  },
+  {
+    year: "2019 — PRESENT",
+    role: "Founder & Creative Director",
+    company: "BECREATIVE AGENCY",
+    description: "Leading the creative direction and digital marketing strategies to empower local businesses, helping them scale and strengthen their brand presence in the digital landscape.",
+    stats: ["30+ BRANDS HANDLED", "+120% AVG. ROI", "12-PERSON TEAM LEAD"],
+    isLatest: true
+  },
+  {
+    year: "2018 — PRESENT",
+    role: "Multidisciplinary Creative",
+    company: "FREELANCE SOLUTIONS",
+    description: "Delivering end-to-end digital solutions by merging visual design, photography, and programming to build functional and aesthetic products for diverse clients.",
+    stats: ["+50 PROJECTS COMPLETED", "98% CLIENT SATISFACTION", "5+ CORE SKILLSETS"],
+    isLatest: true
   },
 ];
 
@@ -48,7 +72,7 @@ export const Experience = () => {
           className="flex items-center gap-4"
         >
           <div className="h-px w-12 bg-primary/40" />
-          <span className="text-[10px] uppercase tracking-[0.4em] text-primary font-black">Professional Path</span>
+          <span className="text-[10px] uppercase tracking-[0.4em] text-primary font-black">Professional Experiences</span>
         </motion.div>
         
         <motion.h2 
@@ -57,7 +81,7 @@ export const Experience = () => {
           viewport={{ once: true }}
           className="font-special-serif text-4xl md:text-7xl leading-tight tracking-tight text-slate-900"
         >
-          Receipts, not <span className="text-primary italic">promises.</span>
+          Career <span className="text-primary italic">Journey</span>
         </motion.h2>
       </div>
 
