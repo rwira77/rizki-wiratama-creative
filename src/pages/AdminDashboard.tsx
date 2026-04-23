@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion, AnimatePresence, Reorder } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { 
   LayoutDashboard, 
   FileText, 
@@ -24,10 +24,19 @@ import {
   GripVertical
 } from "lucide-react";
 import { SECTIONS } from "@/config/sections";
-import { initialWorks, categories } from "@/components/Portfolio";
+import { initialWorks } from "@/components/Portfolio";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/lib/supabase";
+
+const ADMIN_CATEGORIES = [
+  { id: "Branding", label: "Branding" },
+  { id: "Social Media", label: "Social Media" },
+  { id: "Photography", label: "Photography" },
+  { id: "Videography", label: "Videography" },
+  { id: "Graphic Design", label: "Graphic Design" },
+  { id: "Campaign & Event", label: "Campaign & Event" }
+];
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -675,7 +684,7 @@ const AdminDashboard = () => {
               >
                 All Projects
               </button>
-              {categories.map((cat) => (
+              {ADMIN_CATEGORIES.map((cat) => (
                 <button 
                   key={cat.id}
                   onClick={() => setSelectedCategory(cat.id)}
@@ -950,7 +959,7 @@ const AdminDashboard = () => {
                       onChange={(e) => setNewProject({...newProject, cat: e.target.value})}
                       className="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 focus:ring-2 focus:ring-primary/20 transition-all font-bold appearance-none"
                     >
-                      {categories.map(c => <option key={c.id} value={c.id}>{c.label}</option>)}
+                      {ADMIN_CATEGORIES.map(c => <option key={c.id} value={c.id}>{c.label}</option>)}
                     </select>
                   </div>
                 </div>
