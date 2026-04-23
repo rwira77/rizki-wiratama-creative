@@ -106,7 +106,7 @@ const AdminDashboard = () => {
       const { data, error } = await supabase
         .from('works')
         .select('*')
-        .order('year', { ascending: false });
+        .order('order_index', { ascending: true });
 
       if (error) throw error;
       setWorks(data || []);
@@ -616,25 +616,22 @@ const AdminDashboard = () => {
                </button>
              )}
              {activeTab === "portfolio" && (
-               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                      <h2 className="text-2xl font-special-serif text-slate-900">Portfolio Management</h2>
-                      <div className="flex items-center gap-2">
-                        <button 
-                          onClick={saveOrder}
-                          disabled={isLoading}
-                          className="bg-emerald-500 text-white px-6 py-3 rounded-2xl font-bold text-[10px] uppercase tracking-widest hover:bg-emerald-600 transition-all flex items-center gap-2 shadow-lg disabled:opacity-50"
-                        >
-                          <Save className="size-4" /> Save Order
-                        </button>
-                        <button 
-                          onClick={handleOpenCreate}
-                          className="bg-primary text-white px-6 py-3 rounded-2xl font-bold text-[10px] uppercase tracking-widest hover:bg-slate-900 transition-all flex items-center gap-2 shadow-lg"
-                        >
-                          <Plus className="size-4" /> New Project
-                        </button>
-                      </div>
-                    </div>
-             )}
+                <div className="flex items-center gap-2">
+                  <button 
+                    onClick={saveOrder}
+                    disabled={isLoading}
+                    className="bg-emerald-500 text-white px-6 py-3 rounded-xl font-bold text-[10px] uppercase tracking-widest hover:bg-emerald-600 transition-all flex items-center gap-2 shadow-lg disabled:opacity-50"
+                  >
+                    <Save className="size-4" /> Save Order
+                  </button>
+                  <button 
+                    onClick={handleOpenCreate}
+                    className="bg-primary text-white px-6 py-3 rounded-xl font-bold text-[10px] uppercase tracking-widest hover:bg-slate-900 transition-all flex items-center gap-2 shadow-lg"
+                  >
+                    <Plus className="size-4" /> New Project
+                  </button>
+                </div>
+              )}
              {activeTab === "desktop" && (
                <button 
                  onClick={() => setIsLinkModalOpen(true)}
