@@ -106,9 +106,13 @@ const AdminDashboard = () => {
       const { data, error } = await supabase
         .from('works')
         .select('*')
-        .order('order_index', { ascending: true });
+        .order('year', { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase Error:', error);
+        setWorks([]); // Fallback to empty array
+        return;
+      }
       setWorks(data || []);
     } catch (error: any) {
       console.error('Supabase Error:', error);
@@ -685,27 +689,17 @@ const AdminDashboard = () => {
               ))}
             </div>
 
-            <Reorder.Group 
-              axis="y" 
-              values={works.filter(w => selectedCategory === 'all' || w.cat === selectedCategory)} 
-              onReorder={handleReorder}
-              className="space-y-4"
-            >
+            <div className="space-y-4">
               {works.filter(w => selectedCategory === 'all' || w.cat === selectedCategory).map((work, idx) => (
-                <Reorder.Item 
+                <motion.div 
                   key={work.id}
-                  value={work}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  whileDrag={{ scale: 1.02, boxShadow: "0 20px 25px -5px rgb(0 0 0 / 0.1)" }}
-                  className="bg-white border border-slate-100 rounded-[2rem] p-4 shadow-sm hover:shadow-md transition-shadow group cursor-grab active:cursor-grabbing flex items-center gap-6"
+                  className="bg-white border border-slate-100 rounded-[2rem] p-4 shadow-sm hover:shadow-md transition-shadow group flex items-center gap-6"
                 >
                   {/* Compact Thumbnail */}
                   <div className="relative size-20 rounded-2xl overflow-hidden bg-slate-50 shrink-0">
                     <img src={work.img} alt={work.title} className="w-full h-full object-cover" />
-                    <div className="absolute inset-0 bg-slate-900/10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                      <GripVertical className="size-4 text-white" />
-                    </div>
                   </div>
 
                   {/* Project Info - Expanded */}
@@ -728,6 +722,24 @@ const AdminDashboard = () => {
 
                   {/* Actions */}
                   <div className="flex items-center gap-2 pr-2">
+                    {selectedCategory !== 'all' && (
+                      <div className="flex items-center gap-1 mr-4">
+                        <button 
+                          onClick={() => moveProject(idx, 'up')}
+                          disabled={idx === 0}
+                          className="p-2 text-slate-300 hover:text-slate-900 disabled:opacity-20"
+                        >
+                          <ChevronUp className="size-4" />
+                        </button>
+                        <button 
+                          onClick={() => moveProject(idx, 'down')}
+                          disabled={idx === works.filter(w => w.cat === selectedCategory).length - 1}
+                          className="p-2 text-slate-300 hover:text-slate-900 disabled:opacity-20"
+                        >
+                          <ChevronDown className="size-4" />
+                        </button>
+                      </div>
+                    )}
                     <button 
                       onClick={() => handleOpenEdit(work)}
                       className="p-3 text-slate-300 hover:text-slate-900 hover:bg-slate-50 rounded-xl transition-all"
@@ -741,9 +753,9 @@ const AdminDashboard = () => {
                       <Trash2 className="size-4" />
                     </button>
                   </div>
-                </Reorder.Item>
+                </motion.div>
               ))}
-            </Reorder.Group>
+            </div>
           </div>
         ) : activeTab === "desktop" ? (
           <div className="space-y-12">
