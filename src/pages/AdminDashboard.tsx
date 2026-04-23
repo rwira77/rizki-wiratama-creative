@@ -1071,17 +1071,26 @@ const AdminDashboard = () => {
 
                               {block.type === 'image' && (
                                 <div className="space-y-4">
-                                  {block.content && (
+                                  {typeof block.content === 'string' && block.content.trim() !== "" && (
                                     <div className="relative group/thumb w-32 aspect-video rounded-xl overflow-hidden bg-slate-50 border border-slate-100">
                                       <img 
                                         src={getOptimizedUrl(block.content, 'thumb')} 
                                         className="w-full h-full object-cover" 
                                         alt="Preview" 
+                                        onError={(e) => {
+                                          (e.target as HTMLImageElement).src = 'https://placehold.co/600x400/f8fafc/cbd5e1?text=Invalid+Image';
+                                        }}
                                       />
                                       <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/thumb:opacity-100 transition-opacity flex items-center justify-center">
                                         <button 
                                           type="button"
-                                          onClick={() => window.open(block.content, '_blank')}
+                                          onClick={() => {
+                                            try {
+                                              window.open(block.content, '_blank');
+                                            } catch (e) {
+                                              toast.error("Invalid URL");
+                                            }
+                                          }}
                                           className="p-1.5 bg-white rounded-lg text-slate-900"
                                         >
                                           <ExternalLink className="size-3" />
@@ -1104,10 +1113,14 @@ const AdminDashboard = () => {
                                         className="hidden" 
                                         accept="image/*"
                                         onChange={async (e) => {
-                                          const file = e.target.files?.[0];
-                                          if (file) {
-                                            const url = await handleCloudinaryUpload(file);
-                                            if (url) updateBlock(block.id, { content: url });
+                                          try {
+                                            const file = e.target.files?.[0];
+                                            if (file) {
+                                              const url = await handleCloudinaryUpload(file);
+                                              if (url) updateBlock(block.id, { content: url });
+                                            }
+                                          } catch (err) {
+                                            toast.error("Upload failed");
                                           }
                                         }}
                                       />
