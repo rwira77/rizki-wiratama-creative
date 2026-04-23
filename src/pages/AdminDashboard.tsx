@@ -356,6 +356,12 @@ const AdminDashboard = () => {
   const handleOpenEdit = (work: any) => {
     if (!work) return;
     
+    // Ensure all content blocks have unique IDs for legacy data
+    const sanitizedBlocks = (Array.isArray(work.content_blocks) ? work.content_blocks : []).map((b: any) => ({
+      ...b,
+      id: b?.id || Math.random().toString(36).substr(2, 9)
+    }));
+
     setNewProject({
       title: work.title || "",
       cat: work.cat || "Branding",
@@ -365,7 +371,7 @@ const AdminDashboard = () => {
       year: work.year || new Date().getFullYear().toString(),
       hasDetail: !!work.hasDetail,
       block_gap: typeof work.block_gap === 'number' ? work.block_gap : 80,
-      content_blocks: Array.isArray(work.content_blocks) ? work.content_blocks : []
+      content_blocks: sanitizedBlocks
     });
     setEditingId(work.id);
     setIsEditing(true);
