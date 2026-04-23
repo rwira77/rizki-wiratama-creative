@@ -56,8 +56,9 @@ const PortfolioDetail = ({ isModal = false }: { isModal?: boolean }) => {
 
   const content = (
     <div className="min-h-screen bg-[#FDFCF9] text-slate-900 selection:bg-primary/20">
-      {/* Navigation Header */}
-      <nav className="fixed top-0 left-0 right-0 h-20 px-8 md:px-12 flex items-center justify-between z-50 bg-[#FDFCF9]/80 backdrop-blur-md border-b border-slate-100">
+      {/* Navigation Header - Hide in Modal Mode */}
+      {!isModal && (
+        <nav className="fixed top-0 left-0 right-0 h-20 px-8 md:px-12 flex items-center justify-between z-50 bg-[#FDFCF9]/80 backdrop-blur-md border-b border-slate-100">
         <button 
           onClick={() => navigate(-1)}
           className="flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-slate-400 hover:text-slate-900 transition-colors group"
@@ -70,9 +71,10 @@ const PortfolioDetail = ({ isModal = false }: { isModal?: boolean }) => {
            <div className="size-1.5 rounded-full bg-primary animate-pulse" />
         </div>
       </nav>
+      )}
 
       {/* Hero Section */}
-      <header className="pt-40 pb-16 px-8 md:px-12 max-w-7xl mx-auto">
+      <header className={cn("pb-16 px-8 md:px-12 max-w-7xl mx-auto", isModal ? "pt-24" : "pt-40")}>
         <motion.div
            initial={{ opacity: 0, x: -20 }}
            animate={{ opacity: 1, x: 0 }}
