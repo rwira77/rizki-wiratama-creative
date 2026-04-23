@@ -53,10 +53,12 @@ const getOptimizedUrl = (url: string, type: 'thumbnail' | 'gallery' | 'full' = '
 const AdminDashboard = () => {
   const navigate = useNavigate();
   const [works, setWorks] = useState<any[]>([]);
+  const [desktopLinks, setDesktopLinks] = useState<any[]>([]);
   const [activeTab, setActiveTab] = useState("portfolio");
   const [isLoading, setIsLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLinkModalOpen, setIsLinkModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   
@@ -70,6 +72,16 @@ const AdminDashboard = () => {
     hasDetail: false,
     block_gap: 80,
     content_blocks: [] as any[]
+  });
+
+  const [newLink, setNewLink] = useState({
+    title: "",
+    url: "",
+    icon_name: "Star",
+    icon_url: "",
+    color: "text-blue-500",
+    top: "20%",
+    left: "20%"
   });
 
   const [uploading, setUploading] = useState(false);
@@ -126,6 +138,64 @@ const AdminDashboard = () => {
       console.error(error);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const fetchDesktopLinks = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('desktop_links')
+        .select('*');
+      if (error) throw error;
+      setDesktopLinks(data || []);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleOpenLinkEdit = (link: any) => {
+    setNewLink(link);
+    setEditingId(link.id);
+    setIsEditing(true);
+    setIsLinkModalOpen(true);
+  };
+
+  const handleLinkSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    try {
+      if (isEditing && editingId) {
+        const { error } = await supabase
+          .from('desktop_links')
+          .update(newLink)
+          .eq('id', editingId);
+        if (error) throw error;
+        toast.success("Link updated!");
+      } else {
+        const { error } = await supabase
+          .from('desktop_links')
+          .insert([newLink]);
+        if (error) throw error;
+        toast.success("Link added!");
+      }
+      setIsLinkModalOpen(false);
+      fetchDesktopLinks();
+    } catch (err: any) {
+      toast.error("Action failed: " + err.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const deleteLink = async (id: string) => {
+    if (!confirm("Remove this link?")) return;
+    try {
+      const { error } = await supabase.from('desktop_links').delete().eq('id', id);
+      if (error) throw error;
+      toast.success("Link removed");
+      fetchDesktopLinks();
+    } catch (err: any) {
+      toast.error("Delete failed: " + err.message);
     }
   };
 
@@ -299,6 +369,7 @@ const AdminDashboard = () => {
         return;
       }
       fetchWorks();
+      fetchDesktopLinks();
     };
     checkSession();
   }, [navigate]);
@@ -355,34 +426,49 @@ const AdminDashboard = () => {
             {activeTab === "portfolio" ? "Portfolio" : activeTab === "desktop" ? "Desktop" : "Settings"}
           </h1>
           <div className="flex items-center gap-4">
-             {activeTab === "portfolio" && (
+             {(activeTab === "portfolio" || activeTab === "desktop") && (
                <>
-                 <button 
-                   onClick={saveOrder}
-                   disabled={isLoading}
-                   className="bg-emerald-500 text-white px-8 py-3 rounded-xl font-bold text-[10px] uppercase tracking-widest hover:bg-emerald-600 transition-all flex items-center gap-2 shadow-lg disabled:opacity-50"
-                 >
-                   <Save className="size-4" /> Save Order
-                 </button>
+                 {activeTab === "portfolio" && (
+                   <button 
+                     onClick={saveOrder}
+                     disabled={isLoading}
+                     className="bg-emerald-500 text-white px-8 py-3 rounded-xl font-bold text-[10px] uppercase tracking-widest hover:bg-emerald-600 transition-all flex items-center gap-2 shadow-lg disabled:opacity-50"
+                   >
+                     <Save className="size-4" /> Save Order
+                   </button>
+                 )}
                  <button 
                    onClick={() => {
                      setIsEditing(false);
-                     setNewProject({
-                       title: "",
-                       cat: "Branding",
-                       img: "",
-                       problem: "",
-                       result: "",
-                       year: new Date().getFullYear().toString(),
-                       hasDetail: false,
-                       block_gap: 80,
-                       content_blocks: []
-                     });
-                     setIsModalOpen(true);
+                     if (activeTab === "portfolio") {
+                       setNewProject({
+                         title: "",
+                         cat: "Branding",
+                         img: "",
+                         problem: "",
+                         result: "",
+                         year: new Date().getFullYear().toString(),
+                         hasDetail: false,
+                         block_gap: 80,
+                         content_blocks: []
+                       });
+                       setIsModalOpen(true);
+                     } else {
+                       setNewLink({
+                         title: "",
+                         url: "",
+                         icon_name: "Star",
+                         icon_url: "",
+                         color: "text-blue-500",
+                         top: "20%",
+                         left: "20%"
+                       });
+                       setIsLinkModalOpen(true);
+                     }
                    }}
                    className="bg-primary text-white px-8 py-3 rounded-xl font-bold text-[10px] uppercase tracking-widest hover:bg-slate-900 transition-all flex items-center gap-2 shadow-lg"
                  >
-                   <Plus className="size-4" /> New Project
+                   <Plus className="size-4" /> {activeTab === "portfolio" ? "New Project" : "Add Link"}
                  </button>
                </>
              )}
@@ -494,12 +580,40 @@ const AdminDashboard = () => {
                 <p className="text-[10px] text-slate-400 italic">Settings are saved locally in your browser for security.</p>
              </div>
           </div>
-        ) : (
-          <div className="flex flex-col items-center justify-center h-96 text-slate-300 italic">
-            <Star className="size-12 mb-4 opacity-20" />
-            Desktop links management coming soon in next restore...
+        ) : activeTab === "desktop" ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {desktopLinks.map((link) => (
+              <motion.div 
+                key={link.id}
+                layout
+                className="bg-white border border-slate-100 rounded-[2rem] p-8 shadow-sm hover:shadow-md transition-all flex flex-col items-center text-center relative group"
+              >
+                <div className={cn("size-20 rounded-3xl bg-slate-50 flex items-center justify-center mb-6 text-3xl", link.color)}>
+                  {link.icon_url ? (
+                    <img src={link.icon_url} alt="" className="size-12 object-contain" />
+                  ) : (
+                    <Star className="size-10" />
+                  )}
+                </div>
+                <h3 className="font-special-serif text-2xl mb-1">{link.title}</h3>
+                <p className="text-[10px] font-black uppercase tracking-widest text-slate-300 mb-6 truncate w-full px-4">{link.url}</p>
+                <div className="flex items-center gap-3 mt-auto">
+                  <button 
+                    onClick={() => handleOpenLinkEdit(link)}
+                    className="p-3 bg-slate-50 hover:bg-slate-100 text-slate-400 hover:text-slate-900 rounded-xl transition-all"
+                  >
+                    <PenTool className="size-4" />
+                  </button>
+                  <button 
+                    onClick={() => deleteLink(link.id)}
+                    className="p-3 bg-red-50 hover:bg-red-100 text-red-300 hover:text-red-500 rounded-xl transition-all"
+                  >
+                    <Trash2 className="size-4" />
+                  </button>
+                </div>
+              </motion.div>
+            ))}
           </div>
-        )}
       </main>
 
       {/* Project Modal */}
@@ -782,6 +896,102 @@ const AdminDashboard = () => {
                   {isEditing ? "Save Evolution" : "Launch Creation"}
                 </button>
               </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+      {/* Link Modal */}
+      <AnimatePresence>
+        {isLinkModalOpen && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-8">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsLinkModalOpen(false)}
+              className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="relative w-full max-w-lg bg-white rounded-[3rem] shadow-2xl overflow-hidden"
+            >
+              <div className="p-10 border-b border-slate-100 flex items-center justify-between">
+                <div>
+                  <h2 className="font-special-serif text-3xl">{isEditing ? "Modify Link" : "Add Shortcut"}</h2>
+                  <p className="text-[10px] font-black uppercase tracking-widest text-slate-300 mt-1">External Deployment</p>
+                </div>
+                <button onClick={() => setIsLinkModalOpen(false)} className="p-4 hover:bg-slate-50 rounded-2xl transition-colors">
+                  <X className="size-6 text-slate-400" />
+                </button>
+              </div>
+
+              <form onSubmit={handleLinkSubmit} className="p-10 space-y-6">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-4">Display Name</label>
+                  <input 
+                    required
+                    type="text" 
+                    value={newLink.title}
+                    onChange={(e) => setNewLink({...newLink, title: e.target.value})}
+                    className="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 focus:ring-2 focus:ring-primary/20 transition-all font-bold"
+                    placeholder="e.g. Instagram"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-4">External URL</label>
+                  <input 
+                    required
+                    type="text" 
+                    value={newLink.url}
+                    onChange={(e) => setNewLink({...newLink, url: e.target.value})}
+                    className="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 focus:ring-2 focus:ring-primary/20 transition-all font-bold"
+                    placeholder="https://..."
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-4">Top Position (%)</label>
+                    <input 
+                      type="text" 
+                      value={newLink.top}
+                      onChange={(e) => setNewLink({...newLink, top: e.target.value})}
+                      className="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 focus:ring-2 focus:ring-primary/20 transition-all font-bold"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-4">Left Position (%)</label>
+                    <input 
+                      type="text" 
+                      value={newLink.left}
+                      onChange={(e) => setNewLink({...newLink, left: e.target.value})}
+                      className="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 focus:ring-2 focus:ring-primary/20 transition-all font-bold"
+                    />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-4">Accent Color</label>
+                  <select 
+                    value={newLink.color}
+                    onChange={(e) => setNewLink({...newLink, color: e.target.value})}
+                    className="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 focus:ring-2 focus:ring-primary/20 transition-all font-bold appearance-none"
+                  >
+                    <option value="text-blue-500">Blue (LinkedIn)</option>
+                    <option value="text-pink-500">Pink (Instagram)</option>
+                    <option value="text-orange-500">Orange (Behance)</option>
+                    <option value="text-black">Black (TikTok)</option>
+                    <option value="text-purple-500">Purple (Figma)</option>
+                  </select>
+                </div>
+                <div className="pt-4">
+                  <button type="submit" className="w-full py-4 bg-slate-900 text-white rounded-2xl font-bold hover:bg-black transition-all shadow-xl">
+                    {isEditing ? "Save Link" : "Add to Desktop"}
+                  </button>
+                </div>
+              </form>
             </motion.div>
           </div>
         )}
