@@ -6,7 +6,9 @@ import { supabase } from "@/lib/supabase";
 import { useState, useEffect } from "react";
 import { getOptimizedUrl } from "@/lib/cloudinary";
 
-const PortfolioDetail = () => {
+import { X } from "lucide-react";
+
+const PortfolioDetail = ({ isModal = false }: { isModal?: boolean }) => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [work, setWork] = useState<any>(null);
@@ -52,7 +54,7 @@ const PortfolioDetail = () => {
     );
   }
 
-  return (
+  const content = (
     <div className="min-h-screen bg-[#FDFCF9] text-slate-900 selection:bg-primary/20">
       {/* Navigation Header */}
       <nav className="fixed top-0 left-0 right-0 h-20 px-8 md:px-12 flex items-center justify-between z-50 bg-[#FDFCF9]/80 backdrop-blur-md border-b border-slate-100">
@@ -234,6 +236,38 @@ const PortfolioDetail = () => {
       </footer>
     </div>
   );
+
+  if (isModal) {
+    return (
+      <div className="fixed inset-0 z-[5000] flex items-center justify-center p-0 md:p-12">
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={() => navigate(-1)}
+          className="absolute inset-0 bg-slate-900/90 backdrop-blur-md cursor-zoom-out"
+        />
+        <motion.div 
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 40 }}
+          className="relative w-full max-w-7xl h-full bg-white overflow-y-auto custom-scrollbar shadow-2xl md:rounded-3xl"
+        >
+          {/* Floating Close Button */}
+          <button 
+            onClick={() => navigate(-1)}
+            className="fixed top-8 right-8 z-[5100] size-12 rounded-full bg-white/10 hover:bg-white text-white hover:text-black backdrop-blur-xl border border-white/20 flex items-center justify-center transition-all shadow-2xl group"
+          >
+            <X className="size-6 group-hover:scale-110 transition-transform" />
+          </button>
+          
+          {content}
+        </motion.div>
+      </div>
+    );
+  }
+
+  return content;
 };
 
 export default PortfolioDetail;

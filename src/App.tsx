@@ -11,21 +11,39 @@ import AdminDashboard from "./pages/AdminDashboard.tsx";
 
 const queryClient = new QueryClient();
 
+import { useLocation } from "react-router-dom";
+
+const AppContent = () => {
+  const location = useLocation();
+  const backgroundLocation = location.state?.backgroundLocation;
+
+  return (
+    <>
+      <Routes location={backgroundLocation || location}>
+        <Route path="/" element={<Index />} />
+        <Route path="/portfolio/:id" element={<PortfolioDetail />} />
+        <Route path="/admin" element={<Navigate to="/admin/login" replace />} />
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/admin/dashboard" element={<AdminDashboard />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+
+      {backgroundLocation && (
+        <Routes>
+          <Route path="/portfolio/:id" element={<PortfolioDetail isModal={true} />} />
+        </Routes>
+      )}
+    </>
+  );
+};
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/portfolio/:id" element={<PortfolioDetail />} />
-          <Route path="/admin" element={<Navigate to="/admin/login" replace />} />
-          <Route path="/admin/login" element={<AdminLogin />} />
-          <Route path="/admin/dashboard" element={<AdminDashboard />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <AppContent />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

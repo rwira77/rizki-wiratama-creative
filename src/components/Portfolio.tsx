@@ -11,7 +11,7 @@ import {
   Plus
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { supabase } from "@/lib/supabase";
 import { DesktopIcon } from "@/components/DesktopIcon";
 import { getOptimizedUrl } from "@/lib/cloudinary";
@@ -37,6 +37,7 @@ export const categories = [
 export const Portfolio = () => {
   const [selectedCat, setSelectedCat] = useState<string | null>(null);
   const [works, setWorks] = useState<any[]>([]);
+  const location = useLocation();
 
   useEffect(() => {
     const fetchWorks = async () => {
@@ -113,6 +114,7 @@ export const Portfolio = () => {
                   >
                     <Link 
                       to={w.hasDetail ? `/portfolio/${w.id}` : '#'} 
+                      state={{ backgroundLocation: location }}
                       onClick={(e) => !w.hasDetail && e.preventDefault()}
                       className={cn(
                         "block group",
