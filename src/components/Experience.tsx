@@ -54,10 +54,22 @@ const track = [
 ];
 
 const arsenal = [
-  { name: "Figma", icon: Figma, level: "Master", color: "text-purple-500", bg: "bg-purple-50" },
-  { name: "Adobe Suite", icon: PenTool, level: "Expert", color: "text-red-500", bg: "bg-red-50" },
-  { name: "Strategy", icon: Layers, level: "Senior", color: "text-blue-500", bg: "bg-blue-50" },
-  { name: "UI Design", icon: Layout, level: "Master", color: "text-orange-500", bg: "bg-orange-50" },
+  { name: "Illustrator", icon: "https://www.svgrepo.com/show/452147/adobe-illustrator.svg", category: "Design", bg: "bg-orange-50" },
+  { name: "After Effects", icon: "https://www.svgrepo.com/show/452141/adobe-after-effects.svg", category: "Motion", bg: "bg-purple-50" },
+  { name: "Lightroom", icon: "https://www.svgrepo.com/show/452145/adobe-lightroom.svg", category: "Photo", bg: "bg-blue-50" },
+  { name: "Photoshop", icon: "https://www.svgrepo.com/show/452149/adobe-photoshop.svg", category: "Design", bg: "bg-blue-50" },
+  { name: "Premiere", icon: "https://www.svgrepo.com/show/452150/adobe-premiere.svg", category: "Video", bg: "bg-purple-50" },
+  { name: "Google Docs", icon: "https://www.svgrepo.com/show/380994/google-logo-docs-new.svg", category: "Writing", bg: "bg-blue-50" },
+  { name: "VS Code", icon: "https://www.svgrepo.com/show/452129/vs-code.svg", category: "Code", bg: "bg-blue-50" },
+  { name: "JavaScript", icon: "https://www.svgrepo.com/show/452045/js.svg", category: "Logic", bg: "bg-yellow-50" },
+  { name: "React", icon: "https://www.svgrepo.com/show/452092/react.svg", category: "Frontend", bg: "bg-cyan-50" },
+  { name: "Vite", icon: "https://www.svgrepo.com/show/374167/vite.svg", category: "Build", bg: "bg-purple-50" },
+  { name: "Tailwind", icon: "https://www.svgrepo.com/show/374118/tailwind.svg", category: "Styles", bg: "bg-cyan-50" },
+  { name: "Figma", icon: "https://www.svgrepo.com/show/452202/figma.svg", category: "UI/UX", bg: "bg-pink-50" },
+  { name: "Notion", icon: "https://www.svgrepo.com/show/452076/notion.svg", category: "Productivity", bg: "bg-slate-50" },
+  { name: "Hootsuite", icon: "https://www.svgrepo.com/show/343561/hootsuite-communication-chat-interaction-connection-conversation.svg", category: "Social", bg: "bg-amber-50" },
+  { name: "Slack", icon: "https://www.svgrepo.com/show/452102/slack.svg", category: "Comm.", bg: "bg-white" },
+  { name: "Meta", icon: "https://www.svgrepo.com/show/424909/meta-logo-facebook-2.svg", category: "Ad Strategy", bg: "bg-blue-50" },
 ];
 
 export const Experience = () => {
@@ -148,30 +160,30 @@ export const Experience = () => {
         ))}
       </div>
 
-      {/* Creative Arsenal - Bento Grid */}
+      {/* Digital Ecosystem - Grid */}
       <div className="space-y-10 md:space-y-12 pt-12">
         <div className="flex items-center justify-between">
-          <h3 className="font-special-serif text-3xl md:text-5xl text-slate-900">Creative Arsenal</h3>
+          <h3 className="font-special-serif text-3xl md:text-5xl text-slate-900">Digital Ecosystem</h3>
           <div className="h-px flex-1 mx-12 bg-slate-200 hidden md:block" />
         </div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-4 md:gap-6">
           {arsenal.map((a, i) => (
             <motion.div
               key={a.name}
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
+              transition={{ delay: i * 0.05 }}
               whileHover={{ y: -5 }}
-              className="p-6 md:p-8 rounded-[2rem] bg-white border border-slate-100 shadow-sm hover:shadow-xl transition-all group text-center space-y-4 md:space-y-6"
+              className="p-4 md:p-6 rounded-[2rem] bg-white border border-slate-100 shadow-sm hover:shadow-xl transition-all group text-center space-y-3"
             >
-              <div className={cn("size-12 md:size-16 mx-auto rounded-xl md:rounded-2xl flex items-center justify-center transition-transform group-hover:rotate-12", a.bg)}>
-                <a.icon className={cn("size-6 md:size-8", a.color)} />
+              <div className={cn("size-10 md:size-12 mx-auto rounded-xl md:rounded-2xl flex items-center justify-center transition-transform group-hover:rotate-12 p-2", a.bg)}>
+                <img src={a.icon} alt={a.name} className="w-full h-full object-contain" />
               </div>
               <div>
-                <h4 className="font-bold text-slate-900 uppercase tracking-widest text-[10px] md:text-xs mb-1">{a.name}</h4>
-                <p className="text-[9px] font-black text-slate-300 uppercase tracking-[0.2em]">{a.level}</p>
+                <h4 className="font-bold text-slate-900 uppercase tracking-widest text-[8px] md:text-[9px] mb-0.5">{a.name}</h4>
+                <p className="text-[7px] font-black text-slate-300 uppercase tracking-[0.2em]">{a.category}</p>
               </div>
             </motion.div>
           ))}
