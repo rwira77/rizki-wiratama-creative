@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, Reorder } from "framer-motion";
 import { 
   LayoutDashboard, 
   FileText, 
@@ -16,7 +16,8 @@ import {
   Info,
   Star,
   ChevronUp,
-  ChevronDown
+  ChevronDown,
+  GripVertical
 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -102,6 +103,23 @@ const AdminDashboard = () => {
       setWorks(updatedWorks);
     }
     toast.success("Order changed! Click 'Save Order' to persist.");
+  };
+
+  const handleReorder = (newOrder: any[]) => {
+    if (selectedCategory === 'all') {
+      setWorks(newOrder);
+      return;
+    }
+
+    // Advanced merging: preserve the positions of other categories
+    const updatedWorks = [...works];
+    const categoryIndices = works.map((w, i) => w.cat === selectedCategory ? i : -1).filter(i => i !== -1);
+    
+    categoryIndices.forEach((originalIdx, i) => {
+      updatedWorks[originalIdx] = newOrder[i];
+    });
+    
+    setWorks(updatedWorks);
   };
 
   const saveOrder = async () => {
@@ -222,47 +240,39 @@ const AdminDashboard = () => {
               ))}
             </div>
 
-            {/* List */}
-            <div className="space-y-4">
+            {/* List with Drag & Drop */}
+            <Reorder.Group 
+              axis="y" 
+              values={works.filter(w => selectedCategory === 'all' || w.cat === selectedCategory)} 
+              onReorder={handleReorder}
+              className="space-y-4"
+            >
               {works
                 .filter(w => selectedCategory === 'all' || w.cat === selectedCategory)
                 .map((work) => (
-                <div 
+                <Reorder.Item 
                   key={work.id}
-                  className="bg-white border border-slate-100 rounded-[2rem] p-6 flex items-center gap-6"
+                  value={work}
+                  whileDrag={{ scale: 1.02, boxShadow: "0 20px 25px -5px rgb(0 0 0 / 0.1)" }}
+                  className="bg-white border border-slate-100 rounded-[2rem] p-6 flex items-center gap-6 cursor-grab active:cursor-grabbing group shadow-sm hover:shadow-md transition-shadow"
                 >
-                  <div className="size-16 rounded-2xl bg-slate-50 overflow-hidden">
+                  <div className="relative size-16 rounded-2xl bg-slate-50 overflow-hidden shrink-0">
                     <img src={work.img} className="w-full h-full object-cover" alt="" />
+                    <div className="absolute inset-0 bg-slate-900/10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                      <GripVertical className="size-4 text-white" />
+                    </div>
                   </div>
-                  <div className="flex-1">
-                    <h3 className="font-special-serif text-xl">{work.title}</h3>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-special-serif text-xl truncate">{work.title}</h3>
                     <p className="text-[10px] font-black uppercase tracking-widest text-slate-300 mt-1">{work.cat} • {work.year}</p>
                   </div>
                   <div className="flex items-center gap-2">
-                    {selectedCategory !== 'all' && (
-                      <div className="flex items-center gap-1 mr-4">
-                        <button 
-                          onClick={() => moveProject(idx, 'up')}
-                          disabled={idx === 0}
-                          className="p-2 text-slate-300 hover:text-slate-900 disabled:opacity-20"
-                        >
-                          <ChevronUp className="size-4" />
-                        </button>
-                        <button 
-                          onClick={() => moveProject(idx, 'down')}
-                          disabled={idx === works.filter(w => w.cat === selectedCategory).length - 1}
-                          className="p-2 text-slate-300 hover:text-slate-900 disabled:opacity-20"
-                        >
-                          <ChevronDown className="size-4" />
-                        </button>
-                      </div>
-                    )}
                     <button className="p-3 text-slate-300 hover:text-slate-900"><PenTool className="size-4" /></button>
                     <button className="p-3 text-slate-300 hover:text-red-500"><Trash2 className="size-4" /></button>
                   </div>
-                </div>
+                </Reorder.Item>
               ))}
-            </div>
+            </Reorder.Group>
           </div>
         )}
       </main>
