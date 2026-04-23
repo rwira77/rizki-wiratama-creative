@@ -607,65 +607,112 @@ const AdminDashboard = () => {
              <div className="size-12 rounded-full border-4 border-primary border-t-transparent animate-spin" />
           </div>
         ) : activeTab === "portfolio" ? (
-          <div className="grid gap-6">
-             <div className="bg-blue-50 border border-blue-100 p-6 rounded-3xl flex items-start gap-4 mb-6">
-                <div className="p-2 bg-blue-100 rounded-xl">
-                  <Info className="size-4 text-blue-600" />
-                </div>
-                <div className="space-y-1">
-                   <p className="text-sm font-bold text-blue-900">Visibility Control</p>
-                   <p className="text-sm text-blue-700/80 leading-relaxed">
-                     Some projects only require a single image showcase. Toggle the <strong>Detail View</strong> switch to decide if a project should link to its case study page.
-                   </p>
-                </div>
-                    <div className="flex-1 space-y-2">
-                       <div className="flex items-center gap-3">
-                          <h3 className="font-special-serif text-2xl text-slate-900">{work.title}</h3>
-                          <span className="px-3 py-1 bg-slate-50 text-[9px] font-black uppercase tracking-widest text-slate-400 rounded-full border border-slate-100">
-                             {work.cat}
-                          </span>
-                       </div>
-                       <p className="text-slate-400 text-sm font-medium line-clamp-1">{work.problem}</p>
-                    </div>
+          <div className="space-y-8">
+            <div className="bg-blue-50 border border-blue-100 p-6 rounded-3xl flex items-start gap-4 mb-2">
+               <div className="p-2 bg-blue-100 rounded-xl">
+                 <Info className="size-4 text-blue-600" />
+               </div>
+               <div className="space-y-1">
+                  <p className="text-sm font-bold text-blue-900">Portfolio Organization</p>
+                  <p className="text-sm text-blue-700/80 leading-relaxed">
+                    Select a category to enable custom reordering. Grouping projects by specialty makes your work easier to navigate.
+                  </p>
+               </div>
+            </div>
 
-                    <div className="flex items-center gap-6 pr-4 border-r border-slate-100">
-                       <div className="text-right">
-                          <p className="text-[9px] font-black uppercase tracking-widest text-slate-300">Detail Page</p>
-                          <p className={cn("text-xs font-bold", work.hasDetail ? "text-emerald-500" : "text-amber-500")}>
-                             {work.hasDetail ? "Enabled" : "Disabled"}
-                          </p>
-                       </div>
-                       <button 
-                         onClick={() => toggleDetail(work.id, work.hasDetail)}
-                         className={cn(
-                           "relative w-12 h-6 rounded-full transition-colors",
-                           work.hasDetail ? "bg-emerald-400" : "bg-slate-200"
-                         )}
-                       >
-                          <motion.div 
-                            animate={{ x: work.hasDetail ? 24 : 4 }}
-                            className="absolute top-1 size-4 bg-white rounded-full shadow-sm"
-                          />
-                       </button>
-                    </div>
+            <div className="flex gap-2 overflow-x-auto pb-4 custom-scrollbar no-scrollbar">
+              <button 
+                onClick={() => setSelectedCategory("all")}
+                className={cn(
+                  "px-6 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap",
+                  selectedCategory === "all" ? "bg-slate-900 text-white" : "bg-white border border-slate-100 text-slate-400 hover:bg-slate-50"
+                )}
+              >
+                All Projects
+              </button>
+              {categories.map((cat) => (
+                <button 
+                  key={cat.id}
+                  onClick={() => setSelectedCategory(cat.id)}
+                  className={cn(
+                    "px-6 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap",
+                    selectedCategory === cat.id ? "bg-primary text-white" : "bg-white border border-slate-100 text-slate-400 hover:bg-slate-50"
+                  )}
+                >
+                  {cat.label}
+                </button>
+              ))}
+            </div>
 
-                    <div className="flex items-center gap-3">
-                       <button 
-                         onClick={() => handleOpenEdit(work)}
-                         className="p-3 bg-slate-50 text-slate-400 hover:bg-slate-900 hover:text-white rounded-xl transition-all"
-                       >
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {works.filter(w => selectedCategory === 'all' || w.cat === selectedCategory).map((work, idx) => (
+                <motion.div 
+                  key={work.id}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="bg-white border border-slate-100 rounded-[2.5rem] p-6 shadow-sm hover:shadow-xl transition-all group"
+                >
+                  <div className="relative aspect-video rounded-3xl overflow-hidden mb-6 bg-slate-50">
+                    <img src={work.img} alt={work.title} className="w-full h-full object-cover" />
+                    <div className="absolute top-4 left-4">
+                      <span className="px-3 py-1.5 bg-white/90 backdrop-blur-md rounded-full text-[8px] font-black uppercase tracking-widest text-slate-900 border border-white">
+                        {work.cat}
+                      </span>
+                    </div>
+                    
+                    {/* Reorder Controls */}
+                    {selectedCategory !== 'all' && (
+                      <div className="absolute bottom-4 right-4 flex gap-2 translate-y-12 group-hover:translate-y-0 transition-transform duration-300">
+                        <button 
+                          onClick={() => moveProject(idx, 'up')}
+                          disabled={idx === 0}
+                          className="size-10 rounded-full bg-white/90 backdrop-blur-md flex items-center justify-center text-slate-900 hover:bg-primary hover:text-white disabled:opacity-30 transition-all border border-white shadow-lg"
+                        >
+                          <ChevronUp className="size-4" />
+                        </button>
+                        <button 
+                          onClick={() => moveProject(idx, 'down')}
+                          disabled={idx === works.filter(w => w.cat === selectedCategory).length - 1}
+                          className="size-10 rounded-full bg-white/90 backdrop-blur-md flex items-center justify-center text-slate-900 hover:bg-primary hover:text-white disabled:opacity-30 transition-all border border-white shadow-lg"
+                        >
+                          <ChevronDown className="size-4" />
+                        </button>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <h3 className="font-special-serif text-2xl text-slate-900 line-clamp-1">{work.title}</h3>
+                      <div className="flex items-center gap-1">
+                        <button 
+                          onClick={() => handleOpenEdit(work)}
+                          className="p-2.5 text-slate-300 hover:text-slate-900 transition-colors"
+                        >
                           <PenTool className="size-4" />
-                       </button>
-                       <button 
-                         onClick={() => deleteWork(work.id)}
-                         className="p-3 bg-red-50 text-red-400 hover:bg-red-500 hover:text-white rounded-xl transition-all"
-                       >
+                        </button>
+                        <button 
+                          onClick={() => deleteWork(work.id)}
+                          className="p-2.5 text-slate-300 hover:text-red-500 transition-colors"
+                        >
                           <Trash2 className="size-4" />
-                       </button>
+                        </button>
+                      </div>
                     </div>
-                 </motion.div>
-               ))}
-             </AnimatePresence>
+                    
+                    <div className="flex items-center justify-between pt-4 border-t border-slate-50">
+                      <div className="flex items-center gap-2">
+                         <div className={cn("size-2 rounded-full", work.hasDetail ? "bg-emerald-500" : "bg-amber-500")} />
+                         <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">
+                            {work.hasDetail ? "Case Study Ready" : "Quick View Only"}
+                         </span>
+                      </div>
+                      <span className="text-[10px] font-black uppercase tracking-widest text-slate-300">{work.year}</span>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
           </div>
         ) : activeTab === "desktop" ? (
           <div className="space-y-12">
