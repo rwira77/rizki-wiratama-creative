@@ -24,7 +24,7 @@ import {
   GripVertical
 } from "lucide-react";
 import { SECTIONS } from "@/config/sections";
-import { initialWorks } from "@/components/Portfolio";
+import { SECTIONS } from "@/config/sections";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/lib/supabase";
@@ -36,6 +36,11 @@ const ADMIN_CATEGORIES = [
   { id: "Videography", label: "Videography" },
   { id: "Graphic Design", label: "Graphic Design" },
   { id: "Campaign & Event", label: "Campaign & Event" }
+];
+
+
+const initialWorks = [
+  { id: "remlint-identity", title: "Remlint Visual Identity", cat: "Branding", img: "https://images.unsplash.com/photo-1541462608141-ad4d60da3e8a?q=80&w=2670", year: "2024", hasDetail: true },
 ];
 
 const AdminDashboard = () => {
