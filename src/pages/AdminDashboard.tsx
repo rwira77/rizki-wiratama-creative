@@ -1015,11 +1015,8 @@ const AdminDashboard = () => {
                         {Array.isArray(newProject.content_blocks) && newProject.content_blocks.map((block, idx) => {
                           if (!block || !block.id) return null;
                           return (
-                            <motion.div
+                            <div
                               key={`block-${block.id}`}
-                              initial={{ opacity: 0, y: 10 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              exit={{ opacity: 0, scale: 0.95 }}
                               className="group relative bg-white border border-slate-100 rounded-3xl p-5 shadow-sm hover:shadow-md transition-all"
                             >
                               <div className="flex items-center justify-between mb-4">
@@ -1073,7 +1070,7 @@ const AdminDashboard = () => {
                                   {typeof block.content === 'string' && block.content.trim() !== "" && (
                                     <div className="relative group/thumb w-32 aspect-video rounded-xl overflow-hidden bg-slate-50 border border-slate-100">
                                       <img 
-                                        src={getOptimizedUrl(block.content, 'thumb')} 
+                                        src={block.content} 
                                         className="w-full h-full object-cover" 
                                         alt="Preview" 
                                         onError={(e) => {
@@ -1134,7 +1131,7 @@ const AdminDashboard = () => {
                                     <div className="flex flex-wrap gap-3">
                                       {block.urls.map((url: string, i: number) => (
                                         <div key={i} className="w-20 aspect-square rounded-lg overflow-hidden border border-slate-100">
-                                          <img src={getOptimizedUrl(url, 'thumb')} className="w-full h-full object-cover" alt="" />
+                                          <img src={url} className="w-full h-full object-cover" alt="" />
                                         </div>
                                       ))}
                                     </div>
@@ -1167,7 +1164,7 @@ const AdminDashboard = () => {
                                   </div>
                                 </div>
                               )}
-                            </motion.div>
+                            </div>
                           );
                         })}
                       </div>
