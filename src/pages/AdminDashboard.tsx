@@ -665,57 +665,57 @@ const AdminDashboard = () => {
               axis="y" 
               values={works.filter(w => selectedCategory === 'all' || w.cat === selectedCategory)} 
               onReorder={handleReorder}
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+              className="space-y-4"
             >
               {works.filter(w => selectedCategory === 'all' || w.cat === selectedCategory).map((work, idx) => (
                 <Reorder.Item 
                   key={work.id}
                   value={work}
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  whileDrag={{ scale: 1.05, boxShadow: "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)" }}
-                  className="bg-white border border-slate-100 rounded-[2.5rem] p-6 shadow-sm hover:shadow-xl transition-shadow group cursor-grab active:cursor-grabbing"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  whileDrag={{ scale: 1.02, boxShadow: "0 20px 25px -5px rgb(0 0 0 / 0.1)" }}
+                  className="bg-white border border-slate-100 rounded-[2rem] p-4 shadow-sm hover:shadow-md transition-shadow group cursor-grab active:cursor-grabbing flex items-center gap-6"
                 >
-                  <div className="relative aspect-video rounded-3xl overflow-hidden mb-6 bg-slate-50">
+                  {/* Compact Thumbnail */}
+                  <div className="relative size-20 rounded-2xl overflow-hidden bg-slate-50 shrink-0">
                     <img src={work.img} alt={work.title} className="w-full h-full object-cover" />
-                    <div className="absolute top-4 left-4 flex items-center gap-2">
-                      <span className="px-3 py-1.5 bg-white/90 backdrop-blur-md rounded-full text-[8px] font-black uppercase tracking-widest text-slate-900 border border-white">
-                        {work.cat}
-                      </span>
-                      <div className="p-1.5 bg-slate-900/10 backdrop-blur-md rounded-lg text-slate-900 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <GripVertical className="size-3" />
-                      </div>
+                    <div className="absolute inset-0 bg-slate-900/10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                      <GripVertical className="size-4 text-white" />
                     </div>
                   </div>
 
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <h3 className="font-special-serif text-2xl text-slate-900 line-clamp-1">{work.title}</h3>
-                      <div className="flex items-center gap-1">
-                        <button 
-                          onClick={() => handleOpenEdit(work)}
-                          className="p-2.5 text-slate-300 hover:text-slate-900 transition-colors"
-                        >
-                          <PenTool className="size-4" />
-                        </button>
-                        <button 
-                          onClick={() => deleteWork(work.id)}
-                          className="p-2.5 text-slate-300 hover:text-red-500 transition-colors"
-                        >
-                          <Trash2 className="size-4" />
-                        </button>
-                      </div>
+                  {/* Project Info - Expanded */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-3 mb-1">
+                      <h3 className="font-special-serif text-xl text-slate-900 truncate">{work.title}</h3>
+                      <span className="px-2 py-0.5 bg-slate-100 text-[8px] font-black uppercase tracking-widest text-slate-400 rounded-full border border-slate-200">
+                        {work.cat}
+                      </span>
                     </div>
-                    
-                    <div className="flex items-center justify-between pt-4 border-t border-slate-50">
-                      <div className="flex items-center gap-2">
-                         <div className={cn("size-2 rounded-full", work.hasDetail ? "bg-emerald-500" : "bg-amber-500")} />
-                         <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">
-                            {work.hasDetail ? "Case Study Ready" : "Quick View Only"}
-                         </span>
+                    <div className="flex items-center gap-4 text-[10px] font-black uppercase tracking-widest text-slate-300">
+                      <div className="flex items-center gap-1.5">
+                        <div className={cn("size-1.5 rounded-full", work.hasDetail ? "bg-emerald-500" : "bg-amber-500")} />
+                        {work.hasDetail ? "Case Study" : "Quick View"}
                       </div>
-                      <span className="text-[10px] font-black uppercase tracking-widest text-slate-300">{work.year}</span>
+                      <span>•</span>
+                      <span>{work.year}</span>
                     </div>
+                  </div>
+
+                  {/* Actions */}
+                  <div className="flex items-center gap-2 pr-2">
+                    <button 
+                      onClick={() => handleOpenEdit(work)}
+                      className="p-3 text-slate-300 hover:text-slate-900 hover:bg-slate-50 rounded-xl transition-all"
+                    >
+                      <PenTool className="size-4" />
+                    </button>
+                    <button 
+                      onClick={() => deleteWork(work.id)}
+                      className="p-3 text-slate-300 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all"
+                    >
+                      <Trash2 className="size-4" />
+                    </button>
                   </div>
                 </Reorder.Item>
               ))}
