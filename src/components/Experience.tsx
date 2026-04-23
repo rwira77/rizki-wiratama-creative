@@ -170,7 +170,7 @@ export const Experience = () => {
           <div className="h-px flex-1 mx-12 bg-slate-200 hidden md:block" />
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-4 md:gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
           {arsenal.map((a, i) => (
             <motion.div
               key={a.name}
@@ -179,14 +179,14 @@ export const Experience = () => {
               viewport={{ once: true }}
               transition={{ delay: i * 0.05 }}
               whileHover={{ y: -5 }}
-              className="p-4 md:p-6 rounded-[2rem] bg-white border border-slate-100 shadow-sm hover:shadow-xl transition-all group text-center space-y-3"
+              className="p-5 rounded-[1.5rem] bg-white border border-slate-100 shadow-sm hover:shadow-xl transition-all group text-center space-y-4"
             >
-              <div className={cn("size-10 md:size-12 mx-auto rounded-xl md:rounded-2xl flex items-center justify-center transition-transform group-hover:rotate-12 p-2", a.bg)}>
+              <div className={cn("size-12 md:size-14 mx-auto rounded-2xl flex items-center justify-center transition-transform group-hover:rotate-12 p-2.5 shadow-sm", a.bg)}>
                 <img src={a.icon} alt={a.name} className="w-full h-full object-contain" />
               </div>
               <div>
-                <h4 className="font-bold text-slate-900 uppercase tracking-widest text-[8px] md:text-[9px] mb-0.5">{a.name}</h4>
-                <p className="text-[7px] font-black text-slate-300 uppercase tracking-[0.2em]">{a.category}</p>
+                <h4 className="font-bold text-slate-900 uppercase tracking-widest text-[9px] md:text-[10px] mb-0.5">{a.name}</h4>
+                <p className="text-[8px] font-black text-slate-300 uppercase tracking-[0.2em]">{a.category}</p>
               </div>
             </motion.div>
           ))}
