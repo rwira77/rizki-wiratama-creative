@@ -119,8 +119,8 @@ export const Portfolio = () => {
                         !w.hasDetail && "cursor-default"
                       )}
                     >
-                      {/* Image Container - SHARP & CLEAN */}
-                      <div className="overflow-hidden bg-slate-50 border border-slate-100">
+                      {/* Image Container - SUBTLE ROUNDED */}
+                      <div className="overflow-hidden bg-slate-50 border border-slate-100 rounded-xl">
                         <img
                           src={getOptimizedUrl(w.img || "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop", 'thumb')}
                           alt={w.title}
