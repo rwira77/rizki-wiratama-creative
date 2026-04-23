@@ -37,6 +37,21 @@ const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("portfolio");
   const [isLoading, setIsLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  
+  const [newProject, setNewProject] = useState({
+    title: "",
+    cat: "Branding",
+    img: "",
+    problem: "",
+    result: "",
+    year: new Date().getFullYear().toString(),
+    hasDetail: false,
+    block_gap: 80,
+    content_blocks: [] as any[]
+  });
 
   const fetchWorks = async () => {
     setIsLoading(true);
@@ -54,6 +69,52 @@ const AdminDashboard = () => {
       }
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const moveProject = (index: number, direction: 'up' | 'down') => {
+    // Get only projects in the current selected category
+    const filteredWorks = works.filter(w => selectedCategory === 'all' || w.cat === selectedCategory);
+    const targetIndex = direction === 'up' ? index - 1 : index + 1;
+    
+    if (targetIndex < 0 || targetIndex >= filteredWorks.length) return;
+
+    // Create a copy and swap
+    const newFiltered = [...filteredWorks];
+    [newFiltered[index], newFiltered[targetIndex]] = [newFiltered[targetIndex], newFiltered[index]];
+
+    // Merge back with works from other categories
+    const otherWorks = works.filter(w => selectedCategory !== 'all' && w.cat !== selectedCategory);
+    
+    // Update state
+    if (selectedCategory === 'all') {
+      setWorks(newFiltered);
+    } else {
+      // Advanced merging: preserve the positions of other categories
+      const updatedWorks = [...works];
+      const categoryIndices = works.map((w, i) => w.cat === selectedCategory ? i : -1).filter(i => i !== -1);
+      
+      categoryIndices.forEach((originalIdx, i) => {
+        updatedWorks[originalIdx] = newFiltered[i];
+      });
+      setWorks(updatedWorks);
+    }
+    toast.success("Order changed! Click 'Save Order' to persist.");
+  };
+
+  const saveOrder = async () => {
+    setIsLoading(true);
+    try {
+      const promises = works.map((w, index) => 
+        supabase.from('works').update({ order_index: index }).eq('id', w.id)
+      );
+      await Promise.all(promises);
+      toast.success("Order saved to database!");
+    } catch (err: any) {
+      console.error(err);
+      toast.error("Failed to save order.");
     } finally {
       setIsLoading(false);
     }
@@ -111,7 +172,20 @@ const AdminDashboard = () => {
             {activeTab === "portfolio" ? "Portfolio" : "Dashboard"}
           </h1>
           <div className="flex items-center gap-4">
-             <button className="bg-primary text-white px-8 py-3 rounded-xl font-bold text-[10px] uppercase tracking-widest hover:bg-slate-900 transition-all flex items-center gap-2">
+             <button 
+               onClick={saveOrder}
+               disabled={isLoading}
+               className="bg-emerald-500 text-white px-8 py-3 rounded-xl font-bold text-[10px] uppercase tracking-widest hover:bg-emerald-600 transition-all flex items-center gap-2 shadow-lg disabled:opacity-50"
+             >
+               <Save className="size-4" /> Save Order
+             </button>
+             <button 
+               onClick={() => {
+                 setIsEditing(false);
+                 setIsModalOpen(true);
+               }}
+               className="bg-primary text-white px-8 py-3 rounded-xl font-bold text-[10px] uppercase tracking-widest hover:bg-slate-900 transition-all flex items-center gap-2 shadow-lg"
+             >
                <Plus className="size-4" /> New Project
              </button>
           </div>
@@ -165,6 +239,24 @@ const AdminDashboard = () => {
                     <p className="text-[10px] font-black uppercase tracking-widest text-slate-300 mt-1">{work.cat} • {work.year}</p>
                   </div>
                   <div className="flex items-center gap-2">
+                    {selectedCategory !== 'all' && (
+                      <div className="flex items-center gap-1 mr-4">
+                        <button 
+                          onClick={() => moveProject(idx, 'up')}
+                          disabled={idx === 0}
+                          className="p-2 text-slate-300 hover:text-slate-900 disabled:opacity-20"
+                        >
+                          <ChevronUp className="size-4" />
+                        </button>
+                        <button 
+                          onClick={() => moveProject(idx, 'down')}
+                          disabled={idx === works.filter(w => w.cat === selectedCategory).length - 1}
+                          className="p-2 text-slate-300 hover:text-slate-900 disabled:opacity-20"
+                        >
+                          <ChevronDown className="size-4" />
+                        </button>
+                      </div>
+                    )}
                     <button className="p-3 text-slate-300 hover:text-slate-900"><PenTool className="size-4" /></button>
                     <button className="p-3 text-slate-300 hover:text-red-500"><Trash2 className="size-4" /></button>
                   </div>
