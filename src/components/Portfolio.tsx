@@ -115,13 +115,9 @@ export const Portfolio = () => {
                     className="break-inside-avoid relative"
                   >
                     <Link 
-                      to={w.hasDetail ? `/portfolio/${w.id}` : '#'} 
+                      to={`/portfolio/${w.id}`} 
                       state={{ backgroundLocation: location }}
-                      onClick={(e) => !w.hasDetail && e.preventDefault()}
-                      className={cn(
-                        "block group",
-                        !w.hasDetail && "cursor-default"
-                      )}
+                      className="block group"
                     >
                       {/* Image Container - SUBTLE ROUNDED */}
                       <div className="overflow-hidden bg-slate-50 border border-slate-100 rounded-xl">

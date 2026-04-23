@@ -162,11 +162,20 @@ const PortfolioDetail = ({ isModal = false }: { isModal?: boolean }) => {
                     </motion.div>
                   ))
                ) : (
-                  <div className="py-40 text-center text-slate-300">
-                     <p className="text-sm font-bold uppercase tracking-widest">No Content Blocks Defined</p>
-                     <p className="text-xs">Add blocks in Admin Dashboard to build your case study.</p>
-                  </div>
-               )}
+                   <motion.div
+                     initial={{ opacity: 0, y: 20 }}
+                     animate={{ opacity: 1, y: 0 }}
+                     className="w-full"
+                   >
+                     <div className="w-full overflow-hidden rounded-[2.5rem] shadow-2xl bg-slate-50 border border-slate-100">
+                        <img 
+                          src={getOptimizedUrl(work.img, 'full')} 
+                          className="w-full h-auto block" 
+                          alt={work.title} 
+                        />
+                     </div>
+                   </motion.div>
+                )}
             </div>
 
             {/* Footer Navigation */}
