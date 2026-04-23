@@ -70,6 +70,9 @@ const arsenal = [
   { name: "Hootsuite", icon: "https://www.svgrepo.com/show/343561/hootsuite-communication-chat-interaction-connection-conversation.svg", category: "Social", bg: "bg-amber-50" },
   { name: "Slack", icon: "https://www.svgrepo.com/show/452102/slack.svg", category: "Comm.", bg: "bg-white" },
   { name: "Meta", icon: "https://www.svgrepo.com/show/424909/meta-logo-facebook-2.svg", category: "Ad Strategy", bg: "bg-blue-50" },
+  { name: "Data Studio", icon: "https://www.svgrepo.com/show/353809/google-data-studio.svg", category: "Data Viz", bg: "bg-white" },
+  { name: "Antigravity", icon: "https://www.svgrepo.com/show/443128/google-gemini.svg", category: "Agentic AI", bg: "bg-blue-50" },
+  { name: "Claude AI", icon: "https://raw.githubusercontent.com/lobehub/lobe-icons/refs/heads/master/packages/static-png/light/claude-color.png", category: "LLM", bg: "bg-orange-50" },
 ];
 
 export const Experience = () => {
