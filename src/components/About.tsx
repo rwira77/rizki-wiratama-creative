@@ -13,7 +13,7 @@ const tags = ["Branding", "Creative Strategy", "Content Production", "Social Gro
 
 export const About = () => {
   return (
-    <section id="about" className="pt-16 pb-12 space-y-16">
+    <section id="about" className="pt-0 pb-12 space-y-16">
       {/* Top Profile Header */}
       <div className="flex flex-col lg:flex-row gap-12 items-start">
         {/* Left: Profile "Card" */}

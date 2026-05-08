@@ -47,7 +47,7 @@ const services = [
 
 export const Services = () => {
   return (
-    <section id="services" className="py-8 space-y-16">
+    <section id="services" className="pt-4 pb-8 space-y-16">
       {/* Header Section */}
       <div className="space-y-6">
         <motion.div
