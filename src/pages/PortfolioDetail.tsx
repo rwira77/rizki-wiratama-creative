@@ -147,7 +147,10 @@ const PortfolioDetail = ({ isModal = false }: { isModal?: boolean }) => {
                       )}
 
                       {block.type === 'grid' && (
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
+                        <div 
+                          className="grid grid-cols-1 md:grid-cols-2"
+                          style={{ gap: `${work.grid_gap ?? 32}px` }}
+                        >
                           {Array.isArray(block.urls) && block.urls.map((url: string, j: number) => (
                             <div key={j} className="overflow-hidden shadow-lg">
                               <img 

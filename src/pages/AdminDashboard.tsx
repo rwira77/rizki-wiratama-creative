@@ -71,6 +71,7 @@ const AdminDashboard = () => {
     year: new Date().getFullYear().toString(),
     hasDetail: false,
     block_gap: 80,
+    grid_gap: 32,
     content_blocks: [] as any[]
   });
 
@@ -331,6 +332,32 @@ const AdminDashboard = () => {
     }));
   };
 
+  const handleBulkImageUpload = async (files: FileList) => {
+    setIsLoading(true);
+    const uploadPromises = Array.from(files).map(file => handleCloudinaryUpload(file));
+    
+    try {
+      const results = await Promise.all(uploadPromises);
+      const newBlocks = results
+        .filter((url): url is string => url !== null)
+        .map(url => ({
+          id: Math.random().toString(36).substr(2, 9),
+          type: 'image' as const,
+          content: url
+        }));
+
+      setNewProject(prev => ({
+        ...prev,
+        content_blocks: [...(Array.isArray(prev.content_blocks) ? prev.content_blocks : []), ...newBlocks]
+      }));
+      toast.success(`Successfully uploaded ${newBlocks.length} images`);
+    } catch (error) {
+      toast.error("Bulk upload failed");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const updateBlock = (id: string, data: any) => {
     setNewProject(prev => ({
       ...prev,
@@ -450,6 +477,7 @@ const AdminDashboard = () => {
                          year: new Date().getFullYear().toString(),
                          hasDetail: false,
                          block_gap: 80,
+                         grid_gap: 32,
                          content_blocks: []
                        });
                        setIsModalOpen(true);
@@ -735,6 +763,37 @@ const AdminDashboard = () => {
                         )} />
                       </button>
                     </div>
+
+                    <div className="grid grid-cols-2 gap-6 p-6 bg-slate-50 rounded-[2rem] border border-slate-100/50">
+                      <div className="space-y-2">
+                        <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-4">Block Spacing (px)</label>
+                        <div className="flex items-center gap-4">
+                          <input 
+                            type="range" 
+                            min="0" 
+                            max="200" 
+                            value={newProject.block_gap}
+                            onChange={(e) => setNewProject({...newProject, block_gap: parseInt(e.target.value)})}
+                            className="flex-1 accent-slate-900"
+                          />
+                          <span className="text-xs font-bold w-8 text-center">{newProject.block_gap}</span>
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-4">Grid Gap (px)</label>
+                        <div className="flex items-center gap-4">
+                          <input 
+                            type="range" 
+                            min="0" 
+                            max="100" 
+                            value={newProject.grid_gap}
+                            onChange={(e) => setNewProject({...newProject, grid_gap: parseInt(e.target.value)})}
+                            className="flex-1 accent-slate-900"
+                          />
+                          <span className="text-xs font-bold w-8 text-center">{newProject.grid_gap}</span>
+                        </div>
+                      </div>
+                    </div>
                   </div>
 
                   {/* Right Column: Case Study Content */}
@@ -764,6 +823,20 @@ const AdminDashboard = () => {
                       <div className="flex items-center justify-between">
                         <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-4">Content Blocks</label>
                         <div className="flex gap-2">
+                          <input 
+                            type="file" 
+                            id="bulk-upload" 
+                            className="hidden" 
+                            multiple 
+                            accept="image/*"
+                            onChange={(e) => e.target.files && handleBulkImageUpload(e.target.files)}
+                          />
+                          <label 
+                            htmlFor="bulk-upload" 
+                            className="flex items-center gap-2 px-3 py-1.5 bg-emerald-50 text-emerald-600 rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-emerald-100 cursor-pointer transition-all"
+                          >
+                            <Plus className="size-3" /> Bulk Upload
+                          </label>
                           <button type="button" onClick={() => addBlock('text')} className="p-2 bg-slate-50 hover:bg-slate-100 rounded-lg text-slate-400 hover:text-slate-900 transition-all"><Type className="size-4" /></button>
                           <button type="button" onClick={() => addBlock('image')} className="p-2 bg-slate-50 hover:bg-slate-100 rounded-lg text-slate-400 hover:text-slate-900 transition-all"><ImageIcon className="size-4" /></button>
                           <button type="button" onClick={() => addBlock('grid')} className="p-2 bg-slate-50 hover:bg-slate-100 rounded-lg text-slate-400 hover:text-slate-900 transition-all"><LayoutGrid className="size-4" /></button>
@@ -856,12 +929,18 @@ const AdminDashboard = () => {
                                     onChange={async (e) => {
                                       const files = e.target.files;
                                       if (files) {
-                                        const newUrls = [...(block.urls || [])];
-                                        for (let i = 0; i < files.length; i++) {
-                                          const url = await handleCloudinaryUpload(files[i]);
-                                          if (url) newUrls.push(url);
+                                        setUploading(true);
+                                        try {
+                                          const uploadPromises = Array.from(files).map(file => handleCloudinaryUpload(file));
+                                          const results = await Promise.all(uploadPromises);
+                                          const newUrls = [...(block.urls || [])];
+                                          results.forEach(url => {
+                                            if (url) newUrls.push(url);
+                                          });
+                                          updateBlock(block.id, { urls: newUrls });
+                                        } finally {
+                                          setUploading(false);
                                         }
-                                        updateBlock(block.id, { urls: newUrls });
                                       }
                                     }}
                                   />
