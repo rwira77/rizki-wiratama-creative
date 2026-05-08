@@ -68,7 +68,7 @@ export const Portfolio = () => {
   });
 
   return (
-    <section id="work" className="pt-0 pb-24 bg-transparent min-h-screen">
+    <section id="work" className="pt-8 pb-24 bg-transparent min-h-screen">
       <div className="max-w-[1200px] px-4 md:px-8 mx-auto">
         <AnimatePresence mode="wait">
           {!selectedCat ? (
