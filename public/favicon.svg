@@ -4,7 +4,7 @@
   <defs>
     <style>
       .st0 {
-        fill: url(#linear-gradient);
+        fill: #ffffff;
       }
     </style>
     <linearGradient id="linear-gradient" x1=".28" y1="-38.21" x2="395.94" y2="338.6" gradientUnits="userSpaceOnUse">
