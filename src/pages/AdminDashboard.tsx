@@ -277,9 +277,18 @@ const AdminDashboard = () => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      // Ensure content_blocks is an array
+      // Create a slug from the title for the ID if it's a new project
+      const slug = newProject.title
+        .toLowerCase()
+        .trim()
+        .replace(/[^\w\s-]/g, '')
+        .replace(/[\s_-]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+
+      // Prepare the data, ensuring content_blocks is an array
+      const { id, ...projectDataWithoutId } = newProject;
       const projectToSave = {
-        ...newProject,
+        ...projectDataWithoutId,
         content_blocks: Array.isArray(newProject.content_blocks) ? newProject.content_blocks : []
       };
 
@@ -293,7 +302,7 @@ const AdminDashboard = () => {
       } else {
         const { error } = await supabase
           .from('works')
-          .insert([projectToSave]);
+          .insert([{ ...projectToSave, id: slug }]);
         if (error) throw error;
         toast.success("Project created!");
       }
