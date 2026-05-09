@@ -61,7 +61,7 @@ export const Contact = () => {
   }, []);
 
   return (
-    <section id="contact" className="pt-8 pb-8 space-y-12 md:space-y-16">
+    <section id="contact" className="pt-0 pb-8 space-y-12 md:space-y-16">
        {/* Header Section */}
        <div className="space-y-6 md:space-y-8">
         <motion.div

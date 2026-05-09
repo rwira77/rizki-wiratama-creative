@@ -29,16 +29,19 @@ import { cn } from "@/lib/utils";
 import { supabase } from "@/lib/supabase";
 
 const ADMIN_CATEGORIES = [
-  { id: "Branding", label: "Branding" },
+  { id: "Branding", label: "Branding Identity" },
   { id: "Social Media", label: "Social Media" },
+  { id: "UI/UX", label: "UI/UX Design" },
   { id: "Photography", label: "Photography" },
   { id: "Videography", label: "Videography" },
   { id: "Graphic Design", label: "Graphic Design" },
   { id: "Campaign & Event", label: "Campaign & Event" }
 ];
 
+const isVideoUrl = (url: string) => /\.(mp4|webm|mov|ogg)$/i.test(url || '');
+
 const getOptimizedUrl = (url: string, type: 'thumbnail' | 'gallery' | 'full' = 'gallery') => {
-  if (!url || !url.includes('cloudinary.com')) return url;
+  if (!url || !url.includes('cloudinary.com') || isVideoUrl(url)) return url;
   const parts = url.split('/upload/');
   if (parts.length !== 2) return url;
   
@@ -103,7 +106,7 @@ const AdminDashboard = () => {
     formData.append('upload_preset', cloudinarySettings.uploadPreset);
 
     try {
-      const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudinarySettings.cloudName}/image/upload`, {
+      const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudinarySettings.cloudName}/auto/upload`, {
         method: 'POST',
         body: formData
       });
@@ -748,7 +751,11 @@ const AdminDashboard = () => {
                       </div>
                       {newProject.img && (
                         <div className="aspect-video rounded-[2rem] overflow-hidden border border-slate-100">
-                          <img src={getOptimizedUrl(newProject.img)} alt="Preview" className="w-full h-full object-cover" />
+                          {isVideoUrl(newProject.img) ? (
+                            <video src={newProject.img} className="w-full h-full object-cover" autoPlay muted loop playsInline />
+                          ) : (
+                            <img src={getOptimizedUrl(newProject.img)} alt="Preview" className="w-full h-full object-cover" />
+                          )}
                         </div>
                       )}
                     </div>
@@ -907,7 +914,11 @@ const AdminDashboard = () => {
                                   />
                                   <label htmlFor={`upload-${block.id}`} className="cursor-pointer bg-slate-900 text-white p-3 rounded-xl hover:bg-black shrink-0"><ImageIcon className="size-4" /></label>
                                 </div>
-                                {block.content && <img src={getOptimizedUrl(block.content, 'gallery')} className="w-full h-32 object-cover rounded-xl" />}
+                                {block.content && (
+                                  isVideoUrl(block.content) 
+                                    ? <video src={block.content} className="w-full h-32 object-cover rounded-xl" autoPlay muted loop playsInline />
+                                    : <img src={getOptimizedUrl(block.content, 'gallery')} className="w-full h-32 object-cover rounded-xl" />
+                                )}
                               </div>
                             )}
 
@@ -916,7 +927,10 @@ const AdminDashboard = () => {
                                 <div className="grid grid-cols-2 gap-2">
                                   {(block.urls || []).map((url: string, uIdx: number) => (
                                     <div key={uIdx} className="relative aspect-square rounded-xl overflow-hidden group/img">
-                                      <img src={getOptimizedUrl(url, 'thumbnail')} className="w-full h-full object-cover" />
+                                      {isVideoUrl(url) 
+                                        ? <video src={url} className="w-full h-full object-cover" autoPlay muted loop playsInline />
+                                        : <img src={getOptimizedUrl(url, 'thumbnail')} className="w-full h-full object-cover" />
+                                      }
                                       <button 
                                         type="button"
                                         onClick={() => {

@@ -8,6 +8,9 @@ import { getOptimizedUrl } from "@/lib/cloudinary";
 
 import { X } from "lucide-react";
 
+// Helper to determine if a URL is a video
+const isVideoUrl = (url: string) => /\.(mp4|webm|mov|ogg)$/i.test(url || '');
+
 const PortfolioDetail = ({ isModal = false }: { isModal?: boolean }) => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -138,11 +141,22 @@ const PortfolioDetail = ({ isModal = false }: { isModal?: boolean }) => {
 
                       {block.type === 'image' && (
                         <div className="w-full overflow-hidden shadow-xl bg-slate-50">
-                          <img 
-                            src={getOptimizedUrl(block.content, 'full')} 
-                            className="w-full h-auto block" 
-                            alt="" 
-                          />
+                          {isVideoUrl(block.content) ? (
+                            <video 
+                              src={block.content} 
+                              className="w-full h-auto block" 
+                              autoPlay 
+                              muted 
+                              loop 
+                              playsInline 
+                            />
+                          ) : (
+                            <img 
+                              src={getOptimizedUrl(block.content, 'full')} 
+                              className="w-full h-auto block" 
+                              alt="" 
+                            />
+                          )}
                         </div>
                       )}
 
@@ -153,11 +167,22 @@ const PortfolioDetail = ({ isModal = false }: { isModal?: boolean }) => {
                         >
                           {Array.isArray(block.urls) && block.urls.map((url: string, j: number) => (
                             <div key={j} className="overflow-hidden shadow-lg">
-                              <img 
-                                src={getOptimizedUrl(url, 'gallery')} 
-                                className="w-full h-auto block hover:scale-105 transition-transform duration-1000" 
-                                alt="" 
-                              />
+                              {isVideoUrl(url) ? (
+                                <video 
+                                  src={url} 
+                                  className="w-full h-auto block hover:scale-105 transition-transform duration-1000" 
+                                  autoPlay 
+                                  muted 
+                                  loop 
+                                  playsInline 
+                                />
+                              ) : (
+                                <img 
+                                  src={getOptimizedUrl(url, 'gallery')} 
+                                  className="w-full h-auto block hover:scale-105 transition-transform duration-1000" 
+                                  alt="" 
+                                />
+                              )}
                             </div>
                           ))}
                         </div>
@@ -171,11 +196,22 @@ const PortfolioDetail = ({ isModal = false }: { isModal?: boolean }) => {
                      className="w-full"
                    >
                      <div className="w-full overflow-hidden rounded-[2.5rem] shadow-2xl bg-slate-50 border border-slate-100">
-                        <img 
-                          src={getOptimizedUrl(work.img, 'full')} 
-                          className="w-full h-auto block" 
-                          alt={work.title} 
-                        />
+                        {isVideoUrl(work.img) ? (
+                          <video 
+                            src={work.img} 
+                            className="w-full h-auto block" 
+                            autoPlay 
+                            muted 
+                            loop 
+                            playsInline 
+                          />
+                        ) : (
+                          <img 
+                            src={getOptimizedUrl(work.img, 'full')} 
+                            className="w-full h-auto block" 
+                            alt={work.title} 
+                          />
+                        )}
                      </div>
                    </motion.div>
                 )}

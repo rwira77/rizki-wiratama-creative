@@ -77,7 +77,7 @@ const arsenal = [
 
 export const Experience = () => {
   return (
-    <section id="experience" className="pt-8 pb-8 space-y-16 md:space-y-24">
+    <section id="experience" className="pt-0 pb-8 space-y-16 md:space-y-24">
       {/* Header Section */}
       <div className="space-y-6">
         <motion.div

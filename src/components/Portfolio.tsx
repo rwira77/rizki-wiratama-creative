@@ -36,6 +36,9 @@ export const categories = [
   { id: "Campaign & Event", label: "Campaign & Event", icon: Megaphone, color: "from-amber-500 to-orange-600", images: [workEvent, workCampaign] }
 ];
 
+// Helper to determine if a URL is a video
+const isVideoUrl = (url: string) => /\.(mp4|webm|mov|ogg)$/i.test(url || '');
+
 export const Portfolio = () => {
   const [selectedCat, setSelectedCat] = useState<string | null>(null);
   const [works, setWorks] = useState<any[]>([]);
@@ -68,7 +71,7 @@ export const Portfolio = () => {
   });
 
   return (
-    <section id="work" className="pt-8 pb-24 bg-transparent min-h-screen">
+    <section id="work" className="pt-0 pb-24 bg-transparent min-h-screen">
       <div className="max-w-[1200px] px-4 md:px-8 mx-auto">
         <AnimatePresence mode="wait">
           {!selectedCat ? (
@@ -123,12 +126,23 @@ export const Portfolio = () => {
                       className="block group"
                     >
                       {/* Image Container - SUBTLE ROUNDED */}
-                      <div className="overflow-hidden bg-slate-50 border border-slate-100 rounded-xl">
-                        <img
-                          src={getOptimizedUrl(w.img || "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop", 'thumb')}
-                          alt={w.title}
-                          className="w-full h-auto block"
-                        />
+                      <div className="overflow-hidden bg-slate-50 border border-slate-100 rounded-xl relative group-hover:shadow-xl transition-shadow duration-500">
+                        {isVideoUrl(w.img) ? (
+                          <video
+                            src={w.img}
+                            className="w-full h-auto block group-hover:scale-105 transition-transform duration-700"
+                            autoPlay
+                            muted
+                            loop
+                            playsInline
+                          />
+                        ) : (
+                          <img
+                            src={getOptimizedUrl(w.img || "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop", 'thumb')}
+                            alt={w.title}
+                            className="w-full h-auto block group-hover:scale-105 transition-transform duration-700"
+                          />
+                        )}
                       </div>
                       
                       {/* Text Content - Static below image */}
