@@ -100,7 +100,7 @@ const PortfolioDetail = ({ isModal = false }: { isModal?: boolean }) => {
       <main className="relative max-w-[1600px] mx-auto">
         <div className="grid md:grid-cols-12 gap-0">
           {/* Main Case Study Content - Refined with Padding */}
-          <div className="md:col-span-9 lg:col-span-10 px-4 md:px-12 lg:px-20">
+          <div className="md:col-span-10 lg:col-span-10 px-4 md:px-8 lg:px-12">
             <div 
               className="flex flex-col"
               style={{ gap: `${work.block_gap ?? 80}px` }}
@@ -233,7 +233,7 @@ const PortfolioDetail = ({ isModal = false }: { isModal?: boolean }) => {
           </div>
 
           {/* Sticky Sidebar Info - Refined */}
-          <aside className="hidden md:block md:col-span-3 lg:col-span-2">
+          <aside className="hidden md:block md:col-span-2 lg:col-span-2">
             <div className="sticky top-32 p-6 space-y-12">
                <div className="space-y-8">
                   <div className="space-y-2">
