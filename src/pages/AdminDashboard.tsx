@@ -562,7 +562,11 @@ const AdminDashboard = () => {
                   className="bg-white border border-slate-100 rounded-[2rem] p-6 flex items-center gap-6 cursor-grab active:cursor-grabbing group shadow-sm hover:shadow-md transition-shadow"
                 >
                   <div className="relative size-16 rounded-2xl bg-slate-50 overflow-hidden shrink-0">
-                    <img src={work.img} className="w-full h-full object-cover" alt="" />
+                    {isVideoUrl(work.img) ? (
+                      <video src={work.img} className="w-full h-full object-cover" autoPlay muted loop playsInline />
+                    ) : (
+                      <img src={work.img} className="w-full h-full object-cover" alt="" />
+                    )}
                     <div className="absolute inset-0 bg-slate-900/10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                       <GripVertical className="size-4 text-white" />
                     </div>
