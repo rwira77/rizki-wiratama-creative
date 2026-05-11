@@ -416,7 +416,7 @@ const AdminDashboard = () => {
   return (
     <div className="min-h-screen bg-slate-50 flex">
       {/* Sidebar */}
-      <aside className="w-80 bg-white border-r border-slate-100 flex flex-col p-8 sticky top-0 h-screen">
+      <aside className="w-80 bg-white border-r border-slate-100 flex flex-col p-8 pt-12 sticky top-0 h-screen">
         <div className="mb-12">
           <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-300 mb-8">Admin Nexus</h2>
           <nav className="space-y-2">
@@ -459,7 +459,7 @@ const AdminDashboard = () => {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 p-12">
+      <main className="flex-1 p-12 pt-20">
         <header className="flex items-center justify-between mb-12">
           <h1 className="font-special-serif text-5xl text-slate-900">
             {activeTab === "portfolio" ? "Portfolio" : activeTab === "desktop" ? "Desktop" : "Settings"}
