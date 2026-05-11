@@ -107,7 +107,7 @@ export const Portfolio = () => {
                 <h2 className="font-display text-4xl font-light text-slate-800 tracking-tight">{selectedCat}</h2>
               </div>
 
-              {/* ULTRA PINTEREST MASONRY (Based on image ratio) */}              <div className="columns-2 gap-4 md:gap-8 space-y-8 md:space-y-16 pb-48 px-0">
+              <div className="grid grid-cols-2 gap-4 md:gap-12 gap-y-12 md:gap-y-24 pb-48 px-0">
                 {sortedWorks.map((w, i) => (
                   <motion.div 
                     key={w.id || i} 
