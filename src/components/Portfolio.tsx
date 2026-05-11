@@ -64,11 +64,7 @@ export const Portfolio = () => {
     ? works.filter((w) => w.cat?.trim().toLowerCase() === selectedCat.toLowerCase())
     : works;
 
-  const sortedWorks = [...filteredWorks].sort((a, b) => {
-    if (a.hasDetail && !b.hasDetail) return -1;
-    if (!a.hasDetail && b.hasDetail) return 1;
-    return 0;
-  });
+  const sortedWorks = filteredWorks;
 
   return (
     <section id="work" className="pt-0 pb-24 bg-transparent min-h-screen">
