@@ -414,9 +414,9 @@ const AdminDashboard = () => {
   }, [navigate]);
 
   return (
-    <div className="min-h-screen bg-slate-50 flex">
+    <div className="h-screen overflow-hidden bg-slate-50 flex">
       {/* Sidebar */}
-      <aside className="w-80 bg-white border-r border-slate-100 flex flex-col p-8 pt-12 sticky top-0 h-screen">
+      <aside className="w-80 bg-white border-r border-slate-100 flex flex-col p-8 pt-12 shrink-0">
         <div className="mb-12">
           <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-300 mb-8">Admin Nexus</h2>
           <nav className="space-y-2">
@@ -424,7 +424,7 @@ const AdminDashboard = () => {
               onClick={() => setActiveTab("portfolio")}
               className={cn(
                 "w-full flex items-center gap-4 px-6 py-4 rounded-2xl font-bold text-sm transition-all",
-                activeTab === "portfolio" ? "bg-slate-900 text-white shadow-xl scale-105" : "text-slate-400 hover:bg-slate-50"
+                activeTab === "portfolio" ? "bg-slate-900 text-white shadow-xl" : "text-slate-400 hover:bg-slate-50"
               )}
             >
                <LayoutDashboard className="size-4" /> Master Portfolio
@@ -433,7 +433,7 @@ const AdminDashboard = () => {
               onClick={() => setActiveTab("desktop")}
               className={cn(
                 "w-full flex items-center gap-4 px-6 py-4 rounded-2xl font-bold text-sm transition-all",
-                activeTab === "desktop" ? "bg-slate-900 text-white shadow-xl scale-105" : "text-slate-400 hover:bg-slate-50"
+                activeTab === "desktop" ? "bg-slate-900 text-white shadow-xl" : "text-slate-400 hover:bg-slate-50"
               )}
             >
                <Star className="size-4" /> Desktop Links
@@ -442,7 +442,7 @@ const AdminDashboard = () => {
               onClick={() => setActiveTab("profile")}
               className={cn(
                 "w-full flex items-center gap-4 px-6 py-4 rounded-2xl font-bold text-sm transition-all",
-                activeTab === "profile" ? "bg-slate-900 text-white shadow-xl scale-105" : "text-slate-400 hover:bg-slate-50"
+                activeTab === "profile" ? "bg-slate-900 text-white shadow-xl" : "text-slate-400 hover:bg-slate-50"
               )}
             >
                <PenTool className="size-4" /> Cloudinary Settings
@@ -459,7 +459,7 @@ const AdminDashboard = () => {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 p-12 pt-20">
+      <main className="flex-1 p-12 pt-20 overflow-auto h-full custom-scrollbar">
         <header className="flex items-center justify-between mb-12">
           <h1 className="font-special-serif text-5xl text-slate-900">
             {activeTab === "portfolio" ? "Portfolio" : activeTab === "desktop" ? "Desktop" : "Settings"}
