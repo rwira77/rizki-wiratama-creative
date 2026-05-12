@@ -26,6 +26,7 @@ import {
 import { SECTIONS } from "@/config/sections";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/lib/supabase";
+import { Portfolio } from "@/components/Portfolio";
 
 
 const Index = () => {
