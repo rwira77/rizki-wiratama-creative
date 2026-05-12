@@ -162,16 +162,16 @@ const PortfolioDetail = ({ isModal = false }: { isModal?: boolean }) => {
 
                       {block.type === 'grid' && (
                         <div 
-                          className="grid overflow-x-auto snap-x snap-mandatory no-scrollbar md:overflow-visible"
+                          className="flex md:grid overflow-x-auto md:overflow-visible snap-x snap-mandatory no-scrollbar w-full"
                           style={{ 
                             gap: `${work.grid_gap ?? 32}px`,
-                            gridTemplateColumns: (typeof window !== 'undefined' && window.innerWidth < 768) 
-                              ? `repeat(${block.urls?.length || 0}, 85vw)` 
-                              : `repeat(${block.columns || 2}, minmax(0, 1fr))`
+                            gridTemplateColumns: (typeof window !== 'undefined' && window.innerWidth >= 768) 
+                              ? `repeat(${block.columns || 2}, minmax(0, 1fr))` 
+                              : undefined
                           }}
                         >
                           {Array.isArray(block.urls) && block.urls.map((url: string, j: number) => (
-                            <div key={j} className="overflow-hidden shadow-lg snap-center">
+                            <div key={j} className="overflow-hidden shadow-lg snap-center shrink-0 w-[85vw] md:w-full">
                               {isVideoUrl(url) ? (
                                 <video 
                                   src={url} 
