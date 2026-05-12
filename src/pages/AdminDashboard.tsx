@@ -117,6 +117,7 @@ const AdminDashboard = () => {
       }
       throw new Error(data.error?.message || "Upload failed");
     } catch (error: any) {
+      console.error("Cloudinary Upload Error:", error);
       toast.error("Upload failed: " + error.message);
       return null;
     } finally {
@@ -958,12 +959,13 @@ const AdminDashboard = () => {
                                       if (files) {
                                         setUploading(true);
                                         try {
-                                          const uploadPromises = Array.from(files).map(file => handleCloudinaryUpload(file));
-                                          const results = await Promise.all(uploadPromises);
-                                          const newUrls = [...(block.urls || [])];
-                                          results.forEach(url => {
-                                            if (url) newUrls.push(url);
-                                          });
+                                          const results: string[] = [];
+                                          // Sequential upload is more stable for multiple files
+                                          for (const file of Array.from(files)) {
+                                            const url = await handleCloudinaryUpload(file);
+                                            if (url) results.push(url);
+                                          }
+                                          const newUrls = [...(block.urls || []), ...results];
                                           updateBlock(block.id, { urls: newUrls });
                                         } finally {
                                           setUploading(false);
