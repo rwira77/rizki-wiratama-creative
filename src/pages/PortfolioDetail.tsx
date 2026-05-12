@@ -341,9 +341,9 @@ const PortfolioDetail = ({ isModal = false }: { isModal?: boolean }) => {
           {/* Floating Close Button */}
           <button 
             onClick={() => navigate(-1)}
-            className="fixed top-8 right-8 z-[5100] size-12 rounded-full bg-white/10 hover:bg-white text-white hover:text-black backdrop-blur-xl border border-white/20 flex items-center justify-center transition-all shadow-2xl group"
+            className="fixed top-12 right-6 md:top-8 md:right-8 z-[5100] size-10 md:size-12 rounded-full bg-slate-900/80 text-white backdrop-blur-xl border border-white/20 flex items-center justify-center transition-all shadow-2xl hover:scale-110 active:scale-95 group"
           >
-            <X className="size-6 group-hover:scale-110 transition-transform" />
+            <X className="size-5 md:size-6" />
           </button>
           
           {content}
