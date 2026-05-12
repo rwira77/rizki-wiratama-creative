@@ -100,11 +100,11 @@ export const Portfolio = () => {
             </motion.div>
           ) : (
             <motion.div key="grid" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
-              <div className="flex items-center gap-12 mb-8 px-0">
-                <button onClick={() => setSelectedCat(null)} className="flex items-center gap-2 text-xs font-bold text-slate-300 hover:text-black transition-colors uppercase tracking-[0.2em]">
+              <div className="sticky top-0 z-[100] flex items-center gap-12 py-8 mb-8 -mx-4 px-4 md:-mx-8 md:px-8 bg-[#FDFCF9]/90 backdrop-blur-md border-b border-slate-100/50">
+                <button onClick={() => setSelectedCat(null)} className="flex items-center gap-2 text-xs font-black text-slate-400 hover:text-primary transition-colors uppercase tracking-[0.3em]">
                    <ChevronLeft className="size-4" /> Back
                 </button>
-                <h2 className="font-display text-4xl font-light text-slate-800 tracking-tight">{selectedCat}</h2>
+                <h2 className="font-display text-3xl md:text-5xl font-light text-slate-900 tracking-tight uppercase italic">{selectedCat}</h2>
               </div>
 
               <div className="grid grid-cols-2 gap-4 md:gap-12 gap-y-12 md:gap-y-24 pb-48 px-0">
