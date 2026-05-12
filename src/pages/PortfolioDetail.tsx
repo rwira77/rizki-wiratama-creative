@@ -139,38 +139,56 @@ const PortfolioDetail = ({ isModal = false }: { isModal?: boolean }) => {
                         </div>
                       )}
 
-                      {block.type === 'grid' && (
-                        <div 
-                          className="flex md:grid overflow-x-auto md:overflow-visible snap-x snap-mandatory no-scrollbar -mx-4 px-4 md:mx-0 md:px-0"
-                          style={{ 
-                            gap: `${work.grid_gap ?? 32}px`,
-                            gridTemplateColumns: (typeof window !== 'undefined' && window.innerWidth >= 768) 
-                              ? `repeat(${block.columns || 2}, minmax(0, 1fr))` 
-                              : undefined
-                          }}
-                        >
-                          {Array.isArray(block.urls) && block.urls.map((url: string, j: number) => (
-                            <div key={j} className="overflow-hidden shadow-lg snap-center shrink-0 w-[85vw] md:w-full">
-                                {isVideoUrl(url) ? (
-                                  <video 
-                                    src={url} 
-                                    className="w-full h-auto block hover:scale-105 transition-transform duration-1000" 
-                                    autoPlay 
-                                    muted 
-                                    loop 
-                                    playsInline 
-                                  />
-                                ) : (
-                                  <img 
-                                    src={getOptimizedUrl(url, 'gallery')} 
-                                    className="w-full h-auto block hover:scale-105 transition-transform duration-1000" 
-                                    alt="" 
-                                  />
-                                )}
-                              </div>
-                            ))}
+                      {block.type === 'grid' && (() => {
+                        const isMobileView = typeof window !== 'undefined' && window.innerWidth < 768;
+                        const useSlider = isMobileView && (block.mobileView !== 'grid');
+                        
+                        return (
+                          <div className="w-full overflow-hidden">
+                            <div 
+                              className={cn(
+                                "no-scrollbar w-full",
+                                useSlider 
+                                  ? "flex overflow-x-auto snap-x snap-mandatory -mx-4 px-4" 
+                                  : "grid md:grid overflow-visible"
+                              )}
+                              style={{ 
+                                gap: `${work.grid_gap ?? 32}px`,
+                                gridTemplateColumns: useSlider 
+                                  ? undefined 
+                                  : `repeat(${block.columns || (isMobileView ? 1 : 2)}, minmax(0, 1fr))`
+                              }}
+                            >
+                              {Array.isArray(block.urls) && block.urls.map((url: string, j: number) => (
+                                <div 
+                                  key={j} 
+                                  className={cn(
+                                    "overflow-hidden shadow-lg",
+                                    useSlider ? "snap-center shrink-0 w-[85vw]" : "w-full"
+                                  )}
+                                >
+                                  {isVideoUrl(url) ? (
+                                    <video 
+                                      src={url} 
+                                      className="w-full h-auto block hover:scale-105 transition-transform duration-1000" 
+                                      autoPlay 
+                                      muted 
+                                      loop 
+                                      playsInline 
+                                    />
+                                  ) : (
+                                    <img 
+                                      src={getOptimizedUrl(url, 'gallery')} 
+                                      className="w-full h-auto block hover:scale-105 transition-transform duration-1000" 
+                                      alt="" 
+                                    />
+                                  )}
+                                </div>
+                              ))}
+                            </div>
                           </div>
-                      )}
+                        );
+                      })()}
                     </motion.div>
                   ))
                ) : (

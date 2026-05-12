@@ -929,16 +929,29 @@ const AdminDashboard = () => {
 
                             {block.type === 'grid' && (
                               <div className="space-y-4">
-                                <div className="flex items-center gap-4 py-3 px-4 bg-slate-50 rounded-xl mb-2">
-                                  <span className="text-[9px] font-black uppercase tracking-widest text-slate-400 min-w-[80px]">Columns: {block.columns || 2}</span>
-                                  <input 
-                                    type="range" 
-                                    min="1" 
-                                    max="10" 
-                                    value={block.columns || 2}
-                                    onChange={(e) => updateBlock(block.id, { columns: parseInt(e.target.value) })}
-                                    className="flex-1 accent-slate-900 h-1.5"
-                                  />
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-2">
+                                  <div className="flex items-center gap-4 py-3 px-4 bg-slate-50 rounded-xl">
+                                    <span className="text-[9px] font-black uppercase tracking-widest text-slate-400 min-w-[80px]">Columns: {block.columns || 2}</span>
+                                    <input 
+                                      type="range" 
+                                      min="1" 
+                                      max="10" 
+                                      value={block.columns || 2}
+                                      onChange={(e) => updateBlock(block.id, { columns: parseInt(e.target.value) })}
+                                      className="flex-1 accent-slate-900 h-1.5"
+                                    />
+                                  </div>
+                                  <div className="flex items-center gap-4 py-3 px-4 bg-slate-50 rounded-xl">
+                                    <span className="text-[9px] font-black uppercase tracking-widest text-slate-400 min-w-[80px]">Mobile:</span>
+                                    <select 
+                                      value={block.mobileView || "slider"}
+                                      onChange={(e) => updateBlock(block.id, { mobileView: e.target.value })}
+                                      className="flex-1 bg-transparent text-[10px] font-bold outline-none"
+                                    >
+                                      <option value="slider">Slider</option>
+                                      <option value="grid">Grid</option>
+                                    </select>
+                                  </div>
                                 </div>
                                 <div className="grid gap-2" style={{ gridTemplateColumns: `repeat(${Math.min(block.columns || 2, 4)}, minmax(0, 1fr))` }}>
                                   {(block.urls || []).map((url: string, uIdx: number) => (
