@@ -14,7 +14,7 @@ export const OSMenuBar = () => {
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-1.5 font-bold">
           <Aperture className="size-4" />
-          <span>Rizki OS</span>
+          <span>RW OS</span>
         </div>
         <div className="hidden sm:flex items-center gap-4 opacity-80">
           <span>File</span>

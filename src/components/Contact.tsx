@@ -7,8 +7,8 @@ const channels = [
   { 
     icon: MessageCircle, 
     label: "WhatsApp", 
-    value: "+62 812 3456 7890", 
-    href: "https://wa.me/6281234567890",
+    value: "087858115489", 
+    href: "https://wa.me/6287858115489",
     color: "from-emerald-500/20 to-green-500/5",
     accent: "text-emerald-600",
     span: "col-span-12 md:col-span-8"
@@ -16,8 +16,8 @@ const channels = [
   { 
     icon: Mail, 
     label: "Direct Email", 
-    value: "hello@rizkiwiratama.com", 
-    href: "mailto:hello@rizkiwiratama.com",
+    value: "rizkiwiratama7@gmail.com", 
+    href: "mailto:rizkiwiratama7@gmail.com",
     color: "from-blue-500/20 to-indigo-500/5",
     accent: "text-blue-600",
     span: "col-span-12 md:col-span-4"
@@ -25,8 +25,8 @@ const channels = [
   { 
     icon: Instagram, 
     label: "Social / IG", 
-    value: "@rizkiwiratama", 
-    href: "https://instagram.com",
+    value: "@rwira__", 
+    href: "https://www.instagram.com/rwira__/",
     color: "from-pink-500/20 to-orange-500/5",
     accent: "text-pink-600",
     span: "col-span-12 md:col-span-6"
@@ -35,7 +35,7 @@ const channels = [
     icon: Linkedin, 
     label: "Professional / IN", 
     value: "Rizki Wiratama", 
-    href: "https://linkedin.com",
+    href: "https://www.linkedin.com/in/rizki-wiratama-0aa3933b9/",
     color: "from-sky-500/20 to-blue-500/5",
     accent: "text-sky-600",
     span: "col-span-12 md:col-span-6"
