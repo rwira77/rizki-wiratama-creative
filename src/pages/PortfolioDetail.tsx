@@ -162,8 +162,11 @@ const PortfolioDetail = ({ isModal = false }: { isModal?: boolean }) => {
 
                       {block.type === 'grid' && (
                         <div 
-                          className="grid grid-cols-1 md:grid-cols-2"
-                          style={{ gap: `${work.grid_gap ?? 32}px` }}
+                          className="grid"
+                          style={{ 
+                            gap: `${work.grid_gap ?? 32}px`,
+                            gridTemplateColumns: (typeof window !== 'undefined' && window.innerWidth < 768) ? 'repeat(1, minmax(0, 1fr))' : `repeat(${block.columns || 2}, minmax(0, 1fr))`
+                          }}
                         >
                           {Array.isArray(block.urls) && block.urls.map((url: string, j: number) => (
                             <div key={j} className="overflow-hidden shadow-lg">
