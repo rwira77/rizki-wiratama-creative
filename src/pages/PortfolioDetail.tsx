@@ -56,6 +56,7 @@ const PortfolioDetail = ({ isModal = false }: { isModal?: boolean }) => {
       </div>
     );
   }
+  const hasDetailedContent = Array.isArray(work.content_blocks) && work.content_blocks.length > 0;
 
   const content = (
     <div className="min-h-screen bg-[#FDFCF9] text-slate-900 selection:bg-primary/20">
@@ -79,28 +80,30 @@ const PortfolioDetail = ({ isModal = false }: { isModal?: boolean }) => {
         </nav>
       )}
 
-      {/* Hero Section */}
-      <div className={cn("relative w-full bg-slate-50 overflow-hidden", isModal ? "h-[50vh] md:h-[60vh]" : "h-[60vh] md:h-[85vh]")}>
-        {isVideoUrl(work.img) ? (
-          <video 
-            src={work.img} 
-            className="w-full h-full object-cover" 
-            autoPlay 
-            muted 
-            loop 
-            playsInline 
-          />
-        ) : (
-          <img 
-            src={work.img} 
-            alt={work.title} 
-            className="w-full h-full object-cover"
-          />
-        )}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#FDFCF9] via-transparent to-transparent opacity-60" />
-      </div>
+      {/* Hero Section - Hide if detailed content exists */}
+      {!hasDetailedContent && (
+        <div className={cn("relative w-full bg-slate-50 overflow-hidden", isModal ? "h-[50vh] md:h-[60vh]" : "h-[60vh] md:h-[85vh]")}>
+          {isVideoUrl(work.img) ? (
+            <video 
+              src={work.img} 
+              className="w-full h-full object-cover" 
+              autoPlay 
+              muted 
+              loop 
+              playsInline 
+            />
+          ) : (
+            <img 
+              src={work.img} 
+              alt={work.title} 
+              className="w-full h-full object-cover"
+            />
+          )}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#FDFCF9] via-transparent to-transparent opacity-60" />
+        </div>
+      )}
 
-      <main className="relative max-w-[1600px] mx-auto">
+      <main className={cn("relative max-w-[1600px] mx-auto", hasDetailedContent && (isModal ? "pt-12" : "pt-32"))}>
         <div className="grid md:grid-cols-12 gap-0">
           {/* Main Case Study Content - Refined with Padding */}
           <div className="md:col-span-10 lg:col-span-10 px-4 md:px-8 lg:px-12">
