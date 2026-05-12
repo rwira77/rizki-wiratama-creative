@@ -24,14 +24,17 @@ const GridBlock = ({ block, work, isMobileView, getOptimizedUrl, isVideoUrl }: a
   };
 
   return (
-    <div className="w-full">
+    <div className={cn(
+      "w-full",
+      useSlider && "-mx-4 px-4 md:-mx-8 md:px-8 lg:-mx-12 lg:px-12"
+    )}>
       <div 
         ref={scrollRef}
         onScroll={useSlider ? handleScroll : undefined}
         className={cn(
           "no-scrollbar w-full",
           useSlider 
-            ? "flex overflow-x-auto snap-x snap-mandatory -mx-4 px-4" 
+            ? "flex overflow-x-auto snap-x snap-mandatory" 
             : "grid md:grid overflow-visible"
         )}
         style={{ 
