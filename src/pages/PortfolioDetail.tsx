@@ -9,6 +9,35 @@ import { getOptimizedUrl } from "@/lib/cloudinary";
 // Helper to determine if a URL is a video
 const isVideoUrl = (url: string) => /\.(mp4|webm|mov|ogg)$/i.test(url || '');
 
+const SmartMedia = ({ src, className, alt, type = 'image' }: any) => {
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  return (
+    <div className="relative w-full h-full bg-slate-50/50 overflow-hidden flex items-center justify-center">
+      {!isLoaded && (
+        <div className="absolute inset-0 flex items-center justify-center z-10">
+          <div className="size-5 rounded-full border-2 border-slate-200 border-t-primary/40 animate-spin" />
+        </div>
+      )}
+      {type === 'video' ? (
+        <video 
+          src={src} 
+          className={cn(className, "transition-opacity duration-1000", isLoaded ? "opacity-100" : "opacity-0")}
+          onLoadedData={() => setIsLoaded(true)}
+          autoPlay muted loop playsInline 
+        />
+      ) : (
+        <img 
+          src={src} 
+          className={cn(className, "transition-opacity duration-1000", isLoaded ? "opacity-100" : "opacity-0")}
+          onLoad={() => setIsLoaded(true)}
+          alt={alt || ""} 
+        />
+      )}
+    </div>
+  );
+};
+
 const GridBlock = ({ block, work, isMobileView, getOptimizedUrl, isVideoUrl }: any) => {
   const [activeIdx, setActiveIdx] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -52,22 +81,11 @@ const GridBlock = ({ block, work, isMobileView, getOptimizedUrl, isVideoUrl }: a
               useSlider ? "snap-center shrink-0 w-[85vw]" : "w-full"
             )}
           >
-            {isVideoUrl(url) ? (
-              <video 
-                src={url} 
-                className="w-full h-auto block" 
-                autoPlay 
-                muted 
-                loop 
-                playsInline 
-              />
-            ) : (
-              <img 
-                src={getOptimizedUrl(url, 'gallery')} 
-                className="w-full h-auto block" 
-                alt="" 
-              />
-            )}
+            <SmartMedia 
+              src={isVideoUrl(url) ? url : getOptimizedUrl(url, 'gallery')}
+              type={isVideoUrl(url) ? 'video' : 'image'}
+              className="w-full h-auto block"
+            />
           </div>
         ))}
       </div>
@@ -197,22 +215,11 @@ const PortfolioDetail = ({ isModal = false }: { isModal?: boolean }) => {
 
                       {block.type === 'image' && (
                         <div className="w-full overflow-hidden shadow-xl bg-slate-50">
-                          {isVideoUrl(block.content) ? (
-                            <video 
-                              src={block.content} 
-                              className="w-full h-auto block" 
-                              autoPlay 
-                              muted 
-                              loop 
-                              playsInline 
-                            />
-                          ) : (
-                            <img 
-                              src={getOptimizedUrl(block.content, 'full')} 
-                              className="w-full h-auto block" 
-                              alt="" 
-                            />
-                          )}
+                          <SmartMedia 
+                            src={isVideoUrl(block.content) ? block.content : getOptimizedUrl(block.content, 'full')}
+                            type={isVideoUrl(block.content) ? 'video' : 'image'}
+                            className="w-full h-auto block"
+                          />
                         </div>
                       )}
 
@@ -233,24 +240,14 @@ const PortfolioDetail = ({ isModal = false }: { isModal?: boolean }) => {
                      animate={{ opacity: 1, y: 0 }}
                      className="w-full"
                    >
-                     <div className="w-full overflow-hidden rounded-[2.5rem] shadow-2xl bg-slate-50 border border-slate-100">
-                        {isVideoUrl(work.img) ? (
-                          <video 
-                            src={work.img} 
-                            className="w-full h-auto block" 
-                            autoPlay 
-                            muted 
-                            loop 
-                            playsInline 
-                          />
-                        ) : (
-                          <img 
-                            src={getOptimizedUrl(work.img, 'full')} 
-                            className="w-full h-auto block" 
-                            alt={work.title} 
-                          />
-                        )}
-                     </div>
+                      <div className="w-full overflow-hidden rounded-[2.5rem] shadow-2xl bg-slate-50 border border-slate-100">
+                         <SmartMedia 
+                           src={isVideoUrl(work.img) ? work.img : getOptimizedUrl(work.img, 'full')}
+                           type={isVideoUrl(work.img) ? 'video' : 'image'}
+                           className="w-full h-auto block"
+                           alt={work.title}
+                         />
+                      </div>
                    </motion.div>
                 )}
             </div>
