@@ -58,44 +58,47 @@ const PortfolioDetail = ({ isModal = false }: { isModal?: boolean }) => {
   }
 
   const content = (
-    <div className="min-h-screen bg-[#FDFCF9] text-slate-900 selection:bg-primary/20 overflow-x-hidden">
+    <div className="min-h-screen bg-[#FDFCF9] text-slate-900 selection:bg-primary/20">
       {/* Navigation Header - Hide in Modal Mode */}
       {!isModal && (
         <nav className="fixed top-0 left-0 right-0 h-20 px-8 md:px-12 flex items-center justify-between z-50 bg-[#FDFCF9]/80 backdrop-blur-md border-b border-slate-100">
-        <button 
-          onClick={() => navigate(-1)}
-          className="flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-slate-400 hover:text-slate-900 transition-colors group"
-        >
-          <ChevronLeft className="size-4 group-hover:-translate-x-1 transition-transform" />
-          Back to Works
-        </button>
-        <div className="hidden md:flex items-center gap-8">
-           <span className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-300">Case Study 2026</span>
-           <div className="size-1.5 rounded-full bg-primary animate-pulse" />
-        </div>
-      </nav>
+          <button 
+            onClick={() => navigate(-1)}
+            className="flex items-center gap-2 text-slate-400 hover:text-slate-900 transition-colors group"
+          >
+            <ChevronLeft className="size-5 transition-transform group-hover:-translate-x-1" />
+            <span className="text-sm font-medium">Back</span>
+          </button>
+          
+          <div className="flex items-center gap-4">
+             <div className="flex flex-col items-end">
+                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 leading-none mb-1">Project</span>
+                <span className="text-sm font-bold text-slate-900 leading-none">{work.title}</span>
+             </div>
+          </div>
+        </nav>
       )}
 
       {/* Hero Section */}
-      <header className={cn("pb-16 px-8 md:px-12 max-w-7xl mx-auto", isModal ? "pt-24" : "pt-40")}>
-        <motion.div
-           initial={{ opacity: 0, x: -20 }}
-           animate={{ opacity: 1, x: 0 }}
-           className="space-y-4 text-left"
-        >
-           <p className="text-[10px] font-black uppercase tracking-[0.5em] text-primary">
-             {work.cat}
-           </p>
-           <h1 className="font-special-serif text-4xl md:text-6xl tracking-tight text-slate-900">
-             {work.title}
-           </h1>
-           <div className="pt-4 flex items-center gap-4 text-[9px] font-bold uppercase tracking-widest text-slate-300">
-              <span>Case Study 2026</span>
-              <div className="size-1 rounded-full bg-slate-100" />
-              <span>Rizki Wiratama</span>
-           </div>
-        </motion.div>
-      </header>
+      <div className={cn("relative w-full bg-slate-50 overflow-hidden", isModal ? "h-[50vh] md:h-[60vh]" : "h-[60vh] md:h-[85vh]")}>
+        {isVideoUrl(work.img) ? (
+          <video 
+            src={work.img} 
+            className="w-full h-full object-cover" 
+            autoPlay 
+            muted 
+            loop 
+            playsInline 
+          />
+        ) : (
+          <img 
+            src={work.img} 
+            alt={work.title} 
+            className="w-full h-full object-cover"
+          />
+        )}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#FDFCF9] via-transparent to-transparent opacity-60" />
+      </div>
 
       <main className="relative max-w-[1600px] mx-auto">
         <div className="grid md:grid-cols-12 gap-0">
@@ -108,25 +111,21 @@ const PortfolioDetail = ({ isModal = false }: { isModal?: boolean }) => {
                {Array.isArray(work.content_blocks) && work.content_blocks.length > 0 ? (
                   work.content_blocks.map((block: any, i: number) => (
                     <motion.div
-                      key={block.id || i}
-                      initial={{ opacity: 0, y: 20 }}
+                      key={block.id}
+                      initial={{ opacity: 0, y: 30 }}
                       whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true, margin: "-5%" }}
-                      transition={{ duration: 0.8 }}
+                      viewport={{ once: true, margin: "-100px" }}
+                      transition={{ duration: 0.8, delay: i * 0.1 }}
                       className="w-full"
                     >
                       {block.type === 'text' && (
-                        <div className="py-12 md:py-20">
-                          <div className={cn(
-                            "mr-auto",
-                            block.style === 'quote' ? "max-w-4xl" : "max-w-2xl"
-                          )}>
-                            {block.style === 'heading' ? (
-                              <h2 className="font-special-serif text-3xl md:text-5xl text-slate-900 mb-8 tracking-tight">{block.content}</h2>
-                            ) : block.style === 'quote' ? (
-                              <div className="space-y-8">
-                                 <div className="h-1 w-12 bg-primary" />
-                                 <p className="font-special-serif text-3xl md:text-5xl italic text-slate-900 leading-tight">
+                        <div className="max-w-4xl">
+                           <div className="flex flex-col gap-6">
+                            {block.title && <h3 className="text-sm font-black uppercase tracking-[0.3em] text-primary/60">{block.title}</h3>}
+                            {block.content && block.content.length > 150 ? (
+                              <div className="relative">
+                                 <div className="absolute -left-6 top-0 bottom-0 w-1 bg-slate-100 rounded-full" />
+                                 <p className="text-lg md:text-2xl font-light text-slate-700 leading-relaxed font-sans italic">
                                    "{block.content}"
                                  </p>
                               </div>
@@ -161,18 +160,17 @@ const PortfolioDetail = ({ isModal = false }: { isModal?: boolean }) => {
                       )}
 
                       {block.type === 'grid' && (
-                        <div className="w-full overflow-hidden">
-                          <div 
-                            className="flex md:grid overflow-x-auto md:overflow-visible snap-x snap-mandatory no-scrollbar w-full"
-                            style={{ 
-                              gap: `${work.grid_gap ?? 32}px`,
-                              gridTemplateColumns: (typeof window !== 'undefined' && window.innerWidth >= 768) 
-                                ? `repeat(${block.columns || 2}, minmax(0, 1fr))` 
-                                : undefined
-                            }}
-                          >
-                            {Array.isArray(block.urls) && block.urls.map((url: string, j: number) => (
-                              <div key={j} className="overflow-hidden shadow-lg snap-center shrink-0 w-[85vw] md:w-full">
+                        <div 
+                          className="flex md:grid overflow-x-auto md:overflow-visible snap-x snap-mandatory no-scrollbar -mx-4 px-4 md:mx-0 md:px-0"
+                          style={{ 
+                            gap: `${work.grid_gap ?? 32}px`,
+                            gridTemplateColumns: (typeof window !== 'undefined' && window.innerWidth >= 768) 
+                              ? `repeat(${block.columns || 2}, minmax(0, 1fr))` 
+                              : undefined
+                          }}
+                        >
+                          {Array.isArray(block.urls) && block.urls.map((url: string, j: number) => (
+                            <div key={j} className="overflow-hidden shadow-lg snap-center shrink-0 w-[85vw] md:w-full">
                                 {isVideoUrl(url) ? (
                                   <video 
                                     src={url} 
