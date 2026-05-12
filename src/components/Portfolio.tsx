@@ -59,6 +59,14 @@ export const Portfolio = () => {
     };
     fetchWorks();
   }, []);
+
+  useEffect(() => {
+    // Reset scroll to top when category changes (back to folders or switching categories)
+    const scrollContainer = document.querySelector('.custom-scrollbar');
+    if (scrollContainer) {
+      scrollContainer.scrollTo({ top: 0 });
+    }
+  }, [selectedCat]);
   
   const filteredWorks = selectedCat 
     ? works.filter((w) => w.cat?.trim().toLowerCase() === selectedCat.toLowerCase())
