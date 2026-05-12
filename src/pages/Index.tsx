@@ -120,9 +120,9 @@ const Index = () => {
            transition={{ duration: 1.5 }}
            className="text-center"
         >
-          <em className="font-special-serif text-[4vw] text-blue-500/40 leading-none italic block -mb-4">Rizki Wiratama</em>
-          <h1 className="font-special-serif text-[12vw] leading-none text-[#332211]">portfolio</h1>
-          <p className="text-2xl font-special-serif text-[#332211]/60 mt-4">(2026)</p>
+          <em className="font-hero-serif text-[4vw] text-blue-500/40 leading-none italic block -mb-4">Rizki Wiratama</em>
+          <h1 className="font-hero-serif text-[12vw] leading-none text-[#332211]">portfolio</h1>
+          <p className="text-2xl font-hero-serif text-[#332211]/60 mt-4">(2026)</p>
         </motion.div>
       </div>
 
