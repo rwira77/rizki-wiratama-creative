@@ -307,7 +307,7 @@ const Index = () => {
             zIndex={windowZIndices[win.id] || 100}
             onFocus={() => focusWindow(win.id)}
           >
-            <div className="pt-0 px-4 pb-8 md:pt-0 md:pb-8 md:px-8">
+            <div className="pt-12 px-4 pb-8 md:pt-12 md:pb-8 md:px-8">
               <section.component />
             </div>
           </Window>
