@@ -190,7 +190,6 @@ const PortfolioDetail = ({ isModal = false }: { isModal?: boolean }) => {
                               </div>
                             ))}
                           </div>
-                        </div>
                       )}
                     </motion.div>
                   ))
