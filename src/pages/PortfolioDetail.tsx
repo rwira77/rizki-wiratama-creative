@@ -157,7 +157,7 @@ const PortfolioDetail = ({ isModal = false }: { isModal?: boolean }) => {
     <div className="min-h-screen bg-[#FDFCF9] text-slate-900 selection:bg-primary/20">
       {/* Navigation Header - Hide in Modal Mode */}
       {!isModal && (
-        <nav className="fixed top-0 left-0 right-0 h-20 px-8 md:px-12 flex items-center justify-between z-50 bg-[#FDFCF9]/80 backdrop-blur-md border-b border-slate-100">
+        <nav className="fixed top-0 md:top-8 left-0 right-0 h-20 px-8 md:px-12 flex items-center justify-between z-[100] bg-[#FDFCF9]/80 backdrop-blur-md border-b border-slate-100">
           <button 
             onClick={() => navigate(-1)}
             className="flex items-center gap-2 text-slate-400 hover:text-slate-900 transition-colors group"

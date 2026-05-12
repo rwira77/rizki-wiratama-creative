@@ -113,7 +113,7 @@ export const Portfolio = ({
             </motion.div>
           ) : (
             <motion.div key="grid" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
-              <div className="sticky top-0 z-[100] flex md:hidden items-center gap-8 py-2.5 mb-6 -mx-4 px-4 bg-[#FDFCF9]/95 backdrop-blur-md border-b border-slate-100/50">
+              <div className="sticky top-8 z-[100] flex md:hidden items-center gap-8 py-2.5 mb-6 -mx-4 px-4 bg-[#FDFCF9]/95 backdrop-blur-md border-b border-slate-100/50">
                 <button onClick={() => setSelectedCat(null)} className="flex items-center gap-2 text-[10px] font-black text-slate-400 hover:text-primary transition-colors uppercase tracking-[0.3em]">
                    <ChevronLeft className="size-3.5" /> Back
                 </button>
