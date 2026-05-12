@@ -19,7 +19,8 @@ import {
   Phone,
   Settings,
   MapPin,
-  BadgeCheck
+  BadgeCheck,
+  ChevronLeft
 } from "lucide-react";
 
 import { SECTIONS } from "@/config/sections";
