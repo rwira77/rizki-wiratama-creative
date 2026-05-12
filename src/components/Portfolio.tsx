@@ -65,11 +65,14 @@ export const Portfolio = ({
     fetchWorks();
   }, []);
 
+  const containerRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
-    // Reset scroll to top when category changes (back to folders or switching categories)
-    const scrollContainer = document.querySelector('.custom-scrollbar');
-    if (scrollContainer) {
-      scrollContainer.scrollTo({ top: 0 });
+    if (containerRef.current) {
+      const scrollContainer = containerRef.current.closest('.custom-scrollbar');
+      if (scrollContainer) {
+        scrollContainer.scrollTo({ top: 0 });
+      }
     }
   }, [selectedCat]);
   
@@ -80,7 +83,7 @@ export const Portfolio = ({
   const sortedWorks = filteredWorks;
 
   return (
-    <section id="work" className="pt-0 pb-24 bg-transparent min-h-screen">
+    <section id="work" ref={containerRef} className="pt-0 pb-24 bg-transparent min-h-screen">
       <div className="max-w-[1200px] px-4 md:px-8 mx-auto">
         <AnimatePresence mode="wait">
           {!selectedCat ? (
