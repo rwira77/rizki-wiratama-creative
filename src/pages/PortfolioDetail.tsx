@@ -1,15 +1,89 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
-import { ChevronLeft, ArrowUpRight, Calendar, Tag, Target, BarChart3 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ChevronLeft, ArrowUpRight, Calendar, Tag, Target, BarChart3, ChevronRight, Share2, Heart, ExternalLink, X, Aperture } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/lib/supabase";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { getOptimizedUrl } from "@/lib/cloudinary";
-
-import { X } from "lucide-react";
 
 // Helper to determine if a URL is a video
 const isVideoUrl = (url: string) => /\.(mp4|webm|mov|ogg)$/i.test(url || '');
+
+const GridBlock = ({ block, work, isMobileView, getOptimizedUrl, isVideoUrl }: any) => {
+  const [activeIdx, setActiveIdx] = useState(0);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const useSlider = isMobileView && (block.mobileView !== 'grid');
+
+  const handleScroll = () => {
+    if (!scrollRef.current) return;
+    const scrollPos = scrollRef.current.scrollLeft;
+    const containerWidth = scrollRef.current.offsetWidth;
+    // We use a small threshold to detect which item is most visible
+    const idx = Math.round(scrollPos / (containerWidth * 0.85 + (work.grid_gap ?? 32)));
+    setActiveIdx(idx);
+  };
+
+  return (
+    <div className="w-full">
+      <div 
+        ref={scrollRef}
+        onScroll={useSlider ? handleScroll : undefined}
+        className={cn(
+          "no-scrollbar w-full",
+          useSlider 
+            ? "flex overflow-x-auto snap-x snap-mandatory -mx-4 px-4" 
+            : "grid md:grid overflow-visible"
+        )}
+        style={{ 
+          gap: `${work.grid_gap ?? 32}px`,
+          gridTemplateColumns: useSlider 
+            ? undefined 
+            : `repeat(${block.columns || (isMobileView ? 1 : 2)}, minmax(0, 1fr))`
+        }}
+      >
+        {Array.isArray(block.urls) && block.urls.map((url: string, j: number) => (
+          <div 
+            key={j} 
+            className={cn(
+              "overflow-hidden shadow-lg",
+              useSlider ? "snap-center shrink-0 w-[85vw]" : "w-full"
+            )}
+          >
+            {isVideoUrl(url) ? (
+              <video 
+                src={url} 
+                className="w-full h-auto block hover:scale-105 transition-transform duration-1000" 
+                autoPlay 
+                muted 
+                loop 
+                playsInline 
+              />
+            ) : (
+              <img 
+                src={getOptimizedUrl(url, 'gallery')} 
+                className="w-full h-auto block hover:scale-105 transition-transform duration-1000" 
+                alt="" 
+              />
+            )}
+          </div>
+        ))}
+      </div>
+      {useSlider && block.urls && block.urls.length > 1 && (
+        <div className="flex justify-center gap-2 mt-6">
+          {block.urls.map((_: any, idx: number) => (
+            <div 
+              key={idx} 
+              className={cn(
+                "h-1 rounded-full transition-all duration-300",
+                activeIdx === idx ? "w-6 bg-slate-900" : "w-2 bg-slate-200"
+              )} 
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
 
 const PortfolioDetail = ({ isModal = false }: { isModal?: boolean }) => {
   const { id } = useParams();
@@ -139,56 +213,36 @@ const PortfolioDetail = ({ isModal = false }: { isModal?: boolean }) => {
                         </div>
                       )}
 
-                      {block.type === 'grid' && (() => {
-                        const isMobileView = typeof window !== 'undefined' && window.innerWidth < 768;
-                        const useSlider = isMobileView && (block.mobileView !== 'grid');
-                        
-                        return (
-                          <div className="w-full overflow-hidden">
-                            <div 
-                              className={cn(
-                                "no-scrollbar w-full",
-                                useSlider 
-                                  ? "flex overflow-x-auto snap-x snap-mandatory -mx-4 px-4" 
-                                  : "grid md:grid overflow-visible"
-                              )}
-                              style={{ 
-                                gap: `${work.grid_gap ?? 32}px`,
-                                gridTemplateColumns: useSlider 
-                                  ? undefined 
-                                  : `repeat(${block.columns || (isMobileView ? 1 : 2)}, minmax(0, 1fr))`
-                              }}
-                            >
-                              {Array.isArray(block.urls) && block.urls.map((url: string, j: number) => (
-                                <div 
-                                  key={j} 
-                                  className={cn(
-                                    "overflow-hidden shadow-lg",
-                                    useSlider ? "snap-center shrink-0 w-[85vw]" : "w-full"
-                                  )}
-                                >
-                                  {isVideoUrl(url) ? (
-                                    <video 
-                                      src={url} 
-                                      className="w-full h-auto block hover:scale-105 transition-transform duration-1000" 
-                                      autoPlay 
-                                      muted 
-                                      loop 
-                                      playsInline 
-                                    />
-                                  ) : (
-                                    <img 
-                                      src={getOptimizedUrl(url, 'gallery')} 
-                                      className="w-full h-auto block hover:scale-105 transition-transform duration-1000" 
-                                      alt="" 
-                                    />
-                                  )}
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        );
-                      })()}
+                      {block.type === 'image' && (
+                        <div className="w-full overflow-hidden shadow-xl bg-slate-50">
+                          {isVideoUrl(block.content) ? (
+                            <video 
+                              src={block.content} 
+                              className="w-full h-auto block" 
+                              autoPlay 
+                              muted 
+                              loop 
+                              playsInline 
+                            />
+                          ) : (
+                            <img 
+                              src={getOptimizedUrl(block.content, 'full')} 
+                              className="w-full h-auto block" 
+                              alt="" 
+                            />
+                          )}
+                        </div>
+                      )}
+
+                      {block.type === 'grid' && (
+                        <GridBlock 
+                          block={block} 
+                          work={work} 
+                          isMobileView={typeof window !== 'undefined' && window.innerWidth < 768}
+                          getOptimizedUrl={getOptimizedUrl}
+                          isVideoUrl={isVideoUrl}
+                        />
+                      )}
                     </motion.div>
                   ))
                ) : (
