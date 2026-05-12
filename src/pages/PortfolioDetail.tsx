@@ -154,7 +154,7 @@ const PortfolioDetail = ({ isModal = false }: { isModal?: boolean }) => {
         </nav>
       )}
 
-      <main className={cn("relative max-w-[1600px] mx-auto", isModal ? "pt-12" : "pt-32")}>
+      <main className={cn("relative max-w-[1600px] mx-auto", isModal ? "pt-24 md:pt-12" : "pt-32")}>
         <div className="grid md:grid-cols-12 gap-0">
           {/* Main Case Study Content - Refined with Padding */}
           <div className="md:col-span-10 lg:col-span-10 px-4 md:px-8 lg:px-12 overflow-hidden">
@@ -189,27 +189,6 @@ const PortfolioDetail = ({ isModal = false }: { isModal?: boolean }) => {
                               </p>
                             )}
                           </div>
-                        </div>
-                      )}
-
-                      {block.type === 'image' && (
-                        <div className="w-full overflow-hidden shadow-xl bg-slate-50">
-                          {isVideoUrl(block.content) ? (
-                            <video 
-                              src={block.content} 
-                              className="w-full h-auto block" 
-                              autoPlay 
-                              muted 
-                              loop 
-                              playsInline 
-                            />
-                          ) : (
-                            <img 
-                              src={getOptimizedUrl(block.content, 'full')} 
-                              className="w-full h-auto block" 
-                              alt="" 
-                            />
-                          )}
                         </div>
                       )}
 
@@ -274,7 +253,7 @@ const PortfolioDetail = ({ isModal = false }: { isModal?: boolean }) => {
             </div>
 
             {/* Footer Navigation */}
-            <div className="mt-32 p-12 md:p-24 bg-slate-50 rounded-[4rem] text-center space-y-10 mb-20">
+            <div className="mt-16 md:mt-32 p-12 md:p-24 bg-slate-50 rounded-[4rem] text-center space-y-10 mb-20">
                <div className="space-y-4">
                   <p className="text-[10px] font-black uppercase tracking-[0.5em] text-slate-300">Next Project</p>
                   <h3 className="font-special-serif text-4xl md:text-6xl tracking-tight hover:text-primary transition-colors cursor-pointer">Stay Tuned</h3>
