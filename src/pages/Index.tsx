@@ -30,6 +30,7 @@ import { supabase } from "@/lib/supabase";
 const Index = () => {
   const [windows, setWindows] = useState<{ id: string; contentId: string }[]>([]);
   const [windowZIndices, setWindowZIndices] = useState<Record<string, number>>({});
+  const [portfolioCat, setPortfolioCat] = useState<string | null>(null);
   const [maxZ, setMaxZ] = useState(100);
   const [desktopLinks, setDesktopLinks] = useState<any[]>([]);
   const [sectionPositions, setSectionPositions] = useState<Record<string, {top: string, left: string}>>({});
@@ -300,15 +301,31 @@ const Index = () => {
           <Window
             key={win.id}
             id={win.contentId}
-            title={section.title}
+            title={win.contentId === 'portfolio' && portfolioCat ? null : section.title}
             isOpen={true}
             onClose={() => closeWindow(win.id)}
             onNavigate={(targetId) => navigateWindow(win.id, targetId)}
             zIndex={windowZIndices[win.id] || 100}
             onFocus={() => focusWindow(win.id)}
+            headerExtra={win.contentId === 'portfolio' && portfolioCat ? (
+              <div className="flex items-center gap-6 animate-in fade-in zoom-in duration-500">
+                <button 
+                  onClick={() => setPortfolioCat(null)} 
+                  className="flex items-center gap-2 text-[10px] font-black text-slate-400 hover:text-primary transition-colors uppercase tracking-[0.3em]"
+                >
+                   <ChevronLeft className="size-3.5" /> Back
+                </button>
+                <div className="h-3 w-px bg-slate-200" />
+                <h2 className="text-[10px] font-black text-slate-300 uppercase tracking-[0.4em]">{portfolioCat}</h2>
+              </div>
+            ) : null}
           >
             <div className="pt-12 px-4 pb-8 md:pt-12 md:pb-8 md:px-8">
-              <section.component />
+              {win.contentId === 'portfolio' ? (
+                <Portfolio selectedCat={portfolioCat} setSelectedCat={setPortfolioCat} />
+              ) : (
+                <section.component />
+              )}
             </div>
           </Window>
         );

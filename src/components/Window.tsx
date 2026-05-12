@@ -9,6 +9,7 @@ interface WindowProps {
   isOpen: boolean;
   onClose: () => void;
   onNavigate?: (id: string) => void;
+  headerExtra?: React.ReactNode;
   children: React.ReactNode;
   zIndex: number;
   onFocus: () => void;
@@ -29,6 +30,7 @@ export const Window = ({
   isOpen,
   onClose,
   onNavigate,
+  headerExtra,
   children,
   zIndex,
   onFocus,
@@ -142,6 +144,11 @@ export const Window = ({
                 </button>
                 <span className="text-sm font-bold ml-2 tracking-tight text-black/80">{title}</span>
               </div>
+            </div>
+
+            {/* Centered Extra Content (e.g. Portfolio Navigation) */}
+            <div className="absolute left-1/2 -translate-x-1/2 h-full flex items-center pointer-events-auto z-10">
+              {headerExtra}
             </div>
 
             <div className="flex items-center gap-4 opacity-40">
