@@ -83,7 +83,7 @@ const PortfolioDetail = ({ isModal = false }: { isModal?: boolean }) => {
       <main className={cn("relative max-w-[1600px] mx-auto", isModal ? "pt-12" : "pt-32")}>
         <div className="grid md:grid-cols-12 gap-0">
           {/* Main Case Study Content - Refined with Padding */}
-          <div className="md:col-span-10 lg:col-span-10 px-4 md:px-8 lg:px-12">
+          <div className="md:col-span-10 lg:col-span-10 px-4 md:px-8 lg:px-12 overflow-hidden">
             <div 
               className="flex flex-col min-w-0"
               style={{ gap: `${work.block_gap ?? 80}px` }}
