@@ -36,6 +36,14 @@ export const Window = ({
 }: WindowProps) => {
   const [isMaximized, setIsMaximized] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const scrollRef = useRef<HTMLElement>(null);
+
+  // Reset scroll when navigating between sections
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = 0;
+    }
+  }, [id]);
 
   const currentIndex = SIDEBAR_ITEMS.findIndex(item => item.id === id);
 
@@ -191,7 +199,10 @@ export const Window = ({
             </aside>
 
             {/* Main Window Content */}
-            <main className="flex-1 overflow-auto bg-transparent relative custom-scrollbar z-0">
+            <main 
+              ref={scrollRef as any}
+              className="flex-1 overflow-auto bg-transparent relative custom-scrollbar z-0"
+            >
               <div className="px-0 pb-24 md:px-16">
                 {children}
               </div>
