@@ -58,7 +58,7 @@ const PortfolioDetail = ({ isModal = false }: { isModal?: boolean }) => {
   }
 
   const content = (
-    <div className="min-h-screen bg-[#FDFCF9] text-slate-900 selection:bg-primary/20">
+    <div className="min-h-screen bg-[#FDFCF9] text-slate-900 selection:bg-primary/20 overflow-x-hidden">
       {/* Navigation Header - Hide in Modal Mode */}
       {!isModal && (
         <nav className="fixed top-0 left-0 right-0 h-20 px-8 md:px-12 flex items-center justify-between z-50 bg-[#FDFCF9]/80 backdrop-blur-md border-b border-slate-100">
@@ -102,7 +102,7 @@ const PortfolioDetail = ({ isModal = false }: { isModal?: boolean }) => {
           {/* Main Case Study Content - Refined with Padding */}
           <div className="md:col-span-10 lg:col-span-10 px-4 md:px-8 lg:px-12">
             <div 
-              className="flex flex-col"
+              className="flex flex-col min-w-0"
               style={{ gap: `${work.block_gap ?? 80}px` }}
             >
                {Array.isArray(work.content_blocks) && work.content_blocks.length > 0 ? (
@@ -161,35 +161,37 @@ const PortfolioDetail = ({ isModal = false }: { isModal?: boolean }) => {
                       )}
 
                       {block.type === 'grid' && (
-                        <div 
-                          className="flex md:grid overflow-x-auto md:overflow-visible snap-x snap-mandatory no-scrollbar w-full"
-                          style={{ 
-                            gap: `${work.grid_gap ?? 32}px`,
-                            gridTemplateColumns: (typeof window !== 'undefined' && window.innerWidth >= 768) 
-                              ? `repeat(${block.columns || 2}, minmax(0, 1fr))` 
-                              : undefined
-                          }}
-                        >
-                          {Array.isArray(block.urls) && block.urls.map((url: string, j: number) => (
-                            <div key={j} className="overflow-hidden shadow-lg snap-center shrink-0 w-[85vw] md:w-full">
-                              {isVideoUrl(url) ? (
-                                <video 
-                                  src={url} 
-                                  className="w-full h-auto block hover:scale-105 transition-transform duration-1000" 
-                                  autoPlay 
-                                  muted 
-                                  loop 
-                                  playsInline 
-                                />
-                              ) : (
-                                <img 
-                                  src={getOptimizedUrl(url, 'gallery')} 
-                                  className="w-full h-auto block hover:scale-105 transition-transform duration-1000" 
-                                  alt="" 
-                                />
-                              )}
-                            </div>
-                          ))}
+                        <div className="w-full overflow-hidden">
+                          <div 
+                            className="flex md:grid overflow-x-auto md:overflow-visible snap-x snap-mandatory no-scrollbar w-full"
+                            style={{ 
+                              gap: `${work.grid_gap ?? 32}px`,
+                              gridTemplateColumns: (typeof window !== 'undefined' && window.innerWidth >= 768) 
+                                ? `repeat(${block.columns || 2}, minmax(0, 1fr))` 
+                                : undefined
+                            }}
+                          >
+                            {Array.isArray(block.urls) && block.urls.map((url: string, j: number) => (
+                              <div key={j} className="overflow-hidden shadow-lg snap-center shrink-0 w-[85vw] md:w-full">
+                                {isVideoUrl(url) ? (
+                                  <video 
+                                    src={url} 
+                                    className="w-full h-auto block hover:scale-105 transition-transform duration-1000" 
+                                    autoPlay 
+                                    muted 
+                                    loop 
+                                    playsInline 
+                                  />
+                                ) : (
+                                  <img 
+                                    src={getOptimizedUrl(url, 'gallery')} 
+                                    className="w-full h-auto block hover:scale-105 transition-transform duration-1000" 
+                                    alt="" 
+                                  />
+                                )}
+                              </div>
+                            ))}
+                          </div>
                         </div>
                       )}
                     </motion.div>
