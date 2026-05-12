@@ -52,7 +52,7 @@ const GridBlock = ({ block, work, isMobileView, getOptimizedUrl, isVideoUrl }: a
             {isVideoUrl(url) ? (
               <video 
                 src={url} 
-                className="w-full h-auto block hover:scale-105 transition-transform duration-1000" 
+                className="w-full h-auto block" 
                 autoPlay 
                 muted 
                 loop 
@@ -61,7 +61,7 @@ const GridBlock = ({ block, work, isMobileView, getOptimizedUrl, isVideoUrl }: a
             ) : (
               <img 
                 src={getOptimizedUrl(url, 'gallery')} 
-                className="w-full h-auto block hover:scale-105 transition-transform duration-1000" 
+                className="w-full h-auto block" 
                 alt="" 
               />
             )}
