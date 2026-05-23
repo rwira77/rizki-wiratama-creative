@@ -7,7 +7,7 @@ import { useState, useEffect, useRef } from "react";
 import { getOptimizedUrl } from "@/lib/cloudinary";
 
 // Helper to determine if a URL is a video
-const isVideoUrl = (url: string) => /\.(mp4|webm|mov|ogg)$/i.test(url || '');
+const isVideoUrl = (url: string) => /\.(mp4|webm|mov|ogg)(\?.*)?$/i.test(url || '');
 
 const SmartMedia = ({ src, className, containerClassName, alt, type = 'image' }: any) => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -151,7 +151,10 @@ const PortfolioDetail = ({ isModal = false }: { isModal?: boolean }) => {
       </div>
     );
   }
-  const hasDetailedContent = Array.isArray(work.content_blocks) && work.content_blocks.length > 0;
+  const singleMediaBlock = Array.isArray(work.content_blocks) && work.content_blocks.length === 1 && work.content_blocks[0].type === 'image' ? work.content_blocks[0] : null;
+  const isSingleMediaMode = !Array.isArray(work.content_blocks) || work.content_blocks.length === 0 || !!singleMediaBlock;
+  const singleMediaSrc = singleMediaBlock ? singleMediaBlock.content : work.img;
+  const showContentBlocks = Array.isArray(work.content_blocks) && work.content_blocks.length > 0 && !isSingleMediaMode;
 
   const content = (
     <div className="min-h-screen bg-[#FDFCF9] text-slate-900 selection:bg-primary/20">
@@ -183,7 +186,7 @@ const PortfolioDetail = ({ isModal = false }: { isModal?: boolean }) => {
               className="flex flex-col min-w-0"
               style={{ gap: `${work.block_gap ?? 80}px` }}
             >
-               {Array.isArray(work.content_blocks) && work.content_blocks.length > 0 ? (
+               {showContentBlocks ? (
                   work.content_blocks.map((block: any, i: number) => (
                     <motion.div
                       key={block.id}
@@ -250,8 +253,8 @@ const PortfolioDetail = ({ isModal = false }: { isModal?: boolean }) => {
                           : "max-h-[calc(100vh-12rem)] md:max-h-[calc(100vh-18rem)] w-auto max-w-full"
                       )}>
                          <SmartMedia 
-                           src={isVideoUrl(work.img) ? work.img : getOptimizedUrl(work.img, 'full')}
-                           type={isVideoUrl(work.img) ? 'video' : 'image'}
+                           src={isVideoUrl(singleMediaSrc) ? singleMediaSrc : getOptimizedUrl(singleMediaSrc, 'full')}
+                           type={isVideoUrl(singleMediaSrc) ? 'video' : 'image'}
                            containerClassName="w-auto h-auto max-h-full max-w-full flex items-center justify-center"
                            className="max-h-[calc(100vh-10rem)] md:max-h-[calc(100vh-14rem)] lg:max-h-[calc(100vh-16rem)] w-auto max-w-full object-contain block rounded-[2.5rem]"
                            alt={work.title}
@@ -262,7 +265,7 @@ const PortfolioDetail = ({ isModal = false }: { isModal?: boolean }) => {
             </div>
 
             {/* Footer Navigation */}
-            {(!isModal || hasDetailedContent) && (
+            {(!isModal || showContentBlocks) && (
               <div className="mt-16 md:mt-32 p-12 md:p-24 bg-slate-50 rounded-[4rem] text-center space-y-10 mb-20">
                  <div className="space-y-4">
                     <p className="text-[10px] font-black uppercase tracking-[0.5em] text-slate-300">Next Project</p>
