@@ -247,7 +247,7 @@ const PortfolioDetail = ({ isModal = false }: { isModal?: boolean }) => {
                      )}
                    >
                       <div className={cn(
-                        "overflow-hidden rounded-[2.5rem] shadow-2xl bg-slate-50 border border-slate-100 flex items-center justify-center mx-auto",
+                        "overflow-hidden shadow-2xl bg-slate-50 border border-slate-100 flex items-center justify-center mx-auto",
                         isModal 
                           ? "max-h-[calc(100vh-10rem)] md:max-h-[calc(100vh-14rem)] w-auto max-w-full"
                           : "max-h-[calc(100vh-12rem)] md:max-h-[calc(100vh-18rem)] w-auto max-w-full"
@@ -256,7 +256,7 @@ const PortfolioDetail = ({ isModal = false }: { isModal?: boolean }) => {
                            src={isVideoUrl(singleMediaSrc) ? singleMediaSrc : getOptimizedUrl(singleMediaSrc, 'full')}
                            type={isVideoUrl(singleMediaSrc) ? 'video' : 'image'}
                            containerClassName="w-auto h-auto max-h-full max-w-full flex items-center justify-center"
-                           className="max-h-[calc(100vh-10rem)] md:max-h-[calc(100vh-14rem)] lg:max-h-[calc(100vh-16rem)] w-auto max-w-full object-contain block rounded-[2.5rem]"
+                           className="max-h-[calc(100vh-10rem)] md:max-h-[calc(100vh-14rem)] lg:max-h-[calc(100vh-16rem)] w-auto max-w-full object-contain block"
                            alt={work.title}
                          />
                       </div>
