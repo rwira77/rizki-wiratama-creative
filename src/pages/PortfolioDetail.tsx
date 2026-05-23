@@ -9,11 +9,11 @@ import { getOptimizedUrl } from "@/lib/cloudinary";
 // Helper to determine if a URL is a video
 const isVideoUrl = (url: string) => /\.(mp4|webm|mov|ogg)$/i.test(url || '');
 
-const SmartMedia = ({ src, className, alt, type = 'image' }: any) => {
+const SmartMedia = ({ src, className, containerClassName, alt, type = 'image' }: any) => {
   const [isLoaded, setIsLoaded] = useState(false);
 
   return (
-    <div className="relative w-full h-full bg-slate-50/50 overflow-hidden flex items-center justify-center">
+    <div className={cn("relative bg-slate-50/50 overflow-hidden flex items-center justify-center", containerClassName || "w-full h-full")}>
       {!isLoaded && (
         <div className="absolute inset-0 flex items-center justify-center z-10">
           <div className="size-5 rounded-full border-2 border-slate-200 border-t-primary/40 animate-spin" />
@@ -238,13 +238,22 @@ const PortfolioDetail = ({ isModal = false }: { isModal?: boolean }) => {
                    <motion.div
                      initial={{ opacity: 0, y: 20 }}
                      animate={{ opacity: 1, y: 0 }}
-                     className="w-full"
+                     className={cn(
+                       "w-full flex justify-center",
+                       isModal ? "h-full items-center" : ""
+                     )}
                    >
-                      <div className="w-full overflow-hidden rounded-[2.5rem] shadow-2xl bg-slate-50 border border-slate-100">
+                      <div className={cn(
+                        "overflow-hidden rounded-[2.5rem] shadow-2xl bg-slate-50 border border-slate-100 flex items-center justify-center mx-auto",
+                        isModal 
+                          ? "max-h-[calc(100vh-10rem)] md:max-h-[calc(100vh-14rem)] w-auto max-w-full"
+                          : "max-h-[calc(100vh-12rem)] md:max-h-[calc(100vh-18rem)] w-auto max-w-full"
+                      )}>
                          <SmartMedia 
                            src={isVideoUrl(work.img) ? work.img : getOptimizedUrl(work.img, 'full')}
                            type={isVideoUrl(work.img) ? 'video' : 'image'}
-                           className="w-full h-auto block"
+                           containerClassName="w-auto h-auto max-h-full max-w-full flex items-center justify-center"
+                           className="max-h-[calc(100vh-10rem)] md:max-h-[calc(100vh-14rem)] lg:max-h-[calc(100vh-16rem)] w-auto max-w-full object-contain block rounded-[2.5rem]"
                            alt={work.title}
                          />
                       </div>
@@ -253,18 +262,20 @@ const PortfolioDetail = ({ isModal = false }: { isModal?: boolean }) => {
             </div>
 
             {/* Footer Navigation */}
-            <div className="mt-16 md:mt-32 p-12 md:p-24 bg-slate-50 rounded-[4rem] text-center space-y-10 mb-20">
-               <div className="space-y-4">
-                  <p className="text-[10px] font-black uppercase tracking-[0.5em] text-slate-300">Next Project</p>
-                  <h3 className="font-special-serif text-4xl md:text-6xl tracking-tight hover:text-primary transition-colors cursor-pointer">Stay Tuned</h3>
-               </div>
-               <button 
-                  onClick={() => navigate("/")}
-                  className="px-10 py-4 border border-slate-200 rounded-full text-[9px] font-black uppercase tracking-widest hover:bg-slate-900 hover:text-white transition-all"
-               >
-                  Back to Portfolio
-               </button>
-            </div>
+            {(!isModal || hasDetailedContent) && (
+              <div className="mt-16 md:mt-32 p-12 md:p-24 bg-slate-50 rounded-[4rem] text-center space-y-10 mb-20">
+                 <div className="space-y-4">
+                    <p className="text-[10px] font-black uppercase tracking-[0.5em] text-slate-300">Next Project</p>
+                    <h3 className="font-special-serif text-4xl md:text-6xl tracking-tight hover:text-primary transition-colors cursor-pointer">Stay Tuned</h3>
+                 </div>
+                 <button 
+                    onClick={() => navigate("/")}
+                    className="px-10 py-4 border border-slate-200 rounded-full text-[9px] font-black uppercase tracking-widest hover:bg-slate-900 hover:text-white transition-all"
+                 >
+                    Back to Portfolio
+                 </button>
+              </div>
+            )}
           </div>
 
           {/* Sticky Sidebar Info - Refined */}
@@ -316,9 +327,11 @@ const PortfolioDetail = ({ isModal = false }: { isModal?: boolean }) => {
       </div>
 
       {/* Footer */}
-      <footer className="py-20 px-8 text-center bg-white border-t border-slate-100">
-         <p className="text-[10px] font-black uppercase tracking-[0.5em] text-slate-300">Rizki Wiratama · Creative Dossier 2026</p>
-      </footer>
+      {!isModal && (
+        <footer className="py-20 px-8 text-center bg-[#FDFCF9] border-t border-slate-100">
+           <p className="text-[10px] font-black uppercase tracking-[0.5em] text-slate-300">Rizki Wiratama · Creative Dossier 2026</p>
+        </footer>
+      )}
     </div>
   );
 
