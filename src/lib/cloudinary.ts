@@ -43,3 +43,9 @@ export const getOptimizedUrl = (url: string, type: TransformType = 'thumb') => {
 
   return `${base}/${transformation}/${path}`;
 };
+
+export const getVideoPosterUrl = (url: string) => {
+  if (!url) return url;
+  // Replace the video extension with .jpg to get the Cloudinary auto-generated thumbnail
+  return url.replace(/\.(mp4|webm|mov|ogg)(\?.*)?$/i, '.jpg$2');
+};

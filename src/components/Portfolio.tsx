@@ -15,7 +15,7 @@ import { cn } from "@/lib/utils";
 import { Link, useLocation } from "react-router-dom";
 import { supabase } from "@/lib/supabase";
 import { DesktopIcon } from "@/components/DesktopIcon";
-import { getOptimizedUrl } from "@/lib/cloudinary";
+import { getOptimizedUrl, getVideoPosterUrl } from "@/lib/cloudinary";
 
 const workBranding = "https://images.unsplash.com/photo-1541462608141-ad4d60da3e8a?q=80&w=2670&auto=format&fit=crop";
 const workEvent = "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?q=80&w=2612&auto=format&fit=crop";
@@ -37,7 +37,7 @@ export const categories = [
 ];
 
 // Helper to determine if a URL is a video
-const isVideoUrl = (url: string) => /\.(mp4|webm|mov|ogg)$/i.test(url || '');
+const isVideoUrl = (url: string) => /\.(mp4|webm|mov|ogg)(\?.*)?$/i.test(url || '');
 
 export const Portfolio = ({ 
   selectedCat, 
@@ -143,6 +143,7 @@ export const Portfolio = ({
                         {isVideoUrl(w.img) ? (
                           <video
                             src={w.img}
+                            poster={getOptimizedUrl(getVideoPosterUrl(w.img), 'thumb')}
                             className="w-full h-auto block group-hover:scale-105 transition-transform duration-700"
                             autoPlay
                             muted

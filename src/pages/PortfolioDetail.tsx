@@ -4,7 +4,7 @@ import { ChevronLeft, ArrowUpRight, Calendar, Tag, Target, BarChart3, ChevronRig
 import { cn } from "@/lib/utils";
 import { supabase } from "@/lib/supabase";
 import { useState, useEffect, useRef } from "react";
-import { getOptimizedUrl } from "@/lib/cloudinary";
+import { getOptimizedUrl, getVideoPosterUrl } from "@/lib/cloudinary";
 
 // Helper to determine if a URL is a video
 const isVideoUrl = (url: string) => /\.(mp4|webm|mov|ogg)(\?.*)?$/i.test(url || '');
@@ -22,7 +22,8 @@ const SmartMedia = ({ src, className, containerClassName, alt, type = 'image' }:
       {type === 'video' ? (
         <video 
           src={src} 
-          className={cn(className, "transition-opacity duration-1000", isLoaded ? "opacity-100" : "opacity-0")}
+          poster={getOptimizedUrl(getVideoPosterUrl(src), 'thumb')}
+          className={className}
           onLoadedData={() => setIsLoaded(true)}
           autoPlay muted loop playsInline 
         />
