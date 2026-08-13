@@ -12,7 +12,7 @@ import {
   Megaphone
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { supabase } from "@/lib/supabase";
 import { DesktopIcon } from "@/components/DesktopIcon";
 import { getOptimizedUrl, getVideoPosterUrl } from "@/lib/cloudinary";
@@ -49,6 +49,7 @@ export const Portfolio = ({
 }) => {
   const [works, setWorks] = useState<any[]>([]);
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchWorks = async () => {
@@ -134,10 +135,9 @@ export const Portfolio = ({
                     transition={{ delay: i * 0.1, duration: 1 }}
                     className="break-inside-avoid relative"
                   >
-                    <Link 
-                      to={`/portfolio/${w.id}`} 
-                      state={{ backgroundLocation: location }}
-                      className="block group"
+                    <div 
+                      onClick={() => navigate(`/portfolio/${w.id}`, { state: { backgroundLocation: location } })}
+                      className="block group cursor-pointer"
                     >
                       {/* Image Container - SUBTLE ROUNDED */}
                       <div className="overflow-hidden bg-slate-50 border border-slate-100 rounded-xl relative group-hover:shadow-xl transition-shadow duration-500">
@@ -181,7 +181,7 @@ export const Portfolio = ({
                           {w.cat} — {w.year}
                         </p>
                       </div>
-                    </Link>
+                    </div>
                   </motion.div>
                 ))}
               </div>
