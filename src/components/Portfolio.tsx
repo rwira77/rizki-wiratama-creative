@@ -140,7 +140,7 @@ export const Portfolio = ({
                       className="block group cursor-pointer"
                     >
                       {/* Image Container - SUBTLE ROUNDED */}
-                      <div className="overflow-hidden bg-slate-50 border border-slate-100 rounded-xl relative group-hover:shadow-xl transition-shadow duration-500">
+                      <div className="overflow-hidden bg-slate-50 border border-slate-100 rounded-xl relative group-hover:shadow-xl transition-shadow duration-500 isolate transform-gpu">
                         {isVideoUrl(w.img) ? (
                           <video
                             src={w.img}
@@ -152,14 +152,14 @@ export const Portfolio = ({
                             playsInline
                           />
                         ) : isYouTubeUrl(w.img) ? (
-                          <div className="relative w-full aspect-[16/9] group-hover:scale-105 transition-transform duration-700 overflow-hidden scale-[1.35]">
-                            <div className="absolute inset-0 z-10 bg-transparent cursor-pointer" />
+                          <div className="relative w-full aspect-[16/9] group-hover:scale-105 transition-transform duration-700 overflow-hidden scale-[1.35] isolate transform-gpu">
                             <iframe
                               src={`https://www.youtube.com/embed/${getYouTubeId(w.img)}?autoplay=1&mute=1&loop=1&playlist=${getYouTubeId(w.img)}&controls=0&modestbranding=1&playsinline=1`}
                               className="absolute inset-0 w-full h-full border-0 pointer-events-none"
                               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                               allowFullScreen
                             />
+                            <div className="absolute inset-0 z-20 bg-transparent cursor-pointer" />
                           </div>
                         ) : (
                           <img
