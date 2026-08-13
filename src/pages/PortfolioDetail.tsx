@@ -260,13 +260,14 @@ const PortfolioDetail = ({ isModal = false }: { isModal?: boolean }) => {
                         "overflow-hidden shadow-2xl bg-slate-50 border border-slate-100 flex items-center justify-center mx-auto",
                         isModal 
                           ? "max-h-[calc(100vh-10rem)] md:max-h-[calc(100vh-14rem)] w-auto max-w-full"
-                          : "max-h-[calc(100vh-12rem)] md:max-h-[calc(100vh-18rem)] w-auto max-w-full"
+                          : "max-h-[calc(100vh-12rem)] md:max-h-[calc(100vh-18rem)] w-auto max-w-full",
+                        isYouTubeUrl(singleMediaSrc) && "w-[90vw] md:w-[80vw] lg:w-[70vw] max-w-6xl aspect-video h-auto max-h-none"
                       )}>
                          <SmartMedia 
                            src={isVideoUrl(singleMediaSrc) ? singleMediaSrc : isYouTubeUrl(singleMediaSrc) ? singleMediaSrc : getOptimizedUrl(singleMediaSrc, 'full')}
                            type={isVideoUrl(singleMediaSrc) ? 'video' : isYouTubeUrl(singleMediaSrc) ? 'youtube' : 'image'}
-                           containerClassName="w-auto h-auto max-h-full max-w-full flex items-center justify-center"
-                           className="max-h-[calc(100vh-10rem)] md:max-h-[calc(100vh-14rem)] lg:max-h-[calc(100vh-16rem)] w-auto max-w-full object-contain block"
+                           containerClassName={cn("w-auto h-auto max-h-full max-w-full flex items-center justify-center", isYouTubeUrl(singleMediaSrc) && "w-full h-full max-h-none")}
+                           className={cn("max-h-[calc(100vh-10rem)] md:max-h-[calc(100vh-14rem)] lg:max-h-[calc(100vh-16rem)] w-auto max-w-full object-contain block", isYouTubeUrl(singleMediaSrc) && "w-full h-full max-h-none object-cover")}
                            alt={work.title}
                          />
                       </div>
