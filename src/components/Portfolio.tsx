@@ -137,7 +137,7 @@ export const Portfolio = ({
                   >
                     <div 
                       onClick={() => navigate(`/portfolio/${w.id}`, { state: { backgroundLocation: location } })}
-                      className="block group cursor-pointer"
+                      className="block group cursor-pointer relative"
                     >
                       {/* Image Container - SUBTLE ROUNDED */}
                       <div className="overflow-hidden bg-slate-50 border border-slate-100 rounded-xl relative group-hover:shadow-xl transition-shadow duration-500 isolate transform-gpu">
@@ -167,12 +167,10 @@ export const Portfolio = ({
                             className="w-full h-auto block group-hover:scale-105 transition-transform duration-700"
                           />
                         )}
-                        {/* Universal click shield perfectly bounded to the rounded box */}
-                        <div className="absolute inset-0 z-30 bg-transparent cursor-pointer" />
                       </div>
                       
                       {/* Text Content - Static below image */}
-                      <div className="mt-6 space-y-1">
+                      <div className="mt-6 space-y-1 relative z-10">
                         <div className="flex items-center justify-between">
                           <h3 className="font-special-serif text-lg md:text-2xl text-slate-900 leading-tight">
                             {w.title}
@@ -182,6 +180,9 @@ export const Portfolio = ({
                           {w.cat} — {w.year}
                         </p>
                       </div>
+
+                      {/* Ultimate Universal Click Shield for the entire card */}
+                      <div className="absolute inset-0 z-50 bg-transparent" />
                     </div>
                   </motion.div>
                 ))}
