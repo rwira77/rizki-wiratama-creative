@@ -1,11 +1,11 @@
 export const isYouTubeUrl = (url: string) => {
   if (!url) return false;
-  return /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$/.test(url);
+  return /(youtube\.com|youtu\.?be)\//i.test(url);
 };
 
 export const getYouTubeId = (url: string) => {
   if (!url) return null;
-  const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([^&?]+)/);
+  const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([^"&?\/\s]{11})/i);
   return match ? match[1] : null;
 };
 
