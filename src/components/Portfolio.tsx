@@ -152,10 +152,11 @@ export const Portfolio = ({
                             playsInline
                           />
                         ) : isYouTubeUrl(w.img) ? (
-                          <div className="relative w-full aspect-[16/9] group-hover:scale-105 transition-transform duration-700 pointer-events-none overflow-hidden scale-[1.35]">
+                          <div className="relative w-full aspect-[16/9] group-hover:scale-105 transition-transform duration-700 overflow-hidden scale-[1.35]">
+                            <div className="absolute inset-0 z-10" />
                             <iframe
                               src={`https://www.youtube.com/embed/${getYouTubeId(w.img)}?autoplay=1&mute=1&loop=1&playlist=${getYouTubeId(w.img)}&controls=0&modestbranding=1&playsinline=1`}
-                              className="absolute inset-0 w-full h-full border-0"
+                              className="absolute inset-0 w-full h-full border-0 pointer-events-none"
                               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                               allowFullScreen
                             />
