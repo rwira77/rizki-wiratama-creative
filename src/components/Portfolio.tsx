@@ -159,7 +159,6 @@ export const Portfolio = ({
                               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                               allowFullScreen
                             />
-                            <div className="absolute inset-0 z-20 bg-transparent cursor-pointer" />
                           </div>
                         ) : (
                           <img
@@ -168,6 +167,8 @@ export const Portfolio = ({
                             className="w-full h-auto block group-hover:scale-105 transition-transform duration-700"
                           />
                         )}
+                        {/* Universal click shield perfectly bounded to the rounded box */}
+                        <div className="absolute inset-0 z-30 bg-transparent cursor-pointer" />
                       </div>
                       
                       {/* Text Content - Static below image */}
