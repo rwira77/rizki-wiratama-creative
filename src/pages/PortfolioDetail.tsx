@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { supabase } from "@/lib/supabase";
 import { useState, useEffect, useRef } from "react";
 import { getOptimizedUrl, getVideoPosterUrl } from "@/lib/cloudinary";
+import { isYouTubeUrl, getYouTubeId } from "@/lib/youtube";
 
 // Helper to determine if a URL is a video
 const isVideoUrl = (url: string) => /\.(mp4|webm|mov|ogg)(\?.*)?$/i.test(url || '');
@@ -19,7 +20,15 @@ const SmartMedia = ({ src, className, containerClassName, alt, type = 'image' }:
           <div className="size-5 rounded-full border-2 border-slate-200 border-t-primary/40 animate-spin" />
         </div>
       )}
-      {type === 'video' ? (
+      {type === 'youtube' ? (
+        <iframe
+          src={`https://www.youtube.com/embed/${getYouTubeId(src)}?autoplay=0&rel=0`}
+          className={cn("w-full h-full aspect-video border-0", className)}
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+          onLoad={() => setIsLoaded(true)}
+        />
+      ) : type === 'video' ? (
         <video 
           src={src} 
           poster={getOptimizedUrl(getVideoPosterUrl(src), 'thumb')}
@@ -83,8 +92,8 @@ const GridBlock = ({ block, work, isMobileView, getOptimizedUrl, isVideoUrl }: a
             )}
           >
             <SmartMedia 
-              src={isVideoUrl(url) ? url : getOptimizedUrl(url, 'gallery')}
-              type={isVideoUrl(url) ? 'video' : 'image'}
+              src={isVideoUrl(url) ? url : isYouTubeUrl(url) ? url : getOptimizedUrl(url, 'gallery')}
+              type={isVideoUrl(url) ? 'video' : isYouTubeUrl(url) ? 'youtube' : 'image'}
               className="w-full h-auto block"
             />
           </div>
@@ -220,8 +229,8 @@ const PortfolioDetail = ({ isModal = false }: { isModal?: boolean }) => {
                       {block.type === 'image' && (
                         <div className="w-full overflow-hidden shadow-xl bg-slate-50">
                           <SmartMedia 
-                            src={isVideoUrl(block.content) ? block.content : getOptimizedUrl(block.content, 'full')}
-                            type={isVideoUrl(block.content) ? 'video' : 'image'}
+                            src={isVideoUrl(block.content) ? block.content : isYouTubeUrl(block.content) ? block.content : getOptimizedUrl(block.content, 'full')}
+                            type={isVideoUrl(block.content) ? 'video' : isYouTubeUrl(block.content) ? 'youtube' : 'image'}
                             className="w-full h-auto block"
                           />
                         </div>
@@ -254,8 +263,8 @@ const PortfolioDetail = ({ isModal = false }: { isModal?: boolean }) => {
                           : "max-h-[calc(100vh-12rem)] md:max-h-[calc(100vh-18rem)] w-auto max-w-full"
                       )}>
                          <SmartMedia 
-                           src={isVideoUrl(singleMediaSrc) ? singleMediaSrc : getOptimizedUrl(singleMediaSrc, 'full')}
-                           type={isVideoUrl(singleMediaSrc) ? 'video' : 'image'}
+                           src={isVideoUrl(singleMediaSrc) ? singleMediaSrc : isYouTubeUrl(singleMediaSrc) ? singleMediaSrc : getOptimizedUrl(singleMediaSrc, 'full')}
+                           type={isVideoUrl(singleMediaSrc) ? 'video' : isYouTubeUrl(singleMediaSrc) ? 'youtube' : 'image'}
                            containerClassName="w-auto h-auto max-h-full max-w-full flex items-center justify-center"
                            className="max-h-[calc(100vh-10rem)] md:max-h-[calc(100vh-14rem)] lg:max-h-[calc(100vh-16rem)] w-auto max-w-full object-contain block"
                            alt={work.title}

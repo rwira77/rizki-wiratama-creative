@@ -16,6 +16,7 @@ import { Link, useLocation } from "react-router-dom";
 import { supabase } from "@/lib/supabase";
 import { DesktopIcon } from "@/components/DesktopIcon";
 import { getOptimizedUrl, getVideoPosterUrl } from "@/lib/cloudinary";
+import { isYouTubeUrl, getYouTubeId, getYouTubeThumbnail } from "@/lib/youtube";
 
 const workBranding = "https://images.unsplash.com/photo-1541462608141-ad4d60da3e8a?q=80&w=2670&auto=format&fit=crop";
 const workEvent = "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?q=80&w=2612&auto=format&fit=crop";
@@ -149,6 +150,12 @@ export const Portfolio = ({
                             muted
                             loop
                             playsInline
+                          />
+                        ) : isYouTubeUrl(w.img) ? (
+                          <img
+                            src={getYouTubeThumbnail(getYouTubeId(w.img))}
+                            alt={w.title}
+                            className="w-full h-auto block group-hover:scale-105 transition-transform duration-700"
                           />
                         ) : (
                           <img
