@@ -16,7 +16,7 @@ const SmartMedia = ({ src, className, containerClassName, alt, type = 'image' }:
   return (
     <div className={cn("relative bg-slate-50/50 overflow-hidden flex items-center justify-center", containerClassName || "w-full h-full")}>
       {!isLoaded && (
-        <div className="absolute inset-0 flex items-center justify-center z-10">
+        <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
           <div className="size-5 rounded-full border-2 border-slate-200 border-t-primary/40 animate-spin" />
         </div>
       )}

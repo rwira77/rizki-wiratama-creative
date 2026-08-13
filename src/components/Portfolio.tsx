@@ -152,11 +152,14 @@ export const Portfolio = ({
                             playsInline
                           />
                         ) : isYouTubeUrl(w.img) ? (
-                          <img
-                            src={getYouTubeThumbnail(getYouTubeId(w.img))}
-                            alt={w.title}
-                            className="w-full h-auto block group-hover:scale-105 transition-transform duration-700"
-                          />
+                          <div className="relative w-full aspect-[16/9] group-hover:scale-105 transition-transform duration-700 pointer-events-none overflow-hidden scale-[1.35]">
+                            <iframe
+                              src={`https://www.youtube.com/embed/${getYouTubeId(w.img)}?autoplay=1&mute=1&loop=1&playlist=${getYouTubeId(w.img)}&controls=0&modestbranding=1&playsinline=1`}
+                              className="absolute inset-0 w-full h-full border-0"
+                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                              allowFullScreen
+                            />
+                          </div>
                         ) : (
                           <img
                             src={getOptimizedUrl(w.img || "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop", 'thumb')}
