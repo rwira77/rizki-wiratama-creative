@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Minus, Square, ChevronLeft, ChevronRight, LayoutGrid, List, Search, Folder, User, Briefcase, Mail, Sparkles } from "lucide-react";
+import { X, Minus, Square, ChevronLeft, ChevronRight, LayoutGrid, List, Search, Folder, User, Briefcase, Mail, Sparkles, Users } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { cn } from "@/lib/utils";
 
@@ -21,6 +21,7 @@ const SIDEBAR_ITEMS = [
   { label: "Services", icon: Sparkles, id: "services" },
   { label: "Portfolio", icon: Folder, id: "portfolio" },
   { label: "Resume", icon: Briefcase, id: "experience" },
+  { label: "Clients", icon: Users, id: "clients" },
   { label: "Contact", icon: Mail, id: "contact" },
 ];
 
