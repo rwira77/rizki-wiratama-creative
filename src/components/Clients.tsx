@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
 import banjarmasinLogo from "@/assets/logoclient/Banjarmasin_Logo.svg";
 import choutureLogo from "@/assets/logoclient/Chouture-22.png";
 import dofaceLogo from "@/assets/logoclient/Doface-Pink1.png";
@@ -9,14 +10,14 @@ import thrLogo from "@/assets/logoclient/ThrLogo-Tr1.png";
 import donnaLogo from "@/assets/logoclient/donna-logo.png";
 
 const clients = [
-  { name: "Kota Banjarmasin", logo: banjarmasinLogo },
-  { name: "Donna Privé", logo: donnaLogo },
-  { name: "Doface", logo: dofaceLogo },
-  { name: "Chouture", logo: choutureLogo },
-  { name: "Rayana", logo: rayanaLogo },
-  { name: "THR", logo: thrLogo },
-  { name: "LIS", logo: lisLogo },
-  { name: "KAF", logo: kafLogo },
+  { name: "Kota Banjarmasin", logo: banjarmasinLogo, scale: "h-14 md:h-16" },
+  { name: "Donna Privé", logo: donnaLogo, scale: "h-8 md:h-10" },
+  { name: "Doface", logo: dofaceLogo, scale: "h-7 md:h-9" },
+  { name: "Chouture", logo: choutureLogo, scale: "h-7 md:h-9" },
+  { name: "Rayana", logo: rayanaLogo, scale: "h-8 md:h-10" },
+  { name: "THR", logo: thrLogo, scale: "h-7 md:h-9" },
+  { name: "LIS", logo: lisLogo, scale: "h-8 md:h-10" },
+  { name: "KAF", logo: kafLogo, scale: "h-7 md:h-9" },
 ];
 
 export const Clients = () => {
@@ -58,7 +59,7 @@ export const Clients = () => {
       </div>
 
       {/* Pure Logos Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6 md:gap-10 py-6 items-center justify-items-center">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6 md:gap-10 py-8 items-center justify-items-center">
         {clients.map((c, i) => (
           <motion.div
             key={c.name}
@@ -66,12 +67,15 @@ export const Clients = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.4, delay: i * 0.05 }}
-            className="group w-full h-24 md:h-28 flex items-center justify-center p-2"
+            className="group w-full h-20 md:h-24 flex items-center justify-center p-2"
           >
             <img
               src={c.logo}
               alt={c.name}
-              className="max-h-14 md:max-h-16 w-auto max-w-[85%] object-contain transition-transform duration-300 group-hover:scale-110 select-none"
+              className={cn(
+                "w-auto max-w-[85%] object-contain transition-transform duration-300 group-hover:scale-110 select-none",
+                c.scale
+              )}
               loading="lazy"
             />
           </motion.div>
