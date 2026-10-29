@@ -100,8 +100,8 @@ export const Portfolio = ({
         <AnimatePresence mode="wait">
           {!selectedCat ? (
             <motion.div key="folders" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
-              <div className="mb-12 md:mb-20 max-w-2xl px-0">
-                <p className="text-[10px] uppercase tracking-[0.4em] text-primary mb-4 flex items-center gap-3">
+              <div className="mb-8 md:mb-12 max-w-2xl px-0">
+                <p className="text-[10px] uppercase tracking-[0.4em] text-primary mb-3 flex items-center gap-3">
                   <span className="h-px w-6 bg-primary" /> Gallery
                 </p>
                 <h2 className="font-display text-3xl md:text-6xl font-light leading-tight tracking-tight text-slate-900 uppercase">
@@ -109,7 +109,7 @@ export const Portfolio = ({
                 </h2>
               </div>
               
-              <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10 md:gap-12 lg:gap-14 max-w-4xl mx-auto py-6">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-4 sm:gap-x-8 md:gap-x-10 lg:gap-x-12 gap-y-6 md:gap-y-8 w-fit -ml-4 py-2">
                 {categories.map((cat) => {
                   const catProjects = works.filter(w => w.cat?.trim().toLowerCase() === cat.id.toLowerCase());
                   return (
