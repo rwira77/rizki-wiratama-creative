@@ -32,13 +32,13 @@ const workSocial = "https://images.unsplash.com/photo-1611162617474-5b21e879e113
 const workCampaign = "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=2560&auto=format&fit=crop";
 
 export const categories = [
-  { id: "Web & App Dev", label: "Web & App Dev", icon: Globe, color: "from-cyan-500 to-blue-600", images: [sobatripCover, comersialCover] },
-  { id: "Campaign & Event", label: "Campaign & Event", icon: Megaphone, color: "from-amber-500 to-orange-600", images: [donnaMiniTrunkShow, exclusiveRevealDays] },
   { id: "Branding", label: "Branding", icon: Palette, color: "from-blue-500 to-indigo-600", images: [workBranding, workEvent] },
   { id: "Social Media", label: "Social Media", icon: Share2, color: "from-purple-500 to-pink-600", images: [workSocial, workCampaign] },
   { id: "Photography", label: "Photography", icon: Camera, color: "from-orange-500 to-red-600", images: [workCampaign, workBranding] },
   { id: "Videography", label: "Videography", icon: Video, color: "from-emerald-500 to-teal-600", images: [workEvent, workSocial] },
   { id: "Graphic Design", label: "Graphic Design", icon: Layout, color: "from-slate-700 to-slate-900", images: [workBranding, workSocial] },
+  { id: "Campaign & Event", label: "Campaign & Event", icon: Megaphone, color: "from-amber-500 to-orange-600", images: [donnaMiniTrunkShow, exclusiveRevealDays] },
+  { id: "Web & App Dev", label: "Web & App Dev", icon: Globe, color: "from-cyan-500 to-blue-600", images: [sobatripCover, comersialCover] },
 ];
 
 // Helper to determine if a URL is a video
