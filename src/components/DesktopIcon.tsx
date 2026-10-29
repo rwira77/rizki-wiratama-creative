@@ -94,7 +94,7 @@ export const DesktopIcon = ({
       </div>
       
       <div className="text-center z-20">
-        <span className="text-[11px] sm:text-xs font-semibold leading-tight px-2 py-0.5 rounded-full bg-white/50 backdrop-blur-sm shadow-sm group-hover:bg-primary group-hover:text-white transition-colors block whitespace-nowrap">
+        <span className="text-[11px] sm:text-xs font-semibold leading-tight px-3 py-1 rounded-full bg-white/70 backdrop-blur-md shadow-sm border border-slate-200/40 group-hover:bg-primary group-hover:text-white group-hover:border-primary transition-all block whitespace-nowrap">
           {label}
         </span>
       </div>
