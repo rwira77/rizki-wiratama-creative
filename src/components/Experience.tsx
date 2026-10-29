@@ -9,7 +9,7 @@ const track = [
     company: "DOFACE",
     description: "Driving commercial success through high-impact visual strategy and innovative lifecycle marketing management to dominate the skincare market.",
     stats: ["Visual Strategy", "Lifecycle Marketing"],
-    isLatest: true
+    isLatest: false
   },
   {
     year: "2024 — PRESENT",
@@ -28,12 +28,12 @@ const track = [
     isLatest: true
   },
   {
-    year: "2021 — PRESENT",
+    year: "2021 — 2026",
     role: "Creative Manager",
     company: "DONNA PRIVE",
     description: "Overseeing visual identity and brand communication strategies to expand market reach and cultivate customer loyalty within the modest fashion industry.",
     stats: ["+1M SOCIAL REACH", "20+ MAJOR CAMPAIGNS", "85% BRAND RETENTION"],
-    isLatest: true
+    isLatest: false
   },
   {
     year: "2019 — PRESENT",
