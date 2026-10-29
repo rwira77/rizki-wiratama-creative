@@ -4,14 +4,6 @@ import { cn } from "@/lib/utils";
 
 const track = [
   {
-    year: "2026",
-    role: "Creative Marketing Manager",
-    company: "DOFACE",
-    description: "Driving commercial success through high-impact visual strategy and innovative lifecycle marketing management to dominate the skincare market.",
-    stats: ["Visual Strategy", "Lifecycle Marketing"],
-    isLatest: false
-  },
-  {
     year: "2024 — PRESENT",
     role: "Chief Business Officer",
     company: "SOBATRIP",
@@ -28,14 +20,6 @@ const track = [
     isLatest: true
   },
   {
-    year: "2021 — 2026",
-    role: "Creative Manager",
-    company: "DONNA PRIVE",
-    description: "Overseeing visual identity and brand communication strategies to expand market reach and cultivate customer loyalty within the modest fashion industry.",
-    stats: ["+1M SOCIAL REACH", "20+ MAJOR CAMPAIGNS", "85% BRAND RETENTION"],
-    isLatest: false
-  },
-  {
     year: "2019 — PRESENT",
     role: "Founder & Creative Director",
     company: "BECREATIVE AGENCY",
@@ -50,6 +34,22 @@ const track = [
     description: "Delivering end-to-end digital solutions by merging visual design, photography, and programming to build functional and aesthetic products for diverse clients.",
     stats: ["+500 PROJECTS COMPLETED", "98% CLIENT SATISFACTION", "5+ CORE SKILLSETS"],
     isLatest: true
+  },
+  {
+    year: "2026",
+    role: "Creative Marketing Manager",
+    company: "DOFACE",
+    description: "Driving commercial success through high-impact visual strategy and innovative lifecycle marketing management to dominate the skincare market.",
+    stats: ["Visual Strategy", "Lifecycle Marketing"],
+    isLatest: false
+  },
+  {
+    year: "2021 — 2026",
+    role: "Creative Manager",
+    company: "DONNA PRIVE",
+    description: "Overseeing visual identity and brand communication strategies to expand market reach and cultivate customer loyalty within the modest fashion industry.",
+    stats: ["+1M SOCIAL REACH", "20+ MAJOR CAMPAIGNS", "85% BRAND RETENTION"],
+    isLatest: false
   },
 ];
 

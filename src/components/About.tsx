@@ -21,13 +21,13 @@ export const About = () => {
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
-          className="w-full lg:w-[40%] relative shrink-0"
+          className="w-full max-w-[240px] sm:max-w-[280px] md:max-w-[320px] lg:max-w-none lg:w-[40%] mx-auto lg:mx-0 relative shrink-0 mb-8 lg:mb-0"
         >
           <div className="relative group perspective-1000">
             {/* Multi-layered decorative backgrounds */}
             <div className="absolute -inset-6 bg-gradient-to-tr from-blue-400/20 to-purple-400/20 rounded-[3.5rem] blur-3xl opacity-0 group-hover:opacity-100 transition-all duration-700 -z-10" />
             
-            <div className="relative overflow-hidden rounded-[2.5rem] bg-slate-200 shadow-2xl transition-all duration-500 border-4 border-white aspect-[3/4]">
+            <div className="relative overflow-hidden rounded-[2.25rem] sm:rounded-[2.5rem] bg-slate-200 shadow-2xl transition-all duration-500 border-4 border-white aspect-[3/4]">
               <img
                 src={portrait}
                 alt="Rizki Wiratama"
@@ -41,55 +41,55 @@ export const About = () => {
             <motion.div 
               animate={{ y: [0, -5, 0] }}
               transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute -top-4 -left-4 flex items-center gap-2 px-3 py-1.5 bg-white backdrop-blur-md rounded-2xl shadow-xl border border-slate-100 z-30"
+              className="absolute -top-3 left-0 sm:-left-4 flex items-center gap-2 px-2.5 sm:px-3 py-1.5 bg-white backdrop-blur-md rounded-2xl shadow-xl border border-slate-100 z-30 scale-90 sm:scale-100 origin-top-left"
             >
-              <div className="size-6 rounded-lg bg-red-50 flex items-center justify-center text-red-500">
-                <MapPin className="size-3.5" />
+              <div className="size-5 sm:size-6 rounded-lg bg-red-50 flex items-center justify-center text-red-500">
+                <MapPin className="size-3 sm:size-3.5" />
               </div>
-              <span className="text-[10px] font-black uppercase tracking-widest text-slate-900 pr-1">Jakarta, ID</span>
+              <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-slate-900 pr-1">Jakarta, ID</span>
             </motion.div>
 
             {/* Persona Tag - Moved OUTSIDE overflow-hidden */}
-            <div className="absolute -bottom-6 left-4 right-4 p-4 bg-slate-900/90 backdrop-blur-xl rounded-[2rem] border border-white/20 shadow-2xl z-40 transform transition-transform group-hover:scale-105">
+            <div className="absolute -bottom-6 left-2 right-2 sm:left-4 sm:right-4 p-3 sm:p-4 bg-slate-900/90 backdrop-blur-xl rounded-[1.75rem] sm:rounded-[2rem] border border-white/20 shadow-2xl z-40 transform transition-transform group-hover:scale-105">
               <div className="flex items-center justify-between">
-                <div className="pl-2">
-                  <h3 className="font-special-serif text-xl text-white leading-tight">Rizki Wiratama</h3>
-                  <div className="flex items-center gap-2 mt-0.5">
+                <div className="pl-1 sm:pl-2">
+                  <h3 className="font-special-serif text-lg sm:text-xl text-white leading-tight">Rizki Wiratama</h3>
+                  <div className="flex items-center gap-1.5 sm:gap-2 mt-0.5">
                     <div className="size-1.5 rounded-full bg-green-400 animate-pulse" />
-                    <p className="text-[9px] uppercase font-bold tracking-[0.2em] text-white/50">Available for lead</p>
+                    <p className="text-[8px] sm:text-[9px] uppercase font-bold tracking-[0.2em] text-white/50">Available for lead</p>
                   </div>
                 </div>
-                <div className="size-10 rounded-2xl bg-primary flex items-center justify-center text-white hover:rotate-12 transition-all cursor-pointer">
-                  <ArrowUpRight className="size-5" />
+                <div className="size-8 sm:size-10 rounded-xl sm:rounded-2xl bg-primary flex items-center justify-center text-white hover:rotate-12 transition-all cursor-pointer">
+                  <ArrowUpRight className="size-4 sm:size-5" />
                 </div>
               </div>
             </div>
 
             {/* Floating Badges - Trophy */}
             <motion.div 
-              animate={{ x: [0, 10, 0] }}
+              animate={{ x: [0, 8, 0] }}
               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute top-1/3 -right-12 bg-white p-3 rounded-2xl shadow-2xl border border-slate-100 flex items-center gap-3 z-30"
+              className="absolute top-1/4 -right-3 sm:-right-8 lg:-right-10 bg-white p-2 sm:p-3 rounded-2xl shadow-2xl border border-slate-100 flex items-center gap-2 sm:gap-3 z-30 scale-90 sm:scale-100 origin-left"
             >
-               <div className="size-8 rounded-xl bg-yellow-50 flex items-center justify-center text-yellow-600">
-                 <Trophy className="size-4" />
+               <div className="size-7 sm:size-8 rounded-xl bg-yellow-50 flex items-center justify-center text-yellow-600">
+                 <Trophy className="size-3.5 sm:size-4" />
                </div>
                <div className="pr-1">
-                 <p className="text-[9px] font-bold uppercase text-slate-400 leading-none">Top Rated</p>
-                 <p className="text-[11px] font-black text-slate-900 mt-0.5">Specialist</p>
+                 <p className="text-[8px] sm:text-[9px] font-bold uppercase text-slate-400 leading-none">Top Rated</p>
+                 <p className="text-[10px] sm:text-[11px] font-black text-slate-900 mt-0.5">Specialist</p>
                </div>
             </motion.div>
 
             {/* Floating Badges - Verified */}
             <motion.div 
-              animate={{ x: [0, -10, 0] }}
+              animate={{ x: [0, -8, 0] }}
               transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-              className="absolute top-1/2 -left-12 bg-white/90 backdrop-blur-md p-3 rounded-2xl shadow-2xl border border-white/50 flex flex-col items-center gap-2 z-30"
+              className="absolute top-1/2 -left-3 sm:-left-8 lg:-left-10 bg-white/90 backdrop-blur-md p-2 sm:p-3 rounded-2xl shadow-2xl border border-white/50 flex flex-col items-center gap-1.5 sm:gap-2 z-30 scale-90 sm:scale-100 origin-right"
             >
-              <div className="size-10 rounded-2xl bg-blue-500/10 flex items-center justify-center text-blue-600">
-                <BadgeCheck className="size-5" />
+              <div className="size-8 sm:size-10 rounded-xl sm:rounded-2xl bg-blue-500/10 flex items-center justify-center text-blue-600">
+                <BadgeCheck className="size-4 sm:size-5" />
               </div>
-              <span className="[writing-mode:vertical-lr] text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 py-1">Verified</span>
+              <span className="[writing-mode:vertical-lr] text-[8px] sm:text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 py-0.5 sm:py-1">Verified</span>
             </motion.div>
           </div>
         </motion.div>
