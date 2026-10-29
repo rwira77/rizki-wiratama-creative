@@ -7,6 +7,28 @@ import fashionShowTitiDJ from "@/assets/eventporto/fashion-show-titi-dj.png";
 import fashionShowYuniShara from "@/assets/eventporto/fashion-show-yuni-shara.png";
 import ivanGunawan from "@/assets/eventporto/ivan-gunawan.png";
 
+// Web & App Dev Assets
+import sobatripCover from "@/assets/webporto/sobatrip-cover.jpg";
+import sobatripFull from "@/assets/webporto/sobatrip-full.jpg";
+import sobatripTrips from "@/assets/webporto/sobatrip-trips.jpg";
+
+import comersialCover from "@/assets/webporto/comersial-cover.jpg";
+import comersialFull from "@/assets/webporto/comersial-full.jpg";
+import comersialProjects from "@/assets/webporto/comersial-projects.jpg";
+import comersialResearch from "@/assets/webporto/comersial-research.jpg";
+
+import donnapriveCover from "@/assets/webporto/donnaprive-cover.jpg";
+import donnapriveFull from "@/assets/webporto/donnaprive-full.jpg";
+import donnapriveShop from "@/assets/webporto/donnaprive-shop.jpg";
+
+import dofaceCover from "@/assets/webporto/doface-cover.jpg";
+import dofaceFull from "@/assets/webporto/doface-full.jpg";
+
+import putripermatasariCover from "@/assets/webporto/putripermatasari-cover.jpg";
+import putriAbout from "@/assets/webporto/putri-about.jpg";
+import putriProjects from "@/assets/webporto/putri-projects.jpg";
+import putriSkills from "@/assets/webporto/putri-skills.jpg";
+
 const workBranding = "https://images.unsplash.com/photo-1541462608141-ad4d60da3e8a?q=80&w=2670&auto=format&fit=crop";
 const workEvent = "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?q=80&w=2612&auto=format&fit=crop";
 
@@ -29,13 +51,212 @@ export interface Work {
   result: string;
   year: string;
   hasDetail: boolean;
+  liveUrl?: string;
+  githubUrl?: string;
+  techStack?: string[];
   block_gap?: number;
   grid_gap?: number;
   content_blocks?: ContentBlock[];
 }
 
 export const initialWorks: Work[] = [
+  // ==========================================
+  // Web & App Dev Works (Live Websites)
+  // ==========================================
+  {
+    id: "sobatrip-platform",
+    title: "Sobatrip — Open Trip & Travel Experience Platform",
+    cat: "Web & App Dev",
+    liveUrl: "https://www.sobatrip.id/",
+    img: sobatripCover,
+    techStack: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Supabase", "Midtrans Payment"],
+    problem: "Travel enthusiasts faced fragmented open-trip discovery, lack of transparent pricing, and manual booking confirmation via chat.",
+    result: "Built a modern full-stack travel booking platform featuring real-time trip catalogs, automated checkout, dynamic itinerary schedule, and community discovery.",
+    year: "2025",
+    hasDetail: true,
+    block_gap: 60,
+    content_blocks: [
+      {
+        id: "sobatrip-about",
+        type: "text",
+        title: "Platform Overview",
+        content: "Sobatrip (www.sobatrip.id) is a comprehensive travel and open-trip discovery platform designed for modern adventurers across Indonesia. The application simplifies finding and joining curated open trips, private tours, and island-hopping experiences with upfront pricing and verified itineraries.",
+      },
+      {
+        id: "sobatrip-img-home",
+        type: "image",
+        content: sobatripFull,
+      },
+      {
+        id: "sobatrip-features",
+        type: "text",
+        title: "Key Features & Engineering",
+        content: "Engineered with Next.js and Tailwind CSS for lightning-fast server-side rendering and mobile-first responsiveness. Integrated real-time booking availability, customer order tracking, dynamic trip filter by destination & budget, and secure payment processing.",
+      },
+      {
+        id: "sobatrip-img-trips",
+        type: "image",
+        content: sobatripTrips,
+      },
+    ],
+  },
+  {
+    id: "comersial-platform",
+    title: "Comersial — Creative Agency & Video Production Hub",
+    cat: "Web & App Dev",
+    liveUrl: "https://comersial.com/",
+    img: comersialCover,
+    techStack: ["React", "TypeScript", "Tailwind CSS", "Framer Motion", "Cloudinary Video API"],
+    problem: "The creative production studio needed an ultra-sleek, dynamic web presence to showcase commercial advertising reels, director dossiers, and creative research.",
+    result: "Crafted a cinematic dark-mode website featuring fluid video playback, project case dossiers, and an avant-garde editorial aesthetic that elevates brand authority.",
+    year: "2025",
+    hasDetail: true,
+    block_gap: 60,
+    content_blocks: [
+      {
+        id: "comersial-about",
+        type: "text",
+        title: "Platform Overview",
+        content: "Comersial (comersial.com) serves as the flagship digital headquarters for a high-end commercial video production and creative agency. The platform highlights brand commercial reels, production behind-the-scenes, and strategic creative research.",
+      },
+      {
+        id: "comersial-img-home",
+        type: "image",
+        content: comersialFull,
+      },
+      {
+        id: "comersial-arch",
+        type: "text",
+        title: "Design & Interaction Architecture",
+        content: "Designed with an editorial, cinematic visual rhythm with Framer Motion micro-interactions, responsive video embed handling, and seamless transition between project categories, research papers, and commercial showcases.",
+      },
+      {
+        id: "comersial-img-projects",
+        type: "image",
+        content: comersialProjects,
+      },
+      {
+        id: "comersial-img-research",
+        type: "image",
+        content: comersialResearch,
+      },
+    ],
+  },
+  {
+    id: "donnaprive-ecommerce",
+    title: "Donna Privé — Luxury Modest Fashion E-Commerce",
+    cat: "Web & App Dev",
+    liveUrl: "https://donnaprive.com/",
+    img: donnapriveCover,
+    techStack: ["Next.js", "React", "TypeScript", "Tailwind CSS", "E-Commerce", "Payment Gateway"],
+    problem: "Scaling digital commerce infrastructure to manage high-volume viral traffic spikes during limited collection drop days and Eid campaigns.",
+    result: "Engineered a high-performance fashion boutique web store supporting flash drops, lookbook shopping, size recommendation, and seamless checkout that delivered Rp300M+ in single-campaign revenue.",
+    year: "2025",
+    hasDetail: true,
+    block_gap: 60,
+    content_blocks: [
+      {
+        id: "donnaprive-about",
+        type: "text",
+        title: "Platform Overview",
+        content: "Donna Privé (donnaprive.com) is the official e-commerce flagship for one of Indonesia's leading modest luxury fashion brands. The store showcases seasonal runway collections, celebrity collaborations, and limited-edition product drops.",
+      },
+      {
+        id: "donnaprive-img-home",
+        type: "image",
+        content: donnapriveFull,
+      },
+      {
+        id: "donnaprive-commerce",
+        type: "text",
+        title: "Omnichannel Commerce Experience",
+        content: "Features an editorial lookbook grid, real-time inventory synchronization across boutique stores, multi-tiered discount engines for exclusive reveal events, and a frictionless mobile checkout experience.",
+      },
+      {
+        id: "donnaprive-img-shop",
+        type: "image",
+        content: donnapriveShop,
+      },
+    ],
+  },
+  {
+    id: "doface-beauty-store",
+    title: "Doface — Skincare & Beauty Product Discovery",
+    cat: "Web & App Dev",
+    liveUrl: "https://doface.vercel.app/",
+    img: dofaceCover,
+    techStack: ["React", "Vite", "Tailwind CSS", "Framer Motion", "Vercel"],
+    problem: "Beauty brand needed a vibrant, mobile-first product showcase that connects social media followers directly to product benefits and quick ordering.",
+    result: "Delivered a playful, high-converting digital product catalog optimized for smartphone viewports with instant WhatsApp checkout integration.",
+    year: "2025",
+    hasDetail: true,
+    block_gap: 60,
+    content_blocks: [
+      {
+        id: "doface-about",
+        type: "text",
+        title: "Platform Overview",
+        content: "Doface (doface.vercel.app) is an energetic digital showcase for skincare and beauty products tailored for Gen Z and millennial consumers. The web app emphasizes ingredient transparency, before-and-after user reviews, and instant shopping convenience.",
+      },
+      {
+        id: "doface-img-full",
+        type: "image",
+        content: dofaceFull,
+      },
+      {
+        id: "doface-ux",
+        type: "text",
+        title: "Mobile-First UX Strategy",
+        content: "Optimized specifically for TikTok and Instagram traffic with sub-second page loads, engaging micro-animations, product benefits breakdown, and zero-friction purchase flows.",
+      },
+    ],
+  },
+  {
+    id: "putri-permatasari-cv",
+    title: "Putri Permatasari — Interactive Executive Portfolio & CV",
+    cat: "Web & App Dev",
+    liveUrl: "https://putripermatasari.vercel.app/",
+    img: putripermatasariCover,
+    techStack: ["React", "TypeScript", "Tailwind CSS", "Framer Motion", "Vercel"],
+    problem: "Traditional PDF resumes fail to demonstrate technical storytelling, visual polish, and interactive leadership milestones.",
+    result: "Created a personal brand website with interactive career timeline, detailed project case studies, skill mastery benchmarks, and downloadable credentials.",
+    year: "2025",
+    hasDetail: true,
+    block_gap: 60,
+    content_blocks: [
+      {
+        id: "putri-about",
+        type: "text",
+        title: "Executive Profile Overview",
+        content: "Putri Permatasari's digital dossier (putripermatasari.vercel.app) showcases professional executive achievements, project leadership, and creative strategic competencies through a clean, modern digital portfolio.",
+      },
+      {
+        id: "putri-img-about",
+        type: "image",
+        content: putriAbout,
+      },
+      {
+        id: "putri-projects-text",
+        type: "text",
+        title: "Project Milestones & Impact",
+        content: "Comprehensive presentation of organizational impact, campaign management, and business development initiatives with quantified results and visual assets.",
+      },
+      {
+        id: "putri-img-projects",
+        type: "image",
+        content: putriProjects,
+      },
+      {
+        id: "putri-img-skills",
+        type: "image",
+        content: putriSkills,
+      },
+    ],
+  },
+
+  // ==========================================
   // Campaign & Event Works
+  // ==========================================
   {
     id: "donna-mini-trunk-show",
     title: "Donna Mini Trunk Show & Styling Session with Okky Asokawati",
@@ -277,7 +498,9 @@ export const initialWorks: Work[] = [
     ],
   },
 
-  // Existing Branding Works
+  // ==========================================
+  // Branding Works
+  // ==========================================
   {
     id: "remlint-identity",
     title: "Remlint Visual Identity",

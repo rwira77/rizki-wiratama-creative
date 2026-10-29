@@ -1,6 +1,25 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ArrowUpRight, Calendar, Tag, Target, BarChart3, ChevronRight, Share2, Heart, ExternalLink, X, Aperture } from "lucide-react";
+import { 
+  ChevronLeft, 
+  ArrowUpRight, 
+  Calendar, 
+  Tag, 
+  Target, 
+  BarChart3, 
+  ChevronRight, 
+  Share2, 
+  Heart, 
+  ExternalLink, 
+  X, 
+  Aperture,
+  Lock,
+  RotateCw,
+  Monitor,
+  Tablet,
+  Smartphone,
+  Globe
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/lib/supabase";
 import { useState, useEffect, useRef } from "react";
@@ -117,6 +136,164 @@ const GridBlock = ({ block, work, isMobileView, getOptimizedUrl, isVideoUrl }: a
   );
 };
 
+const getHostname = (url: string) => {
+  try {
+    return new URL(url).hostname;
+  } catch {
+    return url;
+  }
+};
+
+const WebBrowserPreview = ({ work }: { work: any }) => {
+  const [viewport, setViewport] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
+  const [isIframeLoading, setIsIframeLoading] = useState(true);
+  const [iframeKey, setIframeKey] = useState(0);
+
+  if (!work.liveUrl) return null;
+
+  return (
+    <div className="w-full mb-12 space-y-3">
+      {/* Browser Window Frame */}
+      <div className="w-full rounded-2xl overflow-hidden border border-slate-200/90 shadow-2xl bg-white">
+        {/* Browser Top Navigation Bar */}
+        <div className="bg-[#FAF9F6] border-b border-slate-200/90 px-4 py-3 flex flex-wrap items-center justify-between gap-3 select-none">
+          {/* Traffic Lights */}
+          <div className="flex items-center gap-2">
+            <span className="size-3 rounded-full bg-red-400 border border-red-500/20" />
+            <span className="size-3 rounded-full bg-amber-400 border border-amber-500/20" />
+            <span className="size-3 rounded-full bg-emerald-400 border border-emerald-500/20" />
+            <span className="ml-2 text-[10px] font-bold text-slate-400 hidden sm:inline uppercase tracking-widest">
+              Live Safari Preview
+            </span>
+          </div>
+
+          {/* Centered URL Address Bar */}
+          <div className="flex-1 max-w-xl mx-auto flex items-center justify-between bg-white border border-slate-200 px-3 py-1.5 rounded-lg shadow-sm text-xs text-slate-700">
+            <div className="flex items-center gap-2 min-w-0">
+              <Lock className="size-3 text-emerald-600 shrink-0" />
+              <span className="truncate font-mono text-[11px] text-slate-600">{work.liveUrl}</span>
+            </div>
+            <div className="flex items-center gap-1 shrink-0 ml-2">
+              <button
+                type="button"
+                onClick={() => {
+                  setIsIframeLoading(true);
+                  setIframeKey((k) => k + 1);
+                }}
+                title="Reload Live View"
+                className="p-1 text-slate-400 hover:text-slate-800 transition-colors rounded hover:bg-slate-100"
+              >
+                <RotateCw className="size-3" />
+              </button>
+              <a
+                href={work.liveUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Open in new window"
+                className="p-1 text-slate-400 hover:text-primary transition-colors rounded hover:bg-slate-100"
+              >
+                <ExternalLink className="size-3" />
+              </a>
+            </div>
+          </div>
+
+          {/* Viewport Toggles (Desktop / Tablet / Mobile) */}
+          <div className="flex items-center gap-1 bg-slate-200/70 p-1 rounded-lg">
+            <button
+              type="button"
+              onClick={() => setViewport('desktop')}
+              className={cn(
+                "px-2.5 py-1 rounded-md transition-all text-xs flex items-center gap-1.5",
+                viewport === 'desktop' ? "bg-white text-slate-900 shadow-sm font-semibold" : "text-slate-500 hover:text-slate-800"
+              )}
+              title="Desktop View"
+            >
+              <Monitor className="size-3.5" />
+              <span className="hidden sm:inline text-[10px]">Desktop</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewport('tablet')}
+              className={cn(
+                "px-2.5 py-1 rounded-md transition-all text-xs flex items-center gap-1.5",
+                viewport === 'tablet' ? "bg-white text-slate-900 shadow-sm font-semibold" : "text-slate-500 hover:text-slate-800"
+              )}
+              title="Tablet View"
+            >
+              <Tablet className="size-3.5" />
+              <span className="hidden sm:inline text-[10px]">Tablet</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewport('mobile')}
+              className={cn(
+                "px-2.5 py-1 rounded-md transition-all text-xs flex items-center gap-1.5",
+                viewport === 'mobile' ? "bg-white text-slate-900 shadow-sm font-semibold" : "text-slate-500 hover:text-slate-800"
+              )}
+              title="Mobile View"
+            >
+              <Smartphone className="size-3.5" />
+              <span className="hidden sm:inline text-[10px]">Mobile</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Browser Content Area with Desk Background */}
+        <div className="relative bg-slate-900/95 p-3 md:p-8 overflow-hidden flex items-center justify-center min-h-[520px] md:min-h-[640px]">
+          {/* Viewport Frame */}
+          <div
+            className={cn(
+              "relative transition-all duration-500 bg-white shadow-2xl overflow-hidden",
+              viewport === 'desktop' && "w-full h-[580px] md:h-[680px] rounded-lg",
+              viewport === 'tablet' && "w-[768px] max-w-full h-[580px] md:h-[680px] rounded-2xl border-4 border-slate-700",
+              viewport === 'mobile' && "w-[390px] max-w-full h-[580px] md:h-[680px] rounded-[2.5rem] border-8 border-slate-800 shadow-[0_0_50px_rgba(0,0,0,0.5)]"
+            )}
+          >
+            {isIframeLoading && (
+              <div className="absolute inset-0 bg-white/95 backdrop-blur-sm z-20 flex flex-col items-center justify-center gap-3">
+                <div className="size-8 rounded-full border-2 border-slate-200 border-t-primary animate-spin" />
+                <span className="text-xs font-semibold text-slate-500 tracking-wider">
+                  Connecting to {getHostname(work.liveUrl)}...
+                </span>
+              </div>
+            )}
+            <iframe
+              key={iframeKey}
+              src={work.liveUrl}
+              className="w-full h-full border-0 bg-white"
+              title={work.title}
+              sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+              onLoad={() => setIsIframeLoading(false)}
+            />
+          </div>
+        </div>
+
+        {/* Browser Bottom Action Bar */}
+        <div className="bg-[#FAF9F6] border-t border-slate-200/90 px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-2">
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">
+              <span className="size-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              Live Interactive Embed
+            </span>
+            <span className="text-xs text-slate-400 hidden sm:inline">
+              Scroll and test responsive features directly in-frame
+            </span>
+          </div>
+          <a
+            href={work.liveUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-4 py-1.5 text-xs font-bold text-white bg-slate-900 hover:bg-primary rounded-lg transition-colors shadow-sm"
+          >
+            Launch Fullscreen Web
+            <ExternalLink className="size-3.5" />
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const PortfolioDetail = ({ isModal = false }: { isModal?: boolean }) => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -210,7 +387,7 @@ const PortfolioDetail = ({ isModal = false }: { isModal?: boolean }) => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="mb-10 space-y-3"
+              className="mb-8 space-y-3"
             >
               <div className="flex items-center gap-3">
                 <span className="text-[10px] font-black uppercase tracking-[0.3em] text-primary">{work.cat}</span>
@@ -226,6 +403,9 @@ const PortfolioDetail = ({ isModal = false }: { isModal?: boolean }) => {
                 </p>
               )}
             </motion.div>
+
+            {/* Live Web Browser Preview Window (When liveUrl is provided) */}
+            {work.liveUrl && <WebBrowserPreview work={work} />}
 
             <div 
               className="flex flex-col min-w-0"
@@ -329,19 +509,50 @@ const PortfolioDetail = ({ isModal = false }: { isModal?: boolean }) => {
 
           {/* Sticky Sidebar Info - Refined */}
           <aside className="hidden md:block md:col-span-2 lg:col-span-2">
-            <div className="sticky top-32 p-6 space-y-12">
-               <div className="space-y-8">
-                  <div className="space-y-2">
+            <div className="sticky top-32 p-6 space-y-10">
+               <div className="space-y-6">
+                  {work.liveUrl && (
+                    <div className="space-y-2">
+                      <p className="text-[9px] font-black uppercase tracking-widest text-emerald-600 flex items-center gap-1.5">
+                        <span className="size-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                        Live Website
+                      </p>
+                      <a
+                        href={work.liveUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center justify-between w-full px-3 py-2 text-xs font-bold text-slate-800 bg-slate-100 hover:bg-slate-900 hover:text-white rounded-lg transition-colors group"
+                      >
+                        <span className="truncate text-[11px] font-mono">{getHostname(work.liveUrl)}</span>
+                        <ExternalLink className="size-3.5 shrink-0 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                      </a>
+                    </div>
+                  )}
+
+                  {Array.isArray(work.techStack) && work.techStack.length > 0 && (
+                    <div className="space-y-2">
+                      <p className="text-[9px] font-black uppercase tracking-widest text-slate-400">Tech Stack</p>
+                      <div className="flex flex-wrap gap-1.5">
+                        {work.techStack.map((tech: string) => (
+                          <span key={tech} className="px-2 py-0.5 text-[10px] font-medium bg-slate-100 text-slate-700 rounded-md">
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="space-y-1">
                      <p className="text-[9px] font-black uppercase tracking-widest text-slate-300">Timeline</p>
                      <p className="font-bold text-xs">{work.year}</p>
                   </div>
-                  <div className="space-y-2">
+                  <div className="space-y-1">
                      <p className="text-[9px] font-black uppercase tracking-widest text-slate-300">Discipline</p>
                      <p className="font-bold text-xs">{work.cat}</p>
                   </div>
-                  <div className="space-y-2">
+                  <div className="space-y-1">
                      <p className="text-[9px] font-black uppercase tracking-widest text-primary">Result</p>
-                     <p className="font-special-serif text-lg italic leading-tight">{work.result}</p>
+                     <p className="font-special-serif text-base italic leading-snug">{work.result}</p>
                   </div>
                </div>
 
@@ -362,7 +573,30 @@ const PortfolioDetail = ({ isModal = false }: { isModal?: boolean }) => {
       </main>
 
       {/* Mobile Meta Info */}
-      <div className="md:hidden p-8 bg-white border-t border-slate-100 space-y-8">
+      <div className="md:hidden p-8 bg-white border-t border-slate-100 space-y-6">
+         {work.liveUrl && (
+           <a
+             href={work.liveUrl}
+             target="_blank"
+             rel="noopener noreferrer"
+             className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-slate-900 text-white font-bold text-xs shadow-md"
+           >
+             <span>Launch Website ({getHostname(work.liveUrl)})</span>
+             <ExternalLink className="size-4" />
+           </a>
+         )}
+         {Array.isArray(work.techStack) && work.techStack.length > 0 && (
+           <div className="space-y-2">
+             <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Tech Stack</p>
+             <div className="flex flex-wrap gap-1.5">
+               {work.techStack.map((tech: string) => (
+                 <span key={tech} className="px-2.5 py-1 text-xs font-medium bg-slate-100 text-slate-700 rounded-md">
+                   {tech}
+                 </span>
+               ))}
+             </div>
+           </div>
+         )}
          <div className="grid grid-cols-2 gap-8">
             <div className="space-y-1">
                <p className="text-[10px] font-black uppercase tracking-widest text-slate-300">Timeline</p>
@@ -373,6 +607,12 @@ const PortfolioDetail = ({ isModal = false }: { isModal?: boolean }) => {
                <p className="font-bold text-sm">{work.cat}</p>
             </div>
          </div>
+         {work.result && (
+           <div className="space-y-1">
+             <p className="text-[10px] font-black uppercase tracking-widest text-primary">Result</p>
+             <p className="font-special-serif text-base italic leading-tight">{work.result}</p>
+           </div>
+         )}
       </div>
 
       {/* Footer */}

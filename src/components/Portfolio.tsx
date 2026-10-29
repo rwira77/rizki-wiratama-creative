@@ -9,7 +9,8 @@ import {
   ChevronLeft,
   ArrowUpRight,
   Plus,
-  Megaphone
+  Megaphone,
+  Globe
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -20,6 +21,8 @@ import { isYouTubeUrl, getYouTubeId, getYouTubeThumbnail } from "@/lib/youtube";
 import { initialWorks } from "@/data/initialWorks";
 import donnaMiniTrunkShow from "@/assets/eventporto/donna-mini-trunk-show.png";
 import exclusiveRevealDays from "@/assets/eventporto/exclusive-reveal-days.png";
+import sobatripCover from "@/assets/webporto/sobatrip-cover.jpg";
+import comersialCover from "@/assets/webporto/comersial-cover.jpg";
 
 export { initialWorks };
 
@@ -29,12 +32,13 @@ const workSocial = "https://images.unsplash.com/photo-1611162617474-5b21e879e113
 const workCampaign = "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=2560&auto=format&fit=crop";
 
 export const categories = [
+  { id: "Web & App Dev", label: "Web & App Dev", icon: Globe, color: "from-cyan-500 to-blue-600", images: [sobatripCover, comersialCover] },
+  { id: "Campaign & Event", label: "Campaign & Event", icon: Megaphone, color: "from-amber-500 to-orange-600", images: [donnaMiniTrunkShow, exclusiveRevealDays] },
   { id: "Branding", label: "Branding", icon: Palette, color: "from-blue-500 to-indigo-600", images: [workBranding, workEvent] },
   { id: "Social Media", label: "Social Media", icon: Share2, color: "from-purple-500 to-pink-600", images: [workSocial, workCampaign] },
   { id: "Photography", label: "Photography", icon: Camera, color: "from-orange-500 to-red-600", images: [workCampaign, workBranding] },
   { id: "Videography", label: "Videography", icon: Video, color: "from-emerald-500 to-teal-600", images: [workEvent, workSocial] },
   { id: "Graphic Design", label: "Graphic Design", icon: Layout, color: "from-slate-700 to-slate-900", images: [workBranding, workSocial] },
-  { id: "Campaign & Event", label: "Campaign & Event", icon: Megaphone, color: "from-amber-500 to-orange-600", images: [donnaMiniTrunkShow, exclusiveRevealDays] }
 ];
 
 // Helper to determine if a URL is a video
@@ -105,7 +109,7 @@ export const Portfolio = ({
                 </h2>
               </div>
               
-              <div className="grid grid-cols-3 md:grid-cols-5 gap-6 md:gap-12 justify-items-center">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4 md:gap-6 justify-items-center">
                 {categories.map((cat) => {
                   const catProjects = works.filter(w => w.cat?.trim().toLowerCase() === cat.id.toLowerCase());
                   return (
@@ -182,9 +186,17 @@ export const Portfolio = ({
                             {w.title}
                           </h3>
                         </div>
-                        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-300">
-                          {w.cat} — {w.year}
-                        </p>
+                        <div className="flex items-center justify-between gap-2 pt-0.5">
+                          <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">
+                            {w.cat} — {w.year}
+                          </p>
+                          {w.liveUrl && (
+                            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[9px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200/80 shadow-xs">
+                              <span className="size-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                              Live Web
+                            </span>
+                          )}
+                        </div>
                       </div>
 
                       {/* Ultimate Universal Click Shield for the entire card */}
