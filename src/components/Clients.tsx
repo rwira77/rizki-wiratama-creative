@@ -9,46 +9,14 @@ import thrLogo from "@/assets/logoclient/ThrLogo-Tr1.png";
 import donnaLogo from "@/assets/logoclient/donna-logo.png";
 
 const clients = [
-  {
-    name: "Kota Banjarmasin",
-    category: "Pemerintah Kota",
-    logo: banjarmasinLogo,
-  },
-  {
-    name: "Donna Privé",
-    category: "Modest Fashion",
-    logo: donnaLogo,
-  },
-  {
-    name: "Doface",
-    category: "Beauty & Skincare",
-    logo: dofaceLogo,
-  },
-  {
-    name: "Chouture",
-    category: "Fashion & Lifestyle",
-    logo: choutureLogo,
-  },
-  {
-    name: "Rayana",
-    category: "Apparel & Retail",
-    logo: rayanaLogo,
-  },
-  {
-    name: "THR",
-    category: "Creative Agency",
-    logo: thrLogo,
-  },
-  {
-    name: "LIS",
-    category: "Brand & Production",
-    logo: lisLogo,
-  },
-  {
-    name: "KAF",
-    category: "Corporate Enterprise",
-    logo: kafLogo,
-  },
+  { name: "Kota Banjarmasin", logo: banjarmasinLogo },
+  { name: "Donna Privé", logo: donnaLogo },
+  { name: "Doface", logo: dofaceLogo },
+  { name: "Chouture", logo: choutureLogo },
+  { name: "Rayana", logo: rayanaLogo },
+  { name: "THR", logo: thrLogo },
+  { name: "LIS", logo: lisLogo },
+  { name: "KAF", logo: kafLogo },
 ];
 
 export const Clients = () => {
@@ -89,33 +57,23 @@ export const Clients = () => {
         </div>
       </div>
 
-      {/* Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5">
+      {/* Pure Logos Grid */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6 md:gap-10 py-6 items-center justify-items-center">
         {clients.map((c, i) => (
           <motion.div
             key={c.name}
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.4, delay: i * 0.05 }}
-            className="group relative rounded-2xl md:rounded-3xl p-5 md:p-6 flex flex-col items-center justify-center bg-white/60 hover:bg-white/95 border border-white/80 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-xl hover:-translate-y-1 transition-all duration-300 min-h-[160px]"
+            className="group w-full h-24 md:h-28 flex items-center justify-center p-2"
           >
-            <div className="h-20 w-full flex items-center justify-center p-2">
-              <img
-                src={c.logo}
-                alt={c.name}
-                className="max-h-16 w-auto max-w-[85%] object-contain filter drop-shadow-sm transition-transform duration-500 group-hover:scale-110"
-                loading="lazy"
-              />
-            </div>
-            <div className="mt-3 text-center">
-              <h4 className="text-xs md:text-sm font-semibold text-slate-800 tracking-tight group-hover:text-primary transition-colors">
-                {c.name}
-              </h4>
-              <p className="text-[10px] uppercase tracking-wider text-slate-400 font-medium mt-0.5">
-                {c.category}
-              </p>
-            </div>
+            <img
+              src={c.logo}
+              alt={c.name}
+              className="max-h-14 md:max-h-16 w-auto max-w-[85%] object-contain transition-transform duration-300 group-hover:scale-110 select-none"
+              loading="lazy"
+            />
           </motion.div>
         ))}
       </div>
