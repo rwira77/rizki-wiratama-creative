@@ -96,7 +96,7 @@ export const Portfolio = ({
 
   return (
     <section id="work" ref={containerRef} className="pt-0 pb-24 bg-transparent min-h-screen">
-      <div className="max-w-[1200px] px-4 md:px-8 mx-auto">
+      <div className="max-w-[1200px] px-0 md:px-8 mx-auto">
         <AnimatePresence mode="wait">
           {!selectedCat ? (
             <motion.div key="folders" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
@@ -109,7 +109,7 @@ export const Portfolio = ({
                 </h2>
               </div>
               
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-4 sm:gap-x-8 md:gap-x-10 lg:gap-x-12 gap-y-6 md:gap-y-8 w-fit -ml-4 py-2">
+              <div className="grid grid-cols-3 sm:grid-cols-4 gap-6 sm:gap-x-8 md:gap-x-10 lg:gap-x-12 sm:gap-y-8 w-full sm:w-fit sm:-ml-4 py-2">
                 {categories.map((cat) => {
                   const catProjects = works.filter(w => w.cat?.trim().toLowerCase() === cat.id.toLowerCase());
                   return (
