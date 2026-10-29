@@ -6,6 +6,7 @@ import { supabase } from "@/lib/supabase";
 import { useState, useEffect, useRef } from "react";
 import { getOptimizedUrl, getVideoPosterUrl } from "@/lib/cloudinary";
 import { isYouTubeUrl, getYouTubeId } from "@/lib/youtube";
+import { initialWorks } from "@/data/initialWorks";
 
 // Helper to determine if a URL is a video
 const isVideoUrl = (url: string) => /\.(mp4|webm|mov|ogg)(\?.*)?$/i.test(url || '');
@@ -131,10 +132,22 @@ const PortfolioDetail = ({ isModal = false }: { isModal?: boolean }) => {
           .eq('id', id)
           .single();
 
-        if (error) throw error;
+        if (error || !data) {
+          const fallback = initialWorks.find((w: any) => w.id === id);
+          if (fallback) {
+            setWork(fallback);
+            return;
+          }
+          if (error) throw error;
+        }
         setWork(data);
       } catch (error) {
-        console.error('Error fetching work:', error);
+        const fallback = initialWorks.find((w: any) => w.id === id);
+        if (fallback) {
+          setWork(fallback);
+        } else {
+          console.error('Error fetching work:', error);
+        }
       } finally {
         setIsLoading(false);
       }
@@ -192,6 +205,28 @@ const PortfolioDetail = ({ isModal = false }: { isModal?: boolean }) => {
         <div className="grid md:grid-cols-12 gap-0">
           {/* Main Case Study Content - Refined with Padding */}
           <div className="md:col-span-10 lg:col-span-10 px-4 md:px-8 lg:px-12 overflow-hidden">
+            {/* Project Header */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="mb-10 space-y-3"
+            >
+              <div className="flex items-center gap-3">
+                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-primary">{work.cat}</span>
+                <span className="text-slate-300">•</span>
+                <span className="text-[10px] font-bold text-slate-400">{work.year}</span>
+              </div>
+              <h1 className="font-special-serif text-3xl md:text-5xl lg:text-6xl text-slate-900 leading-tight">
+                {work.title}
+              </h1>
+              {work.problem && (
+                <p className="text-sm md:text-lg text-slate-500 max-w-3xl font-light leading-relaxed">
+                  {work.problem}
+                </p>
+              )}
+            </motion.div>
+
             <div 
               className="flex flex-col min-w-0"
               style={{ gap: `${work.block_gap ?? 80}px` }}

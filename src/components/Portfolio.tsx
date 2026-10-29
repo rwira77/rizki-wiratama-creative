@@ -17,16 +17,16 @@ import { supabase } from "@/lib/supabase";
 import { DesktopIcon } from "@/components/DesktopIcon";
 import { getOptimizedUrl, getVideoPosterUrl } from "@/lib/cloudinary";
 import { isYouTubeUrl, getYouTubeId, getYouTubeThumbnail } from "@/lib/youtube";
+import { initialWorks } from "@/data/initialWorks";
+import donnaMiniTrunkShow from "@/assets/eventporto/donna-mini-trunk-show.png";
+import exclusiveRevealDays from "@/assets/eventporto/exclusive-reveal-days.png";
+
+export { initialWorks };
 
 const workBranding = "https://images.unsplash.com/photo-1541462608141-ad4d60da3e8a?q=80&w=2670&auto=format&fit=crop";
 const workEvent = "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?q=80&w=2612&auto=format&fit=crop";
 const workSocial = "https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=2574&auto=format&fit=crop";
 const workCampaign = "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=2560&auto=format&fit=crop";
-
-export const initialWorks = [
-  { id: "remlint-identity", title: "Remlint Visual Identity", cat: "Branding", img: workBranding, problem: "Outdated legacy perception", year: "2024", hasDetail: true },
-  { id: "soiree-activation", title: "Soirée Activation", cat: "Branding", img: workEvent, problem: "Unmemorable launch event", year: "2024", hasDetail: false }
-];
 
 export const categories = [
   { id: "Branding", label: "Branding", icon: Palette, color: "from-blue-500 to-indigo-600", images: [workBranding, workEvent] },
@@ -34,7 +34,7 @@ export const categories = [
   { id: "Photography", label: "Photography", icon: Camera, color: "from-orange-500 to-red-600", images: [workCampaign, workBranding] },
   { id: "Videography", label: "Videography", icon: Video, color: "from-emerald-500 to-teal-600", images: [workEvent, workSocial] },
   { id: "Graphic Design", label: "Graphic Design", icon: Layout, color: "from-slate-700 to-slate-900", images: [workBranding, workSocial] },
-  { id: "Campaign & Event", label: "Campaign & Event", icon: Megaphone, color: "from-amber-500 to-orange-600", images: [workEvent, workCampaign] }
+  { id: "Campaign & Event", label: "Campaign & Event", icon: Megaphone, color: "from-amber-500 to-orange-600", images: [donnaMiniTrunkShow, exclusiveRevealDays] }
 ];
 
 // Helper to determine if a URL is a video
@@ -59,7 +59,13 @@ export const Portfolio = ({
           .select('*')
           .order('order_index', { ascending: true });
         if (error) throw error;
-        setWorks(data && data.length > 0 ? data : initialWorks);
+        if (data && data.length > 0) {
+          const existingIds = new Set(data.map((item: any) => item.id));
+          const merged = [...data, ...initialWorks.filter((item) => !existingIds.has(item.id))];
+          setWorks(merged);
+        } else {
+          setWorks(initialWorks);
+        }
       } catch (error) {
         setWorks(initialWorks);
       }
